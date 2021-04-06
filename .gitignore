@@ -1,0 +1,5 @@
+__pycache__
+/.vscode
+/django_sra_afd/settings.py
+/front_end/templates/node_modules
+/front_end/static/build
