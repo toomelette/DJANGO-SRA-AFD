@@ -12,12 +12,15 @@ import ProfileMain from '../Profile/ProfileMain'
 import HomeMain from '../Home/HomeMain'
 import UserMain from '../User/UserMain'
 import MenuMain from '../Menu/MenuMain'
+import EmployeeMain from '../Employee/EmployeeMain'
+
 import NotFoundPage from '../ErrorPages/NotFoundPageComp'
 
 // Stores
 import dashboardMainStore from './store/DashboardMainStore'
 import userStore from '../User/store/UserStore'
 import menuStore from '../Menu/store/MenuStore'
+import employeeStore from '../Employee/store/EmployeeStore'
 
 const DashboardMain = observer(({ dashboardMainStore }) => {
 
@@ -162,7 +165,14 @@ const DashboardMain = observer(({ dashboardMainStore }) => {
                                 { dashboardMainStore.checkIfRouteExist('menu-module') ?
                                     <MenuMain menuStore={menuStore} dashboardMainStore={dashboardMainStore}/>: <NotFoundPage/>
                                 }
-                            </Route> 
+                            </Route>
+    
+                            {/* Employee */}
+                            <Route path="/employees">
+                                { dashboardMainStore.checkIfRouteExist('employee-module') ?
+                                    <EmployeeMain employeeStore={employeeStore} dashboardMainStore={dashboardMainStore}/>: <NotFoundPage/>
+                                }
+                            </Route>
     
                             {/* Page not found */}
                             <Route path="*">
