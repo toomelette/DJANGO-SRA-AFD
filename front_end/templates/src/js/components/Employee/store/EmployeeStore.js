@@ -13,6 +13,7 @@ class EmployeeStore{
     page_size = 10;
     page_limit = 0;
     query = "";
+    filter_is_active = "";
     sort_field = "";
     sort_order = "";
 
@@ -46,6 +47,7 @@ class EmployeeStore{
         axios.get('api/employee', { 
             params: { 
                 q: this.query, 
+                ia: this.filter_is_active.value, 
                 page_size: this.page_size, 
                 page: this.page_current, 
                 sort_field: this.sort_field.value,
@@ -98,25 +100,37 @@ class EmployeeStore{
 
     
     // // List Setters
-    // setSelectedRoute(selected_employee){
-    //     this.selected_employee = selected_employee;
-    // }
+    setFilterIsActive(is_active){
+        this.filter_is_active = is_active;
+    }
 
-    // setIsOpenedForm(is_opened_form){
-    //     this.is_opened_form = is_opened_form;
-    // }
+    setSortField(sort_field){
+        this.sort_field = sort_field;
+    }
 
-    // setIsSelectedAllRows(bool){
-    //     this.is_selected_all_rows = bool;
-    //     this.selected_rows.map(data => {
-    //         this.setSelectedRowObject(bool, data.id)
-    //     })
-    // }
+    setSortOrder(sort_order){
+        this.sort_order = sort_order;
+    }
 
-    // setSelectedRowObject(status, id){
-    //     let obj_index = this.selected_rows.findIndex(data => data.id === id)
-    //     this.selected_rows[obj_index].status = status;
-    // }
+    setSelectedEmployee(selected_employee){
+        this.selected_employee = selected_employee;
+    }
+
+    setIsOpenedForm(is_opened_form){
+        this.is_opened_form = is_opened_form;
+    }
+
+    setIsSelectedAllRows(bool){
+        this.is_selected_all_rows = bool;
+        this.selected_rows.map(data => {
+            this.setSelectedRowObject(bool, data.id)
+        })
+    }
+
+    setSelectedRowObject(status, id){
+        let obj_index = this.selected_rows.findIndex(data => data.id === id)
+        this.selected_rows[obj_index].status = status;
+    }
 
 
     // // Form
@@ -203,64 +217,65 @@ class EmployeeStore{
     // }
 
 
-    // // List Handlers
-    // setSortField(sort_field){
-    //     this.sort_field = sort_field;
-    // }
+    // List Handlers
 
-    // setSortOrder(sort_order){
-    //     this.sort_order = sort_order;
-    // }
+    handleSearch(e){
+        e.preventDefault()
+        this.page_prev = 0;
+        this.page_current = 1;
+        this.page_next = 2;
+        this.query = e.target.value;
+        this.delaySearch();
+    }
 
-    // handleSearch(e){
-    //     e.preventDefault()
-    //     this.page_prev = 0;
-    //     this.page_current = 1;
-    //     this.page_next = 2;
-    //     this.query = e.target.value;
-    //     this.delaySearch();
-    // }
+    handleFilterSubmit(){
+        this.page_prev = 0;
+        this.page_current = 1;
+        this.page_next = 2;
+        this.fetch();
+    }
 
-    // handleSortSubmit(){
-    //     this.page_prev = 0;
-    //     this.page_current = 1;
-    //     this.page_next = 2;
-    //     this.fetch();
-    // }
+    handleSortSubmit(){
+        this.page_prev = 0;
+        this.page_current = 1;
+        this.page_next = 2;
+        this.fetch();
+    }
 
-    // handleRefreshClick(e){
-    //     e.preventDefault()
-    //     this.page_prev = 0;
-    //     this.page_current = 1;
-    //     this.page_next = 2;
-    //     this.page_size = 10;
-    //     this.query = "";
-    //     this.sort_field = "";
-    //     this.sort_order = "";
-    //     this.selected_employee = 0;
-    //     this.fetch();
-    // }
+    handleRefreshClick(e){
+        e.preventDefault()
+        this.page_prev = 0;
+        this.page_current = 1;
+        this.page_next = 2;
+        this.page_size = 10;
+        this.query = "";
+        this.filter_is_active = "";
+        this.sort_field = "";
+        this.sort_order = "";
+        this.selected_employee = 0;
+        this.fetch();
+    }
 
-    // handlePageSizeClick(e){
-    //     e.preventDefault()
-    //     if(e.target.value > 0){
-    //         this.page_prev = 0;
-    //         this.page_current = 1;
-    //         this.page_next = 2;
-    //         this.page_size = e.target.value;
-    //         this.fetch();
-    //     }
-    // }
+    handlePageSizeClick(e){
+        e.preventDefault()
+        if(e.target.value > 0){
+            this.page_prev = 0;
+            this.page_current = 1;
+            this.page_next = 2;
+            this.page_size = e.target.value;
+            this.fetch();
+        }
+    }
 
-    // handlePaginationClick(e, page_current){
-    //     e.preventDefault()
-    //     if(page_current > 0 && page_current <= this.page_limit){
-    //         this.page_prev = page_current - 1;
-    //         this.page_current = page_current;
-    //         this.page_next = page_current + 1;
-    //         this.fetch();
-    //     }
-    // }
+    handlePaginationClick(e, page_current){
+        e.preventDefault()
+        if(page_current > 0 && page_current <= this.page_limit){
+            this.page_prev = page_current - 1;
+            this.page_current = page_current;
+            this.page_next = page_current + 1;
+            this.fetch();
+        }
+    }
 
 
 }

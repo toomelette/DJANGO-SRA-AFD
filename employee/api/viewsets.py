@@ -7,13 +7,11 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.db import connection
 
+from .pagination import EmployeeListPagination
 from .serializers import (
     EmployeeSerializer
 )
 
-from .pagination import (
-    EmployeeListPagination
-)
 
 
 
@@ -28,7 +26,7 @@ class EmployeeViewSet(viewsets.ModelViewSet):
         field = '-updated_at'
         sort_field = self.request.GET.get('sort_field', None)
         sort_order = self.request.GET.get('sort_order', None)
-        available_sort_fields = ["fullname", "first_name", "last_name", "is_active"]
+        available_sort_fields = ["firstname", "lastname"]
         if sort_field:
             if sort_field in available_sort_fields:
                 if sort_order == "desc":
@@ -40,20 +38,16 @@ class EmployeeViewSet(viewsets.ModelViewSet):
 
     def list(self, request):
         search = request.GET.get('q', None)
-        online_status = request.GET.get('os', None)
-        su_status = request.GET.get('sus', None)     
+        is_active = request.GET.get('ia', None)    
         filter_conditions = Q()
 
-        if search or online_status or su_status:
+        if search or is_active:
             if search:
-                filter_conditions.add(Q(username__icontains=search) | Q(first_name__icontains=search) | Q(last_name__icontains=search), Q.AND)
-            if online_status:
-                filter_conditions.add(Q(is_active = online_status), Q.AND) 
-            if su_status:
-                filter_conditions.add(Q(is_superuser = su_status), Q.AND)
+                filter_conditions.add(Q(fullname__icontains=search) | Q(employee_id__icontains=search) | Q(position__icontains=search), Q.AND)
+            if is_active:
+                filter_conditions.add(Q(is_active = is_active), Q.AND) 
         
-        # page = self.paginate_queryset(self.queryset.filter(filter_conditions).order_by(self.__sort_field()))
-        page = self.paginate_queryset(self.queryset.filter(filter_conditions).order_by('fullname'))
+        page = self.paginate_queryset(self.queryset.filter(filter_conditions).order_by(self.__sort_field()))
         serializer = self.get_serializer(page, many=True)
         return self.get_paginated_response(serializer.data)
 

@@ -8,9 +8,9 @@ import { Link, useHistory } from "react-router-dom"
 
 import { TableHeaderDefault } from '../Utils/Table/TableHeaders'
 import { TableFooterDefault } from '../Utils/Table/TableFooters'
-// import EmployeeListFilterModal from './EmployeeListFilterModalComp'
-// import EmployeeListBulkDeleteModal from './EmployeeListBulkDeleteModalComp'
-// import EmployeeListSortModal from './EmployeeListSortModalComp'
+import EmployeeListFilterModal from './EmployeeListFilterModalComp'
+import EmployeeListSortModal from './EmployeeListSortModalComp'
+import EmployeeListBulkDeleteModal from './EmployeeListBulkDeleteModalComp'
 
 
 const EmployeeList = observer(({ employeeStore, dashboardMainStore }) => {
@@ -198,10 +198,10 @@ const EmployeeList = observer(({ employeeStore, dashboardMainStore }) => {
                                                             <td className="align-middle">{ val.fullname }</td>
                                                             <td className="align-middle">{ val.position }</td>
                                                             <td className="align-middle">
-                                                                {/* { val.is_active == true ? 
+                                                                { val.is_active == true ? 
                                                                     <label className="label label-success">active</label> 
                                                                     : <label className="label label-danger">inactive</label> 
-                                                                } */}
+                                                                }
                                                             </td>
                                                             <td className="align-middle"></td>
                                                             <td className="align-middle"></td>
@@ -238,13 +238,13 @@ const EmployeeList = observer(({ employeeStore, dashboardMainStore }) => {
         </div>
         
         {/* Filter Modal */}
-        {/* <EmployeeListFilterModal employeeStore={ employeeStore } /> */}
+        <EmployeeListFilterModal employeeStore={ employeeStore } />
         
         {/* Sort Modal */}
-        {/* <EmployeeListSortModal employeeStore={ employeeStore } /> */}
+        <EmployeeListSortModal employeeStore={ employeeStore } />
 
         {/* Bulk Delete Modal */}
-        {/* { dashboardMainStore.checkIfSubrouteExist('employee-delete') ? <EmployeeListBulkDeleteModal employeeStore={ employeeStore } /> : <></> } */}
+        { dashboardMainStore.checkIfSubrouteExist('employee-delete') ? <EmployeeListBulkDeleteModal employeeStore={ employeeStore } /> : <></> }
 
     </div>
     );
