@@ -87,7 +87,7 @@ const EmployeeList = observer(({ employeeStore, dashboardMainStore }) => {
             <div className="row align-items-end">
                 <div className="col-lg-8">
                     <div className="page-header-title">
-                        <i className="feather icon-employee bg-c-blue"></i>
+                        <i className="feather icon-user bg-c-blue"></i>
                         <div className="d-inline">
                             <h5>Employees</h5>
                             <span>Manage Employees</span>

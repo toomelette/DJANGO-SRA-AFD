@@ -6,7 +6,7 @@ import { Link, useHistory} from 'react-router-dom'
 
 import eventBus from '../Utils/EventBus'
 import DivLoader from '../Utils/DivLoaderComp'
-import { InputTextInline, RadioButton } from '../Utils/Forms/InlineInputs'
+import { InputTextInline, RadioButtonInline } from '../Utils/Forms/InlineInputs'
 
 
 
@@ -167,7 +167,7 @@ const MenuCreate = observer(({ menuStore }) => {
                                                 setter={ e => menuStore.setName(e.target.value) }
                                             />
 
-                                            <RadioButton
+                                            <RadioButtonInline
                                                 label="Is Side Navigation:"
                                                 name="is_menu"
                                                 value={ menuStore.is_menu }
@@ -176,7 +176,7 @@ const MenuCreate = observer(({ menuStore }) => {
                                                 errorField={ menuStore.error_fields.is_menu }
                                             />
 
-                                            <RadioButton
+                                            <RadioButtonInline
                                                 label="Is Side Navigation Dropdown"
                                                 name="is_dropdown"
                                                 value={ menuStore.is_dropdown }

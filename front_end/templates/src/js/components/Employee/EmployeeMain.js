@@ -5,7 +5,7 @@ import { HashRouter, Switch, Route } from "react-router-dom"
 import { observer } from 'mobx-react'
 
 import EmployeeList from './EmployeeListComp.js'
-// import EmployeeCreate from './EmployeeCreateComp.js'
+import EmployeeCreate from './EmployeeCreateComp.js'
 // import EmployeeDetails from './EmployeeDetailsComp.js'
 // import EmployeeEdit from './EmployeeEditComp.js'
 import NotFoundPage from '../ErrorPages/NotFoundPageComp'
@@ -24,10 +24,10 @@ const EmployeeMain = observer(({ employeeStore, dashboardMainStore }) => {
                 </Route>
 
                 {/* CREATE */}
-                {/* <Route exact path="/employees/create">
+                <Route exact path="/employees/create">
                     { dashboardMainStore.checkIfSubrouteExist('employee-create-page') ? 
                         <EmployeeCreate employeeStore={employeeStore}/> : <NotFoundPage/> }
-                </Route> */}
+                </Route>
 
                 {/* DETAILS */}
                 {/* <Route exact path="/employees/:employee_id">

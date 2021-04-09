@@ -52,7 +52,7 @@ function SelectMultiInline(props){
 
 
 
-function RadioButton(props){ 
+function RadioButtonInline(props){ 
 
     return (
         <div className={ props.errorField ? "form-group row has-danger" : "form-group row"}>
@@ -85,4 +85,4 @@ function RadioButton(props){
 }
 
 
-export { InputTextInline, SelectMultiInline, RadioButton };
+export { InputTextInline, SelectMultiInline, RadioButtonInline };

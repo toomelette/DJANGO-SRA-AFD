@@ -23,17 +23,59 @@ class EmployeeStore{
     is_selected_all_rows = false; // is all checkbox selected
     selected_rows = []; // rows that are selected via checkbox
 
-    // // Form
-    // category = "";
-    // name = "";
-    // is_menu = null;
-    // is_dropdown = null;
-    // nav_name = "";
-    // icon = "";
-    // url = "";
-    // url_name = "";
-    // subemployees = [];
-    // error_fields = {};
+    // FORM
+    // - Personal Details
+    firstname = "";
+    middlename = "";
+    lastname = "";
+    suffixname = "";
+    address_present = "";
+    address_permanent = "";
+    birthdate = "";
+    place_of_birth = "";
+    sex = null;
+    civil_status = null;
+    tel_no = "";
+    cell_no = "";
+    email_address = "";
+    spouse_name = "";
+    spouse_occupation = "";
+    no_of_children = "";
+    height = "";
+    weight = "";
+    religion = "";
+    blood_type = "";
+    // - Appointment Details
+    employee_id = "";
+    position = "";
+    // division = null;
+    // department = null;
+    is_active = null;
+    // station = null;
+    salary_grade = 0;
+    step_increment = 0;
+    application_status = null;
+    tax_status = "";
+    monthly_salary = 0;
+    // item = null;
+    // level = "";
+    firstday_gov = null;
+    firstday_sra = null;
+    first_appointment = null;
+    last_appointment = null;
+    last_step_increment = null;
+    last_adjustment = null;
+    last_promotion = null;
+    original_appointment = null;
+    adjustment_date = null;
+    // - ID's
+    tin = "";
+    gsis = "";
+    philhealth = "";
+    pagibig = "";
+    sss = "";
+    // - Error Fields
+    error_fields = {};
 
 
     constructor(){
@@ -99,7 +141,7 @@ class EmployeeStore{
     // }
 
     
-    // // List Setters
+    // List Setters
     setFilterIsActive(is_active){
         this.filter_is_active = is_active;
     }
@@ -133,92 +175,250 @@ class EmployeeStore{
     }
 
 
-    // // Form
-    // resetForm(){
-    //     this.category = "";
-    //     this.name = "";
-    //     this.nav_name = "";
-    //     this.is_menu = null;
-    //     this.is_dropdown = null;
-    //     this.icon = "";
-    //     this.url = "";
-    //     this.url_name = "";
-    //     this.subemployees = [];
-    //     this.error_fields = {};
+    // Form Setters
+    resetForm(){
+        this.firstname = "";
+        this.middlename = "";
+        this.lastname = "";
+        this.suffixname = "";
+        this.address_present = "";
+        this.address_permanent = "";
+        this.birthdate = null;
+        this.place_of_birth = "";
+        this.sex = null;
+        this.civil_status = null;
+        this.tel_no = "";
+        this.cell_no = "";
+        this.email_address = "";
+        this.spouse_name = "";
+        this.spouse_occupation = "";
+        this.no_of_children = 0;
+        this.height = "";
+        this.weight = "";
+        this.religion = "";
+        this.blood_type = "";
+        // - Appointment Details
+        this.employee_id = "";
+        this.position = "";
+        // this.division = null;
+        // this.department = null;
+        this.is_active = null;
+        // this.station = null;
+        this.salary_grade = 0;
+        this.step_increment = 0;
+        this.application_status = null;
+        this.tax_status = "";
+        this.monthly_salary = 0;
+        // this.item = null;
+        // this.level = "";
+        this.firstday_gov = null;
+        this.firstday_sra = null;
+        this.first_appointment = null;
+        this.last_appointment = null;
+        this.last_step_increment = null;
+        this.last_adjustment = null;
+        this.last_promotion = null;
+        this.original_appointment = null;
+        this.adjustment_date = null;
+        // - ID's
+        this.tin = "";
+        this.gsis = "";
+        this.philhealth = "";
+        this.pagibig = "";
+        this.sss = "";
+        this.error_fields = {};
+    }
+
+    setFirstname(firstname){
+        this.firstname = firstname;
+    }
+
+    setMiddlename(middlename){
+        this.middlename = middlename;
+    }
+
+    setLastname(lastname){
+        this.lastname = lastname;
+    }
+
+    setSuffixname(suffixname){
+        this.suffixname = suffixname;
+    }
+
+    setAddressPresent(address_present){
+        this.address_present = address_present;
+    }
+
+    setAddressPermanent(address_permanent){
+        this.address_permanent = address_permanent;
+    }
+
+    setBirthdate(birthdate){
+        this.birthdate = birthdate;
+    }
+
+    setPlaceOfBirth(place_of_birth){
+        this.place_of_birth = place_of_birth;
+    }
+
+    setSex(sex){
+        this.sex = sex;
+    }
+
+    setCivilStatus(civil_status){
+        this.civil_status = civil_status;
+    }
+
+    setTelNo(tel_no){
+        this.tel_no = tel_no;
+    }
+
+    setCellNo(cell_no){
+        this.cell_no = cell_no;
+    }
+
+    setEmailAddress(email_address){
+        this.email_address = email_address;
+    }
+
+    setSpouseName(spouse_name){
+        this.spouse_name = spouse_name;
+    }
+
+    setSpouseOccupation(spouse_occupation){
+        this.spouse_occupation = spouse_occupation;
+    }
+
+    setNoOfChildren(no_of_children){
+        this.no_of_children = no_of_children;
+    }
+
+    setHeight(height){
+        this.height = height;
+    }
+
+    setWeight(weight){
+        this.weight = weight;
+    }
+
+    setReligion(religion){
+        this.religion = religion;
+    }
+
+    setBloodType(blood_type){
+        this.blood_type = blood_type;
+    }
+
+    setPosition(position){
+        this.position = position;
+    }
+
+    // setDivision(division){
+    //     this.division = division;
     // }
 
-    // setCategory(cat){
-    //     this.category = cat;
+    // setDepartment(department){
+    //     this.department = department;
     // }
 
-    // setName(name){
-    //     this.name = name;
+    setIsActive(is_active){
+        this.is_active = is_active;
+    }
+
+    // setStation(station){
+    //     this.station = station;
     // }
 
-    // setIsMenu(is_menu){
-    //     this.is_menu = is_menu;
+    setSalaryGrade(salary_grade){
+        this.salary_grade = salary_grade;
+    }
+
+    setStepIncrement(step_increment){
+        this.step_increment = step_increment;
+    }
+
+    setApplicationStatus(application_status){
+        this.application_status = application_status;
+    }
+
+    setTaxStatus(tax_status){
+        this.tax_status = tax_status;
+    }
+
+    setMonthlySalary(monthly_salary){
+        this.monthly_salary = monthly_salary;
+    }
+
+    // setItem(item){
+    //     this.item = item;
     // }
 
-    // setIsDropdown(is_dropdown){
-    //     this.is_dropdown = is_dropdown;
+    // setLevel(level){
+    //     this.level = level;
     // }
 
-    // setNavName(nav_name){
-    //     this.nav_name = nav_name;
-    // }
+    setFirstdayGov(firstday_gov){
+        this.firstday_gov = firstday_gov;
+    }
 
-    // setIcon(icon){
-    //     this.icon = icon;
-    // }
+    setFirstdaySRA(firstday_sra){
+        this.firstday_sra = firstday_sra;
+    }
 
-    // setUrl(url){
-    //     this.url = url;
-    // }
+    setFirstAppointment(first_appointment){
+        this.first_appointment = first_appointment;
+    }
 
-    // setUrlName(url_name){
-    //     this.url_name = url_name;
-    // }
+    setLastAppointment(last_appointment){
+        this.last_appointment = last_appointment;
+    }
 
-    // addSubemployees(){
-    //     this.subemployees = [...this.subemployees, { name:"", is_nav:"", nav_name:"", url:"", url_name:"" }]
-    // }
+    setLastStepIncrement(last_step_increment){
+        this.last_step_increment = last_step_increment;
+    }
 
-    // modifySubemployees(index, e){
-    //     const list = [...this.subemployees];
-    //     list[index][e.target.name] = e.target.value;
-    //     this.subemployees = list;
-    // }
+    setLastAdjustment(last_adjustment){
+        this.last_adjustment = last_adjustment;
+    }
 
-    // deleteSubemployees(index){
-    //     const list = [...this.subemployees];
-    //     list.splice(index, 1);
-    //     this.subemployees = list;
-    // }
+    setLastAdjustment(last_adjustment){
+        this.last_adjustment = last_adjustment;
+    }
 
-    // setSubemployees(subemployees){
-    //     this.subemployees = subemployees;
-    // }
+    setLastPromotion(last_promotion){
+        this.last_promotion = last_promotion;
+    }
 
-    // findSubemployeeById(value){
-    //     const subemployees = this.subemployees;
-    //     subemployees.find((data)=>{
-    //         return data.id === value;
-    //     })
-    //     return subemployees;
-    // }
+    setOriginalAppointment(original_appointment){
+        this.original_appointment = original_appointment;
+    }
 
-    // findSubemployeeByKey(key){
-    //     const subemployees = this.subemployees;
-    //     return subemployees[key];
-    // }
+    setAdjustmentDate(adjustment_date){
+        this.adjustment_date = adjustment_date;
+    }
 
-    // setErrorFields(obj){
-    //     this.error_fields = obj;
-    // }
+    setTin(tin){
+        this.tin = tin;
+    }
+
+    setGsis(gsis){
+        this.gsis = gsis;
+    }
+
+    setPhilhealth(philhealth){
+        this.philhealth = philhealth;
+    }
+
+    setPagibig(pagibig){
+        this.pagibig = pagibig;
+    }
+
+    setSss(sss){
+        this.sss = sss;
+    }
 
 
     // List Handlers
-
     handleSearch(e){
         e.preventDefault()
         this.page_prev = 0;
