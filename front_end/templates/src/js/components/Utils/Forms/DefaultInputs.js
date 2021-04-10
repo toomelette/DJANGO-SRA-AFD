@@ -1,6 +1,7 @@
 
 import React from "react";
 import Select from "react-select";
+import NumberFormat from 'react-number-format';
 
 
 
@@ -25,6 +26,31 @@ function InputText(props){
     );
 }
 
+
+
+function InputNumeric(props){ 
+    return (
+        <div className={ props.col }>
+            <div className={ props.errorField ? "form-group row has-danger" : "form-group row"}>
+                <label className="col-sm-12 col-form-label">{ props.label }</label>
+                <div className="col-sm-12">
+                    <NumberFormat 
+                        value={props.value} 
+                        className={ props.errorField ? "form-control form-control-danger" : "form-control" }
+                        placeholder={props.placeholder} 
+                        displayType={'input'}
+                        thousandSeparator={true}
+                        onValueChange={props.setter}  
+                        allowedDecimalSeparators={ ['.'] } 
+                    />
+                    <div className="col-form-label" style={ props.errorField ? {} : {display:"none"} }> 
+                        { props.errorField ? props.errorField : ""}
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
 
 
 function SelectMulti(props){ 
@@ -140,4 +166,4 @@ function SelectInput(props){
 }
 
 
-export { InputText, SelectMulti, RadioButton, DatePicker, SelectInput };
+export { InputText, InputNumeric, SelectMulti, RadioButton, DatePicker, SelectInput };

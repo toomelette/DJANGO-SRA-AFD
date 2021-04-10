@@ -48,17 +48,17 @@ class EmployeeStore{
     // - Appointment Details
     employee_id = "";
     position = "";
-    // division = null;
-    // department = null;
     is_active = null;
-    // station = null;
-    salary_grade = 0;
-    step_increment = 0;
+    station = null; //
+    division = null; //
+    department = null; //
+    salary_grade = "";
+    step_increment = "";
     application_status = null;
     tax_status = "";
-    monthly_salary = 0;
-    // item = null;
-    // level = "";
+    monthly_salary = "";
+    item = null; //
+    level = ""; //
     firstday_gov = null;
     firstday_sra = null;
     first_appointment = null;
@@ -309,25 +309,29 @@ class EmployeeStore{
         this.blood_type = blood_type;
     }
 
+    setEmployeeId(employee_id){
+        this.employee_id = employee_id;
+    }
+
     setPosition(position){
         this.position = position;
     }
 
-    // setDivision(division){
-    //     this.division = division;
-    // }
+    setDivision(division){
+        this.division = division;
+    }
 
-    // setDepartment(department){
-    //     this.department = department;
-    // }
+    setDepartment(department){
+        this.department = department;
+    }
 
     setIsActive(is_active){
         this.is_active = is_active;
     }
 
-    // setStation(station){
-    //     this.station = station;
-    // }
+    setStation(station){
+        this.station = station;
+    }
 
     setSalaryGrade(salary_grade){
         this.salary_grade = salary_grade;
@@ -349,13 +353,13 @@ class EmployeeStore{
         this.monthly_salary = monthly_salary;
     }
 
-    // setItem(item){
-    //     this.item = item;
-    // }
+    setItem(item){
+        this.item = item;
+    }
 
-    // setLevel(level){
-    //     this.level = level;
-    // }
+    setLevel(level){
+        this.level = level;
+    }
 
     setFirstdayGov(firstday_gov){
         this.firstday_gov = firstday_gov;
