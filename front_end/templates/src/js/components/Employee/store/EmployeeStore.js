@@ -31,7 +31,7 @@ class EmployeeStore{
     suffixname = "";
     address_present = "";
     address_permanent = "";
-    birthdate = "";
+    birthdate = null;
     place_of_birth = "";
     sex = null;
     civil_status = null;
@@ -40,7 +40,7 @@ class EmployeeStore{
     email_address = "";
     spouse_name = "";
     spouse_occupation = "";
-    no_of_children = "";
+    no_of_children = null;
     height = "";
     weight = "";
     religion = "";
@@ -49,16 +49,15 @@ class EmployeeStore{
     employee_id = "";
     position = "";
     is_active = null;
-    station = null; //
-    division = null; //
-    department = null; //
-    salary_grade = "";
-    step_increment = "";
+    // station = null; //
+    // division = null; //
+    // department = null; //
+    salary_grade = null;
+    step_increment = null;
     application_status = null;
     tax_status = "";
-    monthly_salary = "";
-    item = null; //
-    level = ""; //
+    monthly_salary = null;
+    // item = null; //
     firstday_gov = null;
     firstday_sra = null;
     first_appointment = null;
@@ -68,7 +67,6 @@ class EmployeeStore{
     last_promotion = null;
     original_appointment = null;
     adjustment_date = null;
-    // - ID's
     tin = "";
     gsis = "";
     philhealth = "";
@@ -357,10 +355,6 @@ class EmployeeStore{
         this.item = item;
     }
 
-    setLevel(level){
-        this.level = level;
-    }
-
     setFirstdayGov(firstday_gov){
         this.firstday_gov = firstday_gov;
     }
@@ -419,6 +413,10 @@ class EmployeeStore{
 
     setSss(sss){
         this.sss = sss;
+    }
+
+    setErrorFields(error_fields){
+        this.error_fields = error_fields;
     }
 
 

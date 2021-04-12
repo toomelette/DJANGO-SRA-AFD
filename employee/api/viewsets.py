@@ -9,16 +9,15 @@ from django.db import connection
 
 from .pagination import EmployeeListPagination
 from .serializers import (
-    EmployeeSerializer
+    EmployeeListSerializer,
+    EmployeeCreateSerializer
 )
 
 
 
-
 class EmployeeViewSet(viewsets.ModelViewSet):
-    
     queryset = Employee.objects.all()
-    serializer_class = EmployeeSerializer
+    serializer_class = EmployeeListSerializer
     pagination_class = EmployeeListPagination
 
 
@@ -45,11 +44,66 @@ class EmployeeViewSet(viewsets.ModelViewSet):
             if search:
                 filter_conditions.add(Q(fullname__icontains=search) | Q(employee_id__icontains=search) | Q(position__icontains=search), Q.AND)
             if is_active:
-                filter_conditions.add(Q(is_active = is_active), Q.AND) 
-        
+                filter_conditions.add(Q(is_active = is_active), Q.AND)
+
         page = self.paginate_queryset(self.queryset.filter(filter_conditions).order_by(self.__sort_field()))
         serializer = self.get_serializer(page, many=True)
         return self.get_paginated_response(serializer.data)
+
+
+    def create(self, request):
+        serializer = EmployeeCreateSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        employee = Employee()
+        # Personal Details
+        employee.firstname = serializer.data['firstname']
+        employee.middlename = serializer.data['middlename']
+        employee.lastname = serializer.data['lastname']
+        employee.suffixname = serializer.data['suffixname']
+        employee.address_present = serializer.data['address_present']
+        employee.address_permanent = serializer.data['address_permanent']
+        employee.birthdate = serializer.data['birthdate']
+        employee.place_of_birth = serializer.data['place_of_birth']
+        employee.sex = serializer.data['sex']
+        employee.civil_status = serializer.data['civil_status']
+        employee.tel_no = serializer.data['tel_no']
+        employee.cell_no = serializer.data['cell_no']
+        employee.email_address = serializer.data['email_address']
+        employee.spouse_name = serializer.data['spouse_name']
+        employee.spouse_occupation = serializer.data['spouse_occupation']
+        employee.no_of_children = serializer.data['no_of_children']
+        employee.height = serializer.data['height']
+        employee.weight = serializer.data['weight']
+        employee.religion = serializer.data['religion']
+        employee.blood_type = serializer.data['blood_type']
+        # Appointment Details
+        employee.employee_id = serializer.data['employee_id']
+        employee.position = serializer.data['position']
+        employee.is_active = serializer.data['is_active']
+        employee.salary_grade = serializer.data['salary_grade']
+        employee.step_increment = serializer.data['step_increment']
+        employee.application_status = serializer.data['application_status']
+        employee.tax_status = serializer.data['tax_status']
+        employee.monthly_salary = serializer.data['monthly_salary']
+        employee.firstday_gov = serializer.data['firstday_gov']
+        employee.firstday_sra = serializer.data['firstday_sra']
+        employee.first_appointment = serializer.data['first_appointment']
+        employee.last_appointment = serializer.data['last_appointment']
+        employee.last_step_increment = serializer.data['last_step_increment']
+        employee.last_adjustment = serializer.data['last_adjustment']
+        employee.last_promotion = serializer.data['last_promotion']
+        employee.original_appointment = serializer.data['original_appointment']
+        employee.adjustment_date = serializer.data['adjustment_date']
+        employee.adjustment_date = serializer.data['adjustment_date']
+        employee.tin = serializer.data['tin']
+        employee.gsis = serializer.data['gsis']
+        employee.philhealth = serializer.data['philhealth']
+        employee.pagibig = serializer.data['pagibig']
+        employee.sss = serializer.data['sss']
+        employee.save()
+
+        return Response({"TEST": "TEST"}, 201)
 
 
 

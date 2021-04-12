@@ -17,7 +17,7 @@ const EmployeeCreate = observer(({ employeeStore }) => {
     const [page_loader, SetPageLoader] = useState(false);
 
 
-    const redirectBackToUserList = useCallback(() => {
+    const redirectBackToEmployeeList = useCallback(() => {
         history.push('/employees'), [history]
     });
 
@@ -30,56 +30,139 @@ const EmployeeCreate = observer(({ employeeStore }) => {
 
     const handleCreate = (e, is_save_another) => {
         e.preventDefault()
-        // SetPageLoader(true)
-        // if(employeeStore.password != employeeStore.password_confirm){
-        //     employeeStore.setErrorFields({ password : "Password doesn't match!" })
-        //     SetPageLoader(false)
-        // }else{
-        //     axios.post('api/employee/', { 
-        //         first_name : employeeStore.first_name,
-        //         last_name : employeeStore.last_name,
-        //         email : employeeStore.email,
-        //         employeename : employeeStore.employeename, 
-        //         password : employeeStore.password, 
-        //         employee_routes : employeeStore.employee_routes,
-        //         employee_subroutes : employeeStore.employee_subroutes,
-        //     }).then((response) => {
-        //         eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
-        //             message: "User Successfully Created!", type: "inverse" 
-        //         });
-        //         employeeStore.fetch();
-        //         employeeStore.setSelectedUser(response.data.id);
-        //         employeeStore.resetForm()
-        //         if (is_save_another == 0){
-        //             redirectBackToUserList()
-        //         }
-        //         SetPageLoader(false);
-        //     }).catch((error) => {
-        //         if(error.response.status == 400){
-        //             let field_errors = error.response.data;
-        //             employeeStore.setErrorFields({
-        //                 firstname: field_errors.first_name?.toString(),
-        //                 lastname: field_errors.last_name?.toString(),
-        //                 email: field_errors.email?.toString(),
-        //                 employeename: field_errors.employeename?.toString(),
-        //                 password: field_errors.password?.toString(),
-        //                 employee_routes: field_errors.employee_routes?.toString(),
-        //                 employee_subroutes: field_errors.employee_subroutes?.toString(),
-        //             });
-        //         }
-        //         if(error.response.status == 404){
-        //             eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
-        //                 message: "Data Not Found!", type: "danger" 
-        //             });
-        //         }
-        //         if(error.response.status == 500){
-        //             eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
-        //                 message: "There's an error trying to send data to the server!", type: "danger" 
-        //             });
-        //         }
-        //         SetPageLoader(false);
-        //     });
-        // }
+        SetPageLoader(true)
+        console.log(employeeStore.civil_status)
+        axios.post('api/employee/', { 
+            // Personal Details
+            
+            firstname: employeeStore.firstname, 
+            middlename: employeeStore.middlename, 
+            lastname: employeeStore.lastname, 
+            suffixname: employeeStore.suffixname, 
+            address_present: employeeStore.address_present, 
+            address_permanent: employeeStore.address_permanent, 
+            birthdate: employeeStore.birthdate, 
+            place_of_birth: employeeStore.place_of_birth, 
+            sex: employeeStore.sex, 
+            civil_status: employeeStore.civil_status, 
+            tel_no: employeeStore.tel_no, 
+            cell_no: employeeStore.cell_no, 
+            email_address: employeeStore.email_address, 
+            spouse_name: employeeStore.spouse_name, 
+            spouse_occupation: employeeStore.spouse_occupation, 
+            no_of_children: employeeStore.no_of_children, 
+            height: employeeStore.height, 
+            weight: employeeStore.weight, 
+            religion: employeeStore.religion, 
+            blood_type: employeeStore.blood_type, 
+            // Appointment Details
+            employee_id: employeeStore.employee_id,
+            position: employeeStore.position,
+            is_active: employeeStore.is_active,
+            // -- station: employeeStore.station,
+            // -- division: employeeStore.division,
+            // -- department: employeeStore.department,
+            salary_grade: employeeStore.salary_grade,
+            step_increment: employeeStore.step_increment,
+            application_status: employeeStore.application_status,
+            tax_status: employeeStore.tax_status,
+            monthly_salary: employeeStore.monthly_salary,
+            // -- item: employeeStore.item,
+            firstday_gov: employeeStore.firstday_gov,
+            firstday_sra: employeeStore.firstday_sra,
+            first_appointment: employeeStore.first_appointment,
+            last_appointment: employeeStore.last_appointment,
+            last_step_increment: employeeStore.last_step_increment,
+            last_adjustment: employeeStore.last_adjustment,
+            last_promotion: employeeStore.last_promotion,
+            original_appointment: employeeStore.original_appointment,
+            adjustment_date: employeeStore.adjustment_date,
+            // ID's
+            tin: employeeStore.tin,
+            gsis: employeeStore.gsis,
+            philhealth: employeeStore.philhealth,
+            pagibig: employeeStore.pagibig,
+            sss: employeeStore.sss,
+
+        }).then((response) => {
+            eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
+                message: "Employee Successfully Created!", type: "inverse" 
+            });
+            employeeStore.fetch();
+            employeeStore.setSelectedEmployee(response.data.id);
+            employeeStore.resetForm()
+            if (is_save_another == 0){
+                redirectBackToEmployeeList()
+            }
+            SetPageLoader(false);
+        }).catch((error) => {
+            if(error.response.status == 400){
+                let field_errors = error.response.data;
+                employeeStore.setErrorFields({
+                    // Personal Details
+                    firstname: field_errors.firstname?.toString(), 
+                    middlename: field_errors.middlename?.toString(), 
+                    lastname: field_errors.lastname?.toString(),
+                    suffixname: field_errors.suffixname?.toString(), 
+                    address_present: field_errors.address_present?.toString(), 
+                    address_permanent: field_errors.address_permanent?.toString(), 
+                    birthdate: field_errors.birthdate?.toString(), 
+                    place_of_birth: field_errors.place_of_birth?.toString(), 
+                    sex: field_errors.sex?.toString(), 
+                    civil_status: field_errors.civil_status?.toString(), 
+                    tel_no: field_errors.tel_no?.toString(), 
+                    cell_no: field_errors.cell_no?.toString(), 
+                    email_address: field_errors.email_address?.toString(), 
+                    spouse_name: field_errors.spouse_name?.toString(), 
+                    spouse_occupation: field_errors.spouse_occupation?.toString(), 
+                    no_of_children: field_errors.no_of_children?.toString(), 
+                    height: field_errors.height?.toString(), 
+                    weight: field_errors.weight?.toString(), 
+                    religion: field_errors.religion?.toString(), 
+                    blood_type: field_errors.blood_type?.toString(), 
+                    // Appointment Details
+                    employee_id: field_errors.employee_id?.toString(),
+                    position: field_errors.position?.toString(),
+                    is_active: field_errors.is_active?.toString(),
+                    // -- station: field_errors.station?.toString(),
+                    // -- division: field_errors.division?.toString(),
+                    // -- department: field_errors.department?.toString(),
+                    salary_grade: field_errors.salary_grade?.toString(),
+                    step_increment: field_errors.step_increment?.toString(),
+                    application_status: field_errors.application_status?.toString(),
+                    tax_status: field_errors.tax_status?.toString(),
+                    monthly_salary: field_errors.monthly_salary?.toString(),
+                    // -- item: field_errors.item?.toString(),
+                    firstday_gov: field_errors.firstday_gov?.toString(),
+                    firstday_sra: field_errors.firstday_sra?.toString(),
+                    first_appointment: field_errors.first_appointment?.toString(),
+                    last_appointment: field_errors.last_appointment?.toString(),
+                    last_step_increment: field_errors.last_step_increment?.toString(),
+                    last_adjustment: field_errors.last_adjustment?.toString(),
+                    last_promotion: field_errors.last_promotion?.toString(),
+                    original_appointment: field_errors.original_appointment?.toString(),
+                    adjustment_date: field_errors.adjustment_date?.toString(),
+                    // ID's
+                    tin: field_errors.tin?.toString(),
+                    gsis: field_errors.gsis?.toString(),
+                    philhealth: field_errors.philhealth?.toString(),
+                    pagibig: field_errors.pagibig?.toString(),
+                    sss: field_errors.sss?.toString(),
+                    non_field_errors: field_errors.non_field_errors?.toString(),
+                });
+            }
+            if(error.response.status == 404){
+                eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
+                    message: "Data Not Found!", type: "danger" 
+                });
+            }
+            if(error.response.status == 500){
+                eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
+                    message: "There's an error trying to send data to the server!", type: "danger" 
+                });
+            }
+            SetPageLoader(false);
+        });
     }
     
 
@@ -90,7 +173,7 @@ const EmployeeCreate = observer(({ employeeStore }) => {
             <div className="row align-items-end">
                 <div className="col-lg-8">
                     <div className="page-header-title">
-                        <i className="feather icon-user bg-c-blue"></i>
+                        <i className="feather icon-Employee bg-c-blue"></i>
                         <div className="d-inline">
                             <h5>Employees</h5>
                             <span>Manage Employees</span>

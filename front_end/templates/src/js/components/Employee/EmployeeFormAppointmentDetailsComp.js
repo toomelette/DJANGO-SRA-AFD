@@ -43,7 +43,11 @@ const EmployeeFormAppointmentDetails = observer(({ employeeStore }) => {
                     errorField={ employeeStore.error_fields.is_active }
                 />
 
-                <SelectInput
+                <div className="col-md-3">Station</div>
+                <div className="col-md-3">Division</div>
+                <div className="col-md-3">Department</div>
+
+                {/* <SelectInput
                     col="col-md-3"
                     name="station"
                     label="Station"
@@ -51,9 +55,9 @@ const EmployeeFormAppointmentDetails = observer(({ employeeStore }) => {
                     isDisabled={ false }
                     options={ [ {value:"", label:"Select"}, ] }
                     onChange={ (e) => e.preventDefault() }
-                />
+                /> */}
 
-                <SelectInput
+                {/* <SelectInput
                     col="col-md-3"
                     name="division"
                     label="Division"
@@ -61,9 +65,9 @@ const EmployeeFormAppointmentDetails = observer(({ employeeStore }) => {
                     isDisabled={ false }
                     options={ [ {value:"", label:"Select"}, ] }
                     onChange={ (e) => e.preventDefault() }
-                />
+                /> */}
 
-                <SelectInput
+                {/* <SelectInput
                     col="col-md-3"
                     name="department"
                     label="Department"
@@ -71,7 +75,7 @@ const EmployeeFormAppointmentDetails = observer(({ employeeStore }) => {
                     isDisabled={ false }
                     options={ [ {value:"", label:"Select"}, ] }
                     onChange={ (e) => e.preventDefault() }
-                />
+                /> */}
 
                 <InputText 
                     col="col-sm-3"
@@ -121,8 +125,10 @@ const EmployeeFormAppointmentDetails = observer(({ employeeStore }) => {
                     value={ employeeStore.monthly_salary }
                     setter={ e => employeeStore.setMonthlySalary(e.target.value) }
                 />
-                
-                <InputText 
+
+                <div className="col-sm-3">Item / Plantilla</div>
+
+                {/* <InputText 
                     col="col-sm-3"
                     type="text"
                     label="Item"
@@ -130,17 +136,7 @@ const EmployeeFormAppointmentDetails = observer(({ employeeStore }) => {
                     errorField={ employeeStore.error_fields.item }
                     value={ employeeStore.item }
                     setter={ e => employeeStore.setItem(e.target.value) }
-                />
-                
-                <InputText 
-                    col="col-sm-3"
-                    type="text"
-                    label="Level"
-                    placeholder="Level"
-                    errorField={ employeeStore.error_fields.level }
-                    value={ employeeStore.level }
-                    setter={ e => employeeStore.setLevel(e.target.value) }
-                />
+                /> */}
 
                 <DatePicker 
                     col="col-sm-3"

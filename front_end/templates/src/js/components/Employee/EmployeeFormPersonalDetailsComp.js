@@ -116,6 +116,7 @@ const EmployeeFormPersonalDetails = observer(({ employeeStore }) => {
                         ] 
                     }
                     onChange={ (value) => employeeStore.setCivilStatus(value) }
+                    errorField={ employeeStore.error_fields.civil_status }
                 />
 
                 <InputText 
