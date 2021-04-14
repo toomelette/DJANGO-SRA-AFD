@@ -60,7 +60,7 @@ class Employee(models.Model):
 
     # Appointment Details
     position = models.CharField(max_length=200, default="")
-    is_active = models.BooleanField(null=True)
+    is_active = models.BooleanField(null=True, default=None)
     station = models.IntegerField(choices=STATION_TYPES, default=0)
     department =  models.CharField(max_length=20, default="")
     division =  models.CharField(max_length=20, default="")

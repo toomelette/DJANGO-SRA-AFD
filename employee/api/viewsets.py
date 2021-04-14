@@ -12,6 +12,10 @@ from .serializers import (
     EmployeeListSerializer,
     EmployeeCreateSerializer
 )
+from employee.utils import (
+    validate_int_helper, 
+    validate_decimal_helper
+)
 
 
 
@@ -65,14 +69,14 @@ class EmployeeViewSet(viewsets.ModelViewSet):
         employee.address_permanent = serializer.data['address_permanent']
         employee.birthdate = serializer.data['birthdate']
         employee.place_of_birth = serializer.data['place_of_birth']
-        employee.sex = serializer.data['sex']
-        employee.civil_status = serializer.data['civil_status']
+        employee.sex = validate_int_helper(serializer.data['sex'], 0)
+        employee.civil_status = validate_int_helper(serializer.data['civil_status'], 0)
         employee.tel_no = serializer.data['tel_no']
         employee.cell_no = serializer.data['cell_no']
         employee.email_address = serializer.data['email_address']
         employee.spouse_name = serializer.data['spouse_name']
         employee.spouse_occupation = serializer.data['spouse_occupation']
-        employee.no_of_children = serializer.data['no_of_children']
+        employee.no_of_children = validate_int_helper(serializer.data['no_of_children'], 0)
         employee.height = serializer.data['height']
         employee.weight = serializer.data['weight']
         employee.religion = serializer.data['religion']
@@ -81,11 +85,11 @@ class EmployeeViewSet(viewsets.ModelViewSet):
         employee.employee_id = serializer.data['employee_id']
         employee.position = serializer.data['position']
         employee.is_active = serializer.data['is_active']
-        employee.salary_grade = serializer.data['salary_grade']
-        employee.step_increment = serializer.data['step_increment']
-        employee.application_status = serializer.data['application_status']
+        employee.salary_grade = validate_int_helper(serializer.data['salary_grade'], 0)
+        employee.step_increment = validate_int_helper(serializer.data['step_increment'], 0)
+        employee.application_status = validate_int_helper(serializer.data['application_status'], 0)
         employee.tax_status = serializer.data['tax_status']
-        employee.monthly_salary = serializer.data['monthly_salary']
+        employee.monthly_salary = validate_decimal_helper(serializer.data['monthly_salary'], 0)
         employee.firstday_gov = serializer.data['firstday_gov']
         employee.firstday_sra = serializer.data['firstday_sra']
         employee.first_appointment = serializer.data['first_appointment']
@@ -101,9 +105,11 @@ class EmployeeViewSet(viewsets.ModelViewSet):
         employee.philhealth = serializer.data['philhealth']
         employee.pagibig = serializer.data['pagibig']
         employee.sss = serializer.data['sss']
+        employee.created_by_id = request.user.id
+        employee.updated_by_id = request.user.id
         employee.save()
 
-        return Response({"TEST": "TEST"}, 201)
+        return Response({}, 201)
 
 
 
