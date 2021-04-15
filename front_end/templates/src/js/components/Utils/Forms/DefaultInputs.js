@@ -123,10 +123,10 @@ function DatePicker(props){
                 <label className="col-sm-12 col-form-label">{ props.label }</label>
                 <div className="col-sm-12">
                     <input type="date" 
-                        className={ props.errorField ? "form-control form-control-danger" : "form-control"}
-                        value={props.value} 
-                        onChange={ props.setter }
-                    />
+                           className={ props.errorField ? "form-control form-control-danger" : "form-control"}
+                           value={props.value}
+                           onChange={props.setter}
+                    />  
                     <div className="col-form-label" style={ props.errorField ? {} : {display:"none"} }> 
                         { props.errorField ? props.errorField : ""}
                     </div>

@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { observer } from 'mobx-react'
-import { InputText, InputNumeric, DatePicker, RadioButton, SelectInput } from '../Utils/Forms/DefaultInputs'
+import { InputText, InputNumeric, DatePicker, RadioButton } from '../Utils/Forms/DefaultInputs'
 
 
 const EmployeeFormAppointmentDetails = observer(({ employeeStore }) => {
@@ -38,7 +38,7 @@ const EmployeeFormAppointmentDetails = observer(({ employeeStore }) => {
                     label="Status"
                     name="is_active"
                     value={ employeeStore.is_active }
-                    options={ [{value:1, label:"Active"}, {value:0, label:"Inactive"}] }
+                    options={ [{value:true, label:"Active"}, {value:false, label:"Inactive"}] }
                     onChange={ (e) => employeeStore.setIsActive(e.target.value) }
                     errorField={ employeeStore.error_fields.is_active }
                 />
@@ -123,7 +123,7 @@ const EmployeeFormAppointmentDetails = observer(({ employeeStore }) => {
                     placeholder="Monthly Salary"
                     errorField={ employeeStore.error_fields.monthly_salary }
                     value={ employeeStore.monthly_salary }
-                    setter={ e => employeeStore.setMonthlySalary(e.target.value) }
+                    setter={ values => employeeStore.setMonthlySalary(values.value) }
                 />
 
                 <div className="col-sm-3">Item / Plantilla</div>

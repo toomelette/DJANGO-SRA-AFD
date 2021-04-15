@@ -20,26 +20,26 @@ const EmployeeListBulkDeleteModal = observer(({ employeeStore }) => {
                 ids_for_delete.push(data.id)
             }
         })
-        // if(ids_for_delete.length > 0){
-        //     axios.delete('api/employee/bulk_destroy/', {
-        //         data: { 
-        //             ids:ids_for_delete 
-        //         }
-        //     }).then((response) => {
-        //         eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
-        //             message: "The employees has been successfully Deleted!", type: "inverse"
-        //         });
-        //         employeeStore.fetch()
-        //         SetPageLoader(false)
-        //     }).catch((error) => {
-        //         if(error.response.status == 500){
-        //             eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
-        //                 message: "There's an error trying to send data to the server!", type: "danger" 
-        //             });
-        //         }
-        //         SetPageLoader(false)
-        //     });
-        // }
+        if(ids_for_delete.length > 0){
+            axios.delete('api/employee/bulk_destroy/', {
+                data: { 
+                    ids:ids_for_delete 
+                }
+            }).then((response) => {
+                eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
+                    message: "The Employees has been successfully Deleted!", type: "inverse"
+                });
+                employeeStore.fetch()
+                SetPageLoader(false)
+            }).catch((error) => {
+                if(error.response.status == 500){
+                    eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
+                        message: "There's an error trying to send data to the server!", type: "danger" 
+                    });
+                }
+                SetPageLoader(false)
+            });
+        }
         $("#employee-bulk-delete-modal").modal('hide');
     }
 

@@ -10,11 +10,8 @@ from django.db import connection
 from .pagination import EmployeeListPagination
 from .serializers import (
     EmployeeListSerializer,
-    EmployeeCreateSerializer
-)
-from employee.utils import (
-    validate_int_helper, 
-    validate_decimal_helper
+    EmployeeCreateSerializer,
+    EmployeeBulkDeleteSerializer
 )
 
 
@@ -43,13 +40,11 @@ class EmployeeViewSet(viewsets.ModelViewSet):
         search = request.GET.get('q', None)
         is_active = request.GET.get('ia', None)    
         filter_conditions = Q()
-
         if search or is_active:
             if search:
                 filter_conditions.add(Q(fullname__icontains=search) | Q(employee_id__icontains=search) | Q(position__icontains=search), Q.AND)
             if is_active:
                 filter_conditions.add(Q(is_active = is_active), Q.AND)
-
         page = self.paginate_queryset(self.queryset.filter(filter_conditions).order_by(self.__sort_field()))
         serializer = self.get_serializer(page, many=True)
         return self.get_paginated_response(serializer.data)
@@ -58,10 +53,8 @@ class EmployeeViewSet(viewsets.ModelViewSet):
     def create(self, request):
         serializer = EmployeeCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-
         employee = Employee()
-        # Personal Details
-        employee.firstname = serializer.data['firstname']
+        employee.firstname = serializer.data['firstname'] # Personal Details
         employee.middlename = serializer.data['middlename']
         employee.lastname = serializer.data['lastname']
         employee.suffixname = serializer.data['suffixname']
@@ -69,27 +62,28 @@ class EmployeeViewSet(viewsets.ModelViewSet):
         employee.address_permanent = serializer.data['address_permanent']
         employee.birthdate = serializer.data['birthdate']
         employee.place_of_birth = serializer.data['place_of_birth']
-        employee.sex = validate_int_helper(serializer.data['sex'], 0)
-        employee.civil_status = validate_int_helper(serializer.data['civil_status'], 0)
+        employee.sex = serializer.data['sex']
+        employee.civil_status = serializer.data['civil_status']
         employee.tel_no = serializer.data['tel_no']
         employee.cell_no = serializer.data['cell_no']
         employee.email_address = serializer.data['email_address']
         employee.spouse_name = serializer.data['spouse_name']
         employee.spouse_occupation = serializer.data['spouse_occupation']
-        employee.no_of_children = validate_int_helper(serializer.data['no_of_children'], 0)
+        employee.no_of_children = serializer.data['no_of_children']
         employee.height = serializer.data['height']
         employee.weight = serializer.data['weight']
         employee.religion = serializer.data['religion']
         employee.blood_type = serializer.data['blood_type']
-        # Appointment Details
-        employee.employee_id = serializer.data['employee_id']
+        employee.employee_id = serializer.data['employee_id'] # Appointment Details
         employee.position = serializer.data['position']
         employee.is_active = serializer.data['is_active']
-        employee.salary_grade = validate_int_helper(serializer.data['salary_grade'], 0)
-        employee.step_increment = validate_int_helper(serializer.data['step_increment'], 0)
-        employee.application_status = validate_int_helper(serializer.data['application_status'], 0)
+        # employee.is_active = serializer.data['station']
+        # employee.is_active = serializer.data['plantilla']
+        employee.salary_grade = serializer.data['salary_grade']
+        employee.step_increment = serializer.data['step_increment']
+        employee.application_status = serializer.data['application_status']
         employee.tax_status = serializer.data['tax_status']
-        employee.monthly_salary = validate_decimal_helper(serializer.data['monthly_salary'], 0)
+        employee.monthly_salary = serializer.data['monthly_salary']
         employee.firstday_gov = serializer.data['firstday_gov']
         employee.firstday_sra = serializer.data['firstday_sra']
         employee.first_appointment = serializer.data['first_appointment']
@@ -108,8 +102,19 @@ class EmployeeViewSet(viewsets.ModelViewSet):
         employee.created_by_id = request.user.id
         employee.updated_by_id = request.user.id
         employee.save()
+        return Response({"id":employee.id}, 201)
 
-        return Response({}, 201)
+
+    @action(methods=['delete'], detail=False)
+    def bulk_destroy(self, request):
+        serializer = EmployeeBulkDeleteSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        ids = serializer.data['ids']
+        for data in ids:
+            employee = self.queryset.get(id=data)
+            if employee:
+                employee.delete()
+        return Response({}, 200)
 
 
 

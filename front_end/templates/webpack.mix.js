@@ -4,3 +4,5 @@ mix.setPublicPath('../static').js('src/js/components/Authentication/LoginFormMai
 mix.setPublicPath('../static').js('src/js/components/Utils/FullPageLoaderComp.js', 'static/build/js/Utils').react();
 mix.setPublicPath('../static').js('src/js/components/Utils/ToastNotificationComp.js', 'static/build/js/Utils').react();
 mix.setPublicPath('../static').js('src/js/components/BaseDashboard/DashboardMain.js', 'static/build/js/BaseDashboard').react();
+
+mix.disableSuccessNotifications();

@@ -109,7 +109,7 @@ const EmployeeFormPersonalDetails = observer(({ employeeStore }) => {
                     isDisabled={ false }
                     options={ 
                         [
-                            {value:"", label:"Select"}, 
+                            {value:0, label:"Select"}, 
                             {value:1, label:"Single"}, 
                             {value:2, label:"Married"}, 
                             {value:3, label:"Widow"} 
@@ -171,7 +171,7 @@ const EmployeeFormPersonalDetails = observer(({ employeeStore }) => {
 
                 <InputText 
                     col="col-sm-4"
-                    type="text"
+                    type="number"
                     label="Number of Children"
                     placeholder="Number of Children"
                     errorField={ employeeStore.error_fields.no_of_children }

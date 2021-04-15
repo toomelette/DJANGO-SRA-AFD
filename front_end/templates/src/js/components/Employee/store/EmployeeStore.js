@@ -31,16 +31,16 @@ class EmployeeStore{
     suffixname = "";
     address_present = "";
     address_permanent = "";
-    birthdate = null;
+    birthdate = "";
     place_of_birth = "";
-    sex = null;
-    civil_status = null;
+    sex = 0;
+    civil_status = { value:0, label:"" };
     tel_no = "";
     cell_no = "";
     email_address = "";
     spouse_name = "";
     spouse_occupation = "";
-    no_of_children = null;
+    no_of_children = "";
     height = "";
     weight = "";
     religion = "";
@@ -49,24 +49,22 @@ class EmployeeStore{
     employee_id = "";
     position = "";
     is_active = null;
-    // station = null; //
-    // division = null; //
-    // department = null; //
-    salary_grade = null;
-    step_increment = null;
-    application_status = null;
+    // station = ""; //
+    // plantilla = ""; //
+    salary_grade = "";
+    step_increment = "";
+    application_status = 0;
     tax_status = "";
-    monthly_salary = null;
-    // item = null; //
-    firstday_gov = null;
-    firstday_sra = null;
-    first_appointment = null;
-    last_appointment = null;
-    last_step_increment = null;
-    last_adjustment = null;
-    last_promotion = null;
-    original_appointment = null;
-    adjustment_date = null;
+    monthly_salary = "";
+    firstday_gov = "";
+    firstday_sra = "";
+    first_appointment = "";
+    last_appointment = "";
+    last_step_increment = "";
+    last_adjustment = "";
+    last_promotion = "";
+    original_appointment = "";
+    adjustment_date = "";
     tin = "";
     gsis = "";
     philhealth = "";
@@ -181,16 +179,16 @@ class EmployeeStore{
         this.suffixname = "";
         this.address_present = "";
         this.address_permanent = "";
-        this.birthdate = null;
+        this.birthdate = "";
         this.place_of_birth = "";
-        this.sex = null;
-        this.civil_status = null;
+        this.sex = 0;
+        this.civil_status = "";
         this.tel_no = "";
         this.cell_no = "";
         this.email_address = "";
         this.spouse_name = "";
         this.spouse_occupation = "";
-        this.no_of_children = 0;
+        this.no_of_children = "";
         this.height = "";
         this.weight = "";
         this.religion = "";
@@ -198,26 +196,23 @@ class EmployeeStore{
         // - Appointment Details
         this.employee_id = "";
         this.position = "";
-        // this.division = null;
-        // this.department = null;
-        this.is_active = null;
-        // this.station = null;
-        this.salary_grade = 0;
-        this.step_increment = 0;
-        this.application_status = null;
+        this.is_active = "";
+        // this.station = "";
+        // this.plantilla = "";
+        this.salary_grade = "";
+        this.step_increment = "";
+        this.application_status = 0;
         this.tax_status = "";
-        this.monthly_salary = 0;
-        // this.item = null;
-        // this.level = "";
-        this.firstday_gov = null;
-        this.firstday_sra = null;
-        this.first_appointment = null;
-        this.last_appointment = null;
-        this.last_step_increment = null;
-        this.last_adjustment = null;
-        this.last_promotion = null;
-        this.original_appointment = null;
-        this.adjustment_date = null;
+        this.monthly_salary = "";
+        this.firstday_gov = "";
+        this.firstday_sra = "";
+        this.first_appointment = "";
+        this.last_appointment = "";
+        this.last_step_increment = "";
+        this.last_adjustment = "";
+        this.last_promotion = "";
+        this.original_appointment = "";
+        this.adjustment_date = "";
         // - ID's
         this.tin = "";
         this.gsis = "";
@@ -315,14 +310,6 @@ class EmployeeStore{
         this.position = position;
     }
 
-    setDivision(division){
-        this.division = division;
-    }
-
-    setDepartment(department){
-        this.department = department;
-    }
-
     setIsActive(is_active){
         this.is_active = is_active;
     }
@@ -348,11 +335,12 @@ class EmployeeStore{
     }
 
     setMonthlySalary(monthly_salary){
+        console.log(monthly_salary)
         this.monthly_salary = monthly_salary;
     }
 
-    setItem(item){
-        this.item = item;
+    setPlantilla(plantilla){
+        this.plantilla = plantilla;
     }
 
     setFirstdayGov(firstday_gov){
