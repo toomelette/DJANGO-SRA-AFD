@@ -19,20 +19,24 @@ class Station(models.Model):
 
 
 class Plantilla(models.Model):
-    APPOINTMENT_STATUS_TYPES = ( (1, 'PERMANENT'), (2, 'CO-TERMINUS') )
+    APPOINTMENT_STATUS_TYPES = ( (1, 'PERMANENT'), (2, 'CO-TERMINUS'), (3, 'PRESIDENT APPOINTEE'))
 
-    station =  models.ForeignKey(Station, db_column="station_id", related_name='plantilla_station', on_delete=models.PROTECT)
+    station = models.CharField(max_length=20, blank=True, null=True)
+    station_link =  models.ForeignKey(Station, db_column="station_id", related_name='plantilla_station', null=True, default=None, on_delete=models.PROTECT)
+
     plantilla_id = models.CharField(max_length=20, unique=True)
-    title = models.CharField(max_length=200)
+    employee_name = models.CharField(max_length=200, default="")
+    position = models.CharField(max_length=200)
     salary_grade = models.PositiveIntegerField(default=0)
     step_increment = models.PositiveIntegerField(default=0)
     monthly_salary = models.DecimalField(max_digits=13, decimal_places=2, default=0)
-    required_eligibility = models.CharField(max_length=200)
-    required_education = models.CharField(max_length=200)
+    orig_monthly_salary = models.DecimalField(max_digits=13, decimal_places=2, default=0)
+    eligibility = models.CharField(max_length=200)
+    education = models.CharField(max_length=200)
     appointment_status = models.IntegerField(choices=APPOINTMENT_STATUS_TYPES, default=0)
     appointment_date = models.DateField(null=True)
     promotion_date =  models.DateField(null=True)
-    is_open =  models.BooleanField(default=False)
+    is_open =  models.BooleanField(default=False, null=True)
     plantilla_date =  models.DateField(null=True)
 
     created_by = models.ForeignKey(User, related_name='plantilla_created_by_user', on_delete=models.PROTECT)
@@ -50,9 +54,12 @@ class Employee(models.Model):
     CIVIL_STATUS_TYPES = ( (0, 'N/A'), (1, 'SINGLE'), (2, 'MARRIED'), (3, 'WIDOW') )
     APPLICATION_STATUS_TYPES = ( (0, 'N/A'), (1, 'PERMANENT'), (2, 'CONTRACT OF SERVICE') )
     
+    station = models.CharField(max_length=20, blank=True, null=True)
+    station_link =  models.ForeignKey(Station, db_column="station_id", related_name='employee_station', null=True, default=None, on_delete=models.PROTECT)
+    plantilla = models.CharField(max_length=20, blank=True, null=True)
+    plantilla_link = models.ForeignKey(Plantilla, db_column="plantilla_id", related_name='employee_plantilla', null=True, default=None, unique=True, on_delete=models.PROTECT)
+    
     # Personal Information
-    station =  models.ForeignKey(Station, db_column="station_id", related_name='employee_station', on_delete=models.PROTECT)
-    plantilla = models.ForeignKey(Plantilla, db_column="plantilla_id", related_name='employee_plantilla', unique=True, on_delete=models.PROTECT)
     employee_id = models.CharField(max_length=20, unique=True)
     firstname = models.CharField(max_length=100, default="")
     middlename = models.CharField(max_length=100, default="")
