@@ -1,5 +1,5 @@
 
-from employee.models import Employee
+from employee.models import Employee, Station, Plantilla
 
 from django.db.models import Q
 from rest_framework import viewsets
@@ -9,10 +9,44 @@ from django.db import connection
 
 from .pagination import EmployeeListPagination
 from .serializers import (
+    StationListSerializer,
+    PlantillaListSerializer,
     EmployeeListSerializer,
     EmployeeCreateSerializer,
     EmployeeBulkDeleteSerializer
 )
+
+
+
+class StationViewSet(viewsets.ModelViewSet):
+    queryset = Station.objects.all()
+    serializer_class = StationListSerializer
+
+
+    @action(methods=['get'], detail=False)
+    def get_all(self, request):
+        station_queryset = Station.objects.all()
+        serializer = self.get_serializer(station_queryset, many=True)
+        return Response(serializer.data, 200)
+
+
+
+class PlantillaViewSet(viewsets.ModelViewSet):
+    queryset = Plantilla.objects.all()
+    serializer_class = PlantillaListSerializer
+
+
+    @action(methods=['get'], detail=False)
+    def get_all_open_by_station(self, request):
+        station = request.GET.get('s')    
+        filter_conditions = Q()
+        plantilla_queryset = []
+        if station != "":
+            filter_conditions.add(Q(station=station), Q.AND)
+            filter_conditions.add(Q(is_open=1), Q.AND)
+            plantilla_queryset = Plantilla.objects.all().filter(filter_conditions)
+        serializer = self.get_serializer(plantilla_queryset, many=True)
+        return Response(serializer.data, 200)
 
 
 
@@ -54,7 +88,8 @@ class EmployeeViewSet(viewsets.ModelViewSet):
         serializer = EmployeeCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         employee = Employee()
-        employee.firstname = serializer.data['firstname'] # Personal Details
+        # Personal Details
+        employee.firstname = serializer.data['firstname'] 
         employee.middlename = serializer.data['middlename']
         employee.lastname = serializer.data['lastname']
         employee.suffixname = serializer.data['suffixname']
@@ -74,11 +109,12 @@ class EmployeeViewSet(viewsets.ModelViewSet):
         employee.weight = serializer.data['weight']
         employee.religion = serializer.data['religion']
         employee.blood_type = serializer.data['blood_type']
-        employee.employee_id = serializer.data['employee_id'] # Appointment Details
+        # Appointment Details
+        employee.employee_id = serializer.data['employee_id'] 
         employee.position = serializer.data['position']
         employee.is_active = serializer.data['is_active']
-        # employee.is_active = serializer.data['station']
-        # employee.is_active = serializer.data['plantilla']
+        employee.station = serializer.data['station']
+        employee.plantilla = serializer.data['plantilla']
         employee.salary_grade = serializer.data['salary_grade']
         employee.step_increment = serializer.data['step_increment']
         employee.application_status = serializer.data['application_status']

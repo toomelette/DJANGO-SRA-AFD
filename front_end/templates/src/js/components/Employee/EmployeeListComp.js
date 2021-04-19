@@ -167,8 +167,7 @@ const EmployeeList = observer(({ employeeStore, dashboardMainStore }) => {
                                                         <th className="align-middle">Name</th>
                                                         <th className="align-middle">Position</th>
                                                         <th className="align-middle">Status</th>
-                                                        <th className="align-middle">Division</th>
-                                                        <th className="align-middle">Department</th>
+                                                        <th className="align-middle">Station</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -203,8 +202,7 @@ const EmployeeList = observer(({ employeeStore, dashboardMainStore }) => {
                                                                     : <label className="label label-danger">inactive</label> 
                                                                 }
                                                             </td>
-                                                            <td className="align-middle"></td>
-                                                            <td className="align-middle"></td>
+                                                            <td className="align-middle">{ val.station_link.name }</td>
                                                         </tr>
                                                     )
                                                 }) }

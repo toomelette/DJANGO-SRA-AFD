@@ -1,5 +1,5 @@
 
-import React, { useState, useCallback } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { observer } from 'mobx-react'
 import { Link, useHistory } from 'react-router-dom'
 
@@ -15,6 +15,17 @@ const EmployeeCreate = observer(({ employeeStore }) => {
     
     const history = useHistory();
     const [page_loader, SetPageLoader] = useState(false);
+
+
+    useEffect (() => {
+        let is_mounted = true;
+        if(is_mounted = true){
+            employeeStore.setStationOptions()
+        }
+        return () => {
+            is_mounted = false;
+        } 
+    },[])
 
 
     const redirectBackToEmployeeList = useCallback(() => {
@@ -166,7 +177,7 @@ const EmployeeCreate = observer(({ employeeStore }) => {
             <div className="row align-items-end">
                 <div className="col-lg-8">
                     <div className="page-header-title">
-                        <i className="feather icon-Employee bg-c-blue"></i>
+                        <i className="feather icon-user bg-c-blue"></i>
                         <div className="d-inline">
                             <h5>Employees</h5>
                             <span>Manage Employees</span>

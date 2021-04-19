@@ -13,9 +13,6 @@ class Station(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
 
-    def __str__(self):
-        return self.name
-
 
 
 class Plantilla(models.Model):
@@ -43,9 +40,6 @@ class Plantilla(models.Model):
     updated_by = models.ForeignKey(User, related_name='plantilla_updated_by_user', on_delete=models.PROTECT)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
-
-    def __str__(self):
-        return self.title
 
 
 

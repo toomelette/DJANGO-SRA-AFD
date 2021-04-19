@@ -1,13 +1,42 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
-from employee.models import Employee
+from employee.models import Employee, Station, Plantilla
 
 
-class EmployeeListSerializer(serializers.ModelSerializer): 
+class StationListSerializer(serializers.ModelSerializer): 
+     class Meta:
+          model = Station
+          fields = ('id', 'station_id', 'name')
+
+
+class PlantillaListSerializer(serializers.ModelSerializer): 
+     class Meta:
+          model = Plantilla
+          fields = (
+               'id', 
+               'plantilla_id', 
+               'employee_name', 
+               'position', 
+               'salary_grade', 
+               'step_increment',
+               'monthly_salary',
+               'orig_monthly_salary',
+               'eligibility',
+               'education',
+               'appointment_status',
+               'appointment_date',
+               'promotion_date',
+               'is_open',
+               'plantilla_date',
+          )
+
+
+class EmployeeListSerializer(serializers.ModelSerializer):
+     station_link = StationListSerializer(read_only=True, many=False)
      class Meta:
           model = Employee
-          fields = ('id', 'employee_id', 'fullname', 'position', 'is_active')
+          fields = ('id', 'employee_id', 'fullname', 'position', 'is_active', 'station_link')
 
 
 class EmployeeCreateSerializer(serializers.ModelSerializer): 
@@ -39,8 +68,8 @@ class EmployeeCreateSerializer(serializers.ModelSerializer):
                "employee_id",
                "position",
                "is_active",
-               # "station",
-               # "plantilla",
+               "station",
+               "plantilla",
                "salary_grade",
                "step_increment",
                "application_status",
@@ -61,6 +90,7 @@ class EmployeeCreateSerializer(serializers.ModelSerializer):
                "philhealth",
                "pagibig",
                "sss",
+               
           )
 
 

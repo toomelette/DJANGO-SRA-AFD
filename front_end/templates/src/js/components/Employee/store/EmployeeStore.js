@@ -23,6 +23,9 @@ class EmployeeStore{
     is_selected_all_rows = false; // is all checkbox selected
     selected_rows = []; // rows that are selected via checkbox
 
+    station_options = [ { value:"", label:"Select" } ];
+    plantilla_options = [ { value:"", label:"Select" } ];
+
     // FORM
     // - Personal Details
     firstname = "";
@@ -34,7 +37,7 @@ class EmployeeStore{
     birthdate = "";
     place_of_birth = "";
     sex = 0;
-    civil_status = { value:0, label:"" };
+    civil_status = { value:0, label:"Select" };
     tel_no = "";
     cell_no = "";
     email_address = "";
@@ -49,8 +52,8 @@ class EmployeeStore{
     employee_id = "";
     position = "";
     is_active = null;
-    // station = ""; //
-    // plantilla = ""; //
+    station = { value:"", label:"Select" };
+    plantilla = { value:"", label:"Select" };
     salary_grade = "";
     step_increment = "";
     application_status = 0;
@@ -92,6 +95,7 @@ class EmployeeStore{
                 sort_order: this.sort_order.value, 
             }
         }).then((response) => {
+            console.log(response.data.results)
             runInAction(() => {
                 const employees = response.data.results;
                 let array = [];
@@ -170,6 +174,43 @@ class EmployeeStore{
         this.selected_rows[obj_index].status = status;
     }
 
+    setStationOptions(){
+        axios.get('api/station/get_all')
+             .then((response) => {
+                runInAction(() => {
+                    let stations = response.data;
+                    if(stations.length > 0){
+                        stations.forEach(data => {
+                            this.station_options.push({ value:data.station_id, label:data.name });
+                        });
+                    }
+                })
+        });
+    }
+
+    setPlantillaOptions(station){
+
+        if(station){
+            axios.get('api/plantilla/get_all_open_by_station', {
+                    params:{ 
+                        s:station
+                    }
+                 })
+                 .then((response) => {
+                    runInAction(() => {
+                        let plantillas = response.data;
+                        this.plantilla_options = [{ value:"", label:"Select" }];
+                        if(plantillas.length > 0){
+                            plantillas.forEach(data => {
+                                this.plantilla_options.push({ value:data.plantilla_id.toString(), label:data.position });
+                            });
+                        }
+                    })
+            });
+        }
+        
+    }
+
 
     // Form Setters
     resetForm(){
@@ -182,7 +223,7 @@ class EmployeeStore{
         this.birthdate = "";
         this.place_of_birth = "";
         this.sex = 0;
-        this.civil_status = "";
+        this.civil_status = { value:0, label:"Select" };
         this.tel_no = "";
         this.cell_no = "";
         this.email_address = "";
@@ -197,8 +238,8 @@ class EmployeeStore{
         this.employee_id = "";
         this.position = "";
         this.is_active = "";
-        // this.station = "";
-        // this.plantilla = "";
+        this.station = { value:"", label:"Select" };
+        this.plantilla = { value:"", label:"Select" };
         this.salary_grade = "";
         this.step_increment = "";
         this.application_status = 0;
@@ -220,6 +261,8 @@ class EmployeeStore{
         this.pagibig = "";
         this.sss = "";
         this.error_fields = {};
+        this.plantilla_options = [{ value:"", label:"Select" }];
+
     }
 
     setFirstname(firstname){
@@ -316,6 +359,7 @@ class EmployeeStore{
 
     setStation(station){
         this.station = station;
+        this.setPlantillaOptions(station.value)
     }
 
     setSalaryGrade(salary_grade){

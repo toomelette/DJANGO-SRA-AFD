@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { observer } from 'mobx-react'
-import { InputText, InputNumeric, DatePicker, RadioButton } from '../Utils/Forms/DefaultInputs'
+import { InputText, InputNumeric, DatePicker, RadioButton, SelectInput } from '../Utils/Forms/DefaultInputs'
 
 
 const EmployeeFormAppointmentDetails = observer(({ employeeStore }) => {
@@ -43,39 +43,16 @@ const EmployeeFormAppointmentDetails = observer(({ employeeStore }) => {
                     errorField={ employeeStore.error_fields.is_active }
                 />
 
-                <div className="col-md-3">Station</div>
-                <div className="col-md-3">Division</div>
-                <div className="col-md-3">Department</div>
-
-                {/* <SelectInput
+                <SelectInput
                     col="col-md-3"
                     name="station"
                     label="Station"
                     value={ employeeStore.station }
                     isDisabled={ false }
-                    options={ [ {value:"", label:"Select"}, ] }
-                    onChange={ (e) => e.preventDefault() }
-                /> */}
-
-                {/* <SelectInput
-                    col="col-md-3"
-                    name="division"
-                    label="Division"
-                    value={ employeeStore.division }
-                    isDisabled={ false }
-                    options={ [ {value:"", label:"Select"}, ] }
-                    onChange={ (e) => e.preventDefault() }
-                /> */}
-
-                {/* <SelectInput
-                    col="col-md-3"
-                    name="department"
-                    label="Department"
-                    value={ employeeStore.department }
-                    isDisabled={ false }
-                    options={ [ {value:"", label:"Select"}, ] }
-                    onChange={ (e) => e.preventDefault() }
-                /> */}
+                    options={ employeeStore.station_options }
+                    onChange={ (value) => employeeStore.setStation(value) }
+                    errorField={ employeeStore.error_fields.station }
+                />
 
                 <InputText 
                     col="col-sm-3"
@@ -126,17 +103,15 @@ const EmployeeFormAppointmentDetails = observer(({ employeeStore }) => {
                     setter={ values => employeeStore.setMonthlySalary(values.value) }
                 />
 
-                <div className="col-sm-3">Item / Plantilla</div>
-
-                {/* <InputText 
-                    col="col-sm-3"
-                    type="text"
-                    label="Item"
-                    placeholder="Item"
-                    errorField={ employeeStore.error_fields.item }
-                    value={ employeeStore.item }
-                    setter={ e => employeeStore.setItem(e.target.value) }
-                /> */}
+                <SelectInput
+                    col="col-md-3"
+                    name="plantilla"
+                    label="Plantilla"
+                    value={ employeeStore.plantilla }
+                    isDisabled={ false }
+                    options={ employeeStore.plantilla_options }
+                    onChange={ (value) => employeeStore.setPlantilla(value) }
+                />
 
                 <DatePicker 
                     col="col-sm-3"

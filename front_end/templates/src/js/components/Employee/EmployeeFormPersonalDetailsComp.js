@@ -109,10 +109,10 @@ const EmployeeFormPersonalDetails = observer(({ employeeStore }) => {
                     isDisabled={ false }
                     options={ 
                         [
-                            {value:0, label:"Select"}, 
-                            {value:1, label:"Single"}, 
-                            {value:2, label:"Married"}, 
-                            {value:3, label:"Widow"} 
+                            { value:0, label:"Select" }, 
+                            { value:1, label:"Single" }, 
+                            { value:2, label:"Married" }, 
+                            { value:3, label:"Widow" } 
                         ] 
                     }
                     onChange={ (value) => employeeStore.setCivilStatus(value) }
