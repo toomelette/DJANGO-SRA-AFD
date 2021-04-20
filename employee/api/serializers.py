@@ -69,7 +69,7 @@ class EmployeeCreateSerializer(serializers.ModelSerializer):
                "position",
                "is_active",
                "station",
-               "plantilla",
+               "plantilla_item",
                "salary_grade",
                "step_increment",
                "application_status",
@@ -90,7 +90,6 @@ class EmployeeCreateSerializer(serializers.ModelSerializer):
                "philhealth",
                "pagibig",
                "sss",
-               
           )
 
 

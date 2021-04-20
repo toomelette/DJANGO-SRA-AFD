@@ -202,7 +202,7 @@ const EmployeeList = observer(({ employeeStore, dashboardMainStore }) => {
                                                                     : <label className="label label-danger">inactive</label> 
                                                                 }
                                                             </td>
-                                                            <td className="align-middle">{ val.station_link.name }</td>
+                                                            <td className="align-middle">{ val.station_link?.name }</td>
                                                         </tr>
                                                     )
                                                 }) }

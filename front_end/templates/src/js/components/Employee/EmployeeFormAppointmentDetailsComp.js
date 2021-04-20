@@ -107,10 +107,10 @@ const EmployeeFormAppointmentDetails = observer(({ employeeStore }) => {
                     col="col-md-3"
                     name="plantilla"
                     label="Plantilla"
-                    value={ employeeStore.plantilla }
+                    value={ employeeStore.plantilla_item }
                     isDisabled={ false }
                     options={ employeeStore.plantilla_options }
-                    onChange={ (value) => employeeStore.setPlantilla(value) }
+                    onChange={ (value) => employeeStore.setPlantillaItem(value) }
                 />
 
                 <DatePicker 

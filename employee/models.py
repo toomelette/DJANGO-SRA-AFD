@@ -7,7 +7,6 @@ from django.utils.timezone import now
 class Station(models.Model):
     station_id = models.CharField(max_length=20, unique=True)
     name = models.CharField(max_length=200, default="")
-
     created_by = models.ForeignKey(User, related_name='station_created_by_user', on_delete=models.PROTECT)
     updated_by = models.ForeignKey(User, related_name='station_updated_by_user', on_delete=models.PROTECT)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
@@ -19,8 +18,14 @@ class Plantilla(models.Model):
     APPOINTMENT_STATUS_TYPES = ( (1, 'PERMANENT'), (2, 'CO-TERMINUS'), (3, 'PRESIDENT APPOINTEE'))
 
     station = models.CharField(max_length=20, blank=True, null=True)
-    station_link =  models.ForeignKey(Station, db_column="station_id", related_name='plantilla_station', null=True, default=None, on_delete=models.PROTECT)
-
+    station_link =  models.ForeignKey(
+        Station, 
+        db_column="station_id", 
+        related_name='plantilla_station', 
+        null=True, 
+        default=None, 
+        on_delete=models.PROTECT
+    )
     plantilla_id = models.CharField(max_length=20, unique=True)
     employee_name = models.CharField(max_length=200, default="")
     position = models.CharField(max_length=200)
@@ -35,7 +40,6 @@ class Plantilla(models.Model):
     promotion_date =  models.DateField(null=True)
     is_open =  models.BooleanField(default=False, null=True)
     plantilla_date =  models.DateField(null=True)
-
     created_by = models.ForeignKey(User, related_name='plantilla_created_by_user', on_delete=models.PROTECT)
     updated_by = models.ForeignKey(User, related_name='plantilla_updated_by_user', on_delete=models.PROTECT)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
@@ -47,12 +51,18 @@ class Employee(models.Model):
     SEX_TYPES = ( (0, 'N/A'), (1, 'MALE'), (2, 'FEMALE') )
     CIVIL_STATUS_TYPES = ( (0, 'N/A'), (1, 'SINGLE'), (2, 'MARRIED'), (3, 'WIDOW') )
     APPLICATION_STATUS_TYPES = ( (0, 'N/A'), (1, 'PERMANENT'), (2, 'CONTRACT OF SERVICE') )
+    LEVEL_TYPES = ( (0, 'N/A'), (1, 'FIRST'), (2, 'SECOND'), (3, 'RA1080') )
     
+    #Foreign Keys
     station = models.CharField(max_length=20, blank=True, null=True)
-    station_link =  models.ForeignKey(Station, db_column="station_id", related_name='employee_station', null=True, default=None, on_delete=models.PROTECT)
-    plantilla = models.CharField(max_length=20, blank=True, null=True)
-    plantilla_link = models.ForeignKey(Plantilla, db_column="plantilla_id", related_name='employee_plantilla', null=True, default=None, unique=True, on_delete=models.PROTECT)
-    
+    station_link =  models.ForeignKey(
+        Station, 
+        db_column="station_id", 
+        related_name='employee_station', 
+        null=True, 
+        default=None, 
+        on_delete=models.PROTECT
+    )
     # Personal Information
     employee_id = models.CharField(max_length=20, unique=True)
     firstname = models.CharField(max_length=100, default="")
@@ -85,7 +95,8 @@ class Employee(models.Model):
     application_status = models.IntegerField(choices=APPLICATION_STATUS_TYPES, default=0)
     tax_status = models.CharField(max_length=20, default="", blank=True)
     monthly_salary = models.DecimalField(max_digits=13, decimal_places=2, default=0)
-    level = models.CharField(max_length=20, default="")
+    level = models.IntegerField(choices=LEVEL_TYPES, default=0)
+    plantilla_item = models.CharField(max_length=20, default="", blank=True)
     firstday_gov =  models.DateField(null=True)
     firstday_sra =  models.DateField(null=True)
     first_appointment =  models.DateField(null=True)
@@ -102,18 +113,21 @@ class Employee(models.Model):
     pagibig = models.CharField(max_length=50, default="", blank=True)
     sss = models.CharField(max_length=50, default="", blank=True)
 
+    #Default Fields
     created_by = models.ForeignKey(User, related_name='employee_created_by_user', on_delete=models.PROTECT)
     updated_by = models.ForeignKey(User, related_name='employee_updated_by_user', on_delete=models.PROTECT)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
 
-    def __str__(self):
-        return self.fullname
-
 
 
 class EmployeeEducationalBackground(models.Model):
-    employee = models.ForeignKey(Employee, db_column="employee_id", related_name='employeeEB_employee', on_delete=models.CASCADE)
+    employee = models.ForeignKey(
+        Employee, 
+        db_column="employee_id", 
+        related_name='employeeEB_employee', 
+        on_delete=models.CASCADE
+    )
     level = models.CharField(max_length=100, default="")
     school = models.CharField(max_length=200, default="")
     course = models.CharField(max_length=200, default="")
@@ -127,7 +141,12 @@ class EmployeeEducationalBackground(models.Model):
 
 
 class EmployeeEligibility(models.Model):
-    employee = models.ForeignKey(Employee, db_column="employee_id", related_name='employeeELIG_employee', on_delete=models.CASCADE)
+    employee = models.ForeignKey(
+        Employee, 
+        db_column="employee_id", 
+        related_name='employeeELIG_employee', 
+        on_delete=models.CASCADE
+    )
     eligibility = models.CharField(max_length=200, default="")
     level = models.CharField(max_length=100, default="")
     rating = models.DecimalField(max_digits=5, decimal_places=2, default=0)
@@ -139,7 +158,11 @@ class EmployeeEligibility(models.Model):
 
 
 class EmployeeTrainings(models.Model):
-    employee = models.ForeignKey(Employee, db_column="employee_id", related_name='employeeTRNG_employee', on_delete=models.CASCADE)
+    employee = models.ForeignKey(Employee, 
+        db_column="employee_id", 
+        related_name='employeeTRNG_employee', 
+        on_delete=models.CASCADE
+    )
     title = models.CharField(max_length=200, default="")
     category = models.CharField(max_length=100, default="")
     date_from = models.DateField(null=True)
@@ -149,7 +172,6 @@ class EmployeeTrainings(models.Model):
     venue = models.CharField(max_length=200, default="")
     remarks = models.CharField(max_length=200, default="")
     is_relevant = models.BooleanField(null=True)
-
     created_by = models.ForeignKey(User, related_name='employeeTRNG_created_by_user', on_delete=models.PROTECT)
     updated_by = models.ForeignKey(User, related_name='employeeTRNG_updated_by_user', on_delete=models.PROTECT)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
@@ -158,7 +180,12 @@ class EmployeeTrainings(models.Model):
 
 
 class EmployeeServiceRecords(models.Model):
-    employee = models.ForeignKey(Employee, db_column="employee_id", related_name='employeeSR_employee', on_delete=models.CASCADE)
+    employee = models.ForeignKey(
+        Employee, 
+        db_column="employee_id", 
+        related_name='employeeSR_employee', 
+        on_delete=models.CASCADE
+    )
     seq = models.IntegerField(default=0)
     date_from = models.CharField(max_length=50, default="")
     date_to = models.CharField(max_length=50, default="")
@@ -173,7 +200,6 @@ class EmployeeServiceRecords(models.Model):
     sp_date = models.CharField(max_length=20, default="")
     status = models.CharField(max_length=100, default="")
     remarks = models.CharField(max_length=100, default="")
-
     created_by = models.ForeignKey(User, related_name='employeeSR_created_by_user', on_delete=models.PROTECT)
     updated_by = models.ForeignKey(User, related_name='employeeSR_updated_by_user', on_delete=models.PROTECT)
     created_at = models.DateTimeField(auto_now_add=True, null=True)

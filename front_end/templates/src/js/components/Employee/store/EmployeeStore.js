@@ -53,7 +53,7 @@ class EmployeeStore{
     position = "";
     is_active = null;
     station = { value:"", label:"Select" };
-    plantilla = { value:"", label:"Select" };
+    plantilla_item = { value:"", label:"Select" };
     salary_grade = "";
     step_increment = "";
     application_status = 0;
@@ -95,7 +95,6 @@ class EmployeeStore{
                 sort_order: this.sort_order.value, 
             }
         }).then((response) => {
-            console.log(response.data.results)
             runInAction(() => {
                 const employees = response.data.results;
                 let array = [];
@@ -202,7 +201,10 @@ class EmployeeStore{
                         this.plantilla_options = [{ value:"", label:"Select" }];
                         if(plantillas.length > 0){
                             plantillas.forEach(data => {
-                                this.plantilla_options.push({ value:data.plantilla_id.toString(), label:data.position });
+                                this.plantilla_options.push({ 
+                                    value:data.plantilla_id.toString(), 
+                                    label:"#"+data.plantilla_id+" | "+data.position
+                                });
                             });
                         }
                     })
@@ -239,7 +241,7 @@ class EmployeeStore{
         this.position = "";
         this.is_active = "";
         this.station = { value:"", label:"Select" };
-        this.plantilla = { value:"", label:"Select" };
+        this.plantilla_item = { value:"", label:"Select" };
         this.salary_grade = "";
         this.step_increment = "";
         this.application_status = 0;
@@ -379,12 +381,11 @@ class EmployeeStore{
     }
 
     setMonthlySalary(monthly_salary){
-        console.log(monthly_salary)
         this.monthly_salary = monthly_salary;
     }
 
-    setPlantilla(plantilla){
-        this.plantilla = plantilla;
+    setPlantillaItem(plantilla_item){
+        this.plantilla_item = plantilla_item;
     }
 
     setFirstdayGov(firstday_gov){

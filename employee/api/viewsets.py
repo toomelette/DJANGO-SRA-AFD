@@ -56,20 +56,6 @@ class EmployeeViewSet(viewsets.ModelViewSet):
     pagination_class = EmployeeListPagination
 
 
-    def __sort_field(self):
-        field = '-updated_at'
-        sort_field = self.request.GET.get('sort_field', None)
-        sort_order = self.request.GET.get('sort_order', None)
-        available_sort_fields = ["firstname", "lastname"]
-        if sort_field:
-            if sort_field in available_sort_fields:
-                if sort_order == "desc":
-                    field = "-"+sort_field
-                else:
-                    field = sort_field
-        return field
-
-
     def list(self, request):
         search = request.GET.get('q', None)
         is_active = request.GET.get('ia', None)    
@@ -84,14 +70,31 @@ class EmployeeViewSet(viewsets.ModelViewSet):
         return self.get_paginated_response(serializer.data)
 
 
+    def __sort_field(self):
+        field = '-updated_at'
+        sort_field = self.request.GET.get('sort_field', None)
+        sort_order = self.request.GET.get('sort_order', None)
+        available_sort_fields = ["firstname", "lastname"]
+        if sort_field:
+            if sort_field in available_sort_fields:
+                if sort_order == "desc":
+                    field = "-"+sort_field
+                else:
+                    field = sort_field
+        return field
+
+
     def create(self, request):
         serializer = EmployeeCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+
         employee = Employee()
+        station = Station.objects.get(station_id=serializer.data['station'])
         # Personal Details
-        employee.firstname = serializer.data['firstname'] 
-        employee.middlename = serializer.data['middlename']
-        employee.lastname = serializer.data['lastname']
+        employee.firstname = serializer.data['firstname'].upper()
+        employee.middlename = serializer.data['middlename'].upper()
+        employee.lastname = serializer.data['lastname'].upper()
+        employee.fullname = self.__set_fullname(serializer)
         employee.suffixname = serializer.data['suffixname']
         employee.address_present = serializer.data['address_present']
         employee.address_permanent = serializer.data['address_permanent']
@@ -111,10 +114,11 @@ class EmployeeViewSet(viewsets.ModelViewSet):
         employee.blood_type = serializer.data['blood_type']
         # Appointment Details
         employee.employee_id = serializer.data['employee_id'] 
-        employee.position = serializer.data['position']
+        employee.position = serializer.data['position'].upper()
         employee.is_active = serializer.data['is_active']
         employee.station = serializer.data['station']
-        employee.plantilla = serializer.data['plantilla']
+        employee.station_link = station
+        employee.plantilla_item = serializer.data['plantilla_item']
         employee.salary_grade = serializer.data['salary_grade']
         employee.step_increment = serializer.data['step_increment']
         employee.application_status = serializer.data['application_status']
@@ -151,6 +155,38 @@ class EmployeeViewSet(viewsets.ModelViewSet):
             if employee:
                 employee.delete()
         return Response({}, 200)
+
+
+    def __set_fullname(self, serializer):
+        lastname = serializer.data['lastname'].upper()
+        firstname = serializer.data['firstname'].upper()
+        middlename = serializer.data['middlename'].upper()
+        suffixname = serializer.data['suffixname']
+        return lastname+", "+firstname+" "+suffixname+" "+middlename[0]
+
+
+    def __set_level(self, value):
+        return value
+
+
+    # @action(methods=['GET'], detail=False)
+    # def test(self, request):
+        
+    #     employees = Employee.objects.all()
+    #     stations = Station.objects.all()
+
+    #     for data_e in employees:
+    #         for data_s in stations:
+    #             if data_e.station == data_s.station_id:
+    #                 station = stations.get(id=data_s.id)
+    #                 employee = employees.get(id=data_e.id)
+    #                 employee.station_link = station
+    #                 employee.save()
+    #                 print(employee.fullname)
+    #                 print("DOne!!")
+
+    #     return Response({}, 200)
+
 
 
 
