@@ -70,26 +70,10 @@ class EmployeeViewSet(viewsets.ModelViewSet):
         return self.get_paginated_response(serializer.data)
 
 
-    def __sort_field(self):
-        field = '-updated_at'
-        sort_field = self.request.GET.get('sort_field', None)
-        sort_order = self.request.GET.get('sort_order', None)
-        available_sort_fields = ["firstname", "lastname"]
-        if sort_field:
-            if sort_field in available_sort_fields:
-                if sort_order == "desc":
-                    field = "-"+sort_field
-                else:
-                    field = sort_field
-        return field
-
-
     def create(self, request):
         serializer = EmployeeCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-
         employee = Employee()
-        station = Station.objects.get(station_id=serializer.data['station'])
         # Personal Details
         employee.firstname = serializer.data['firstname'].upper()
         employee.middlename = serializer.data['middlename'].upper()
@@ -117,13 +101,14 @@ class EmployeeViewSet(viewsets.ModelViewSet):
         employee.position = serializer.data['position'].upper()
         employee.is_active = serializer.data['is_active']
         employee.station = serializer.data['station']
-        employee.station_link = station
+        employee.station_link = self.__set_station(serializer)
         employee.plantilla_item = serializer.data['plantilla_item']
         employee.salary_grade = serializer.data['salary_grade']
         employee.step_increment = serializer.data['step_increment']
         employee.application_status = serializer.data['application_status']
         employee.tax_status = serializer.data['tax_status']
         employee.monthly_salary = serializer.data['monthly_salary']
+        employee.level = self.__set_level(serializer)
         employee.firstday_gov = serializer.data['firstday_gov']
         employee.firstday_sra = serializer.data['firstday_sra']
         employee.first_appointment = serializer.data['first_appointment']
@@ -157,6 +142,29 @@ class EmployeeViewSet(viewsets.ModelViewSet):
         return Response({}, 200)
 
 
+    # UTILITY METHODS
+    def __sort_field(self):
+        field = '-updated_at'
+        sort_field = self.request.GET.get('sort_field', None)
+        sort_order = self.request.GET.get('sort_order', None)
+        available_sort_fields = ["firstname", "lastname"]
+        if sort_field:
+            if sort_field in available_sort_fields:
+                if sort_order == "desc":
+                    field = "-"+sort_field
+                else:
+                    field = sort_field
+        return field
+
+
+    def __set_station(self, serializer):
+        if serializer.data['station']:
+            station = Station.objects.get(station_id=serializer.data['station'])
+            return station
+        else:
+            return None
+
+
     def __set_fullname(self, serializer):
         lastname = serializer.data['lastname'].upper()
         firstname = serializer.data['firstname'].upper()
@@ -165,25 +173,31 @@ class EmployeeViewSet(viewsets.ModelViewSet):
         return lastname+", "+firstname+" "+suffixname+" "+middlename[0]
 
 
-    def __set_level(self, value):
-        return value
+    def __set_level(self, serializer):
+        value = 0
+        if serializer.data['salary_grade'] > 0 and serializer.data['salary_grade'] <= 10:
+            value = 1
+        elif serializer.data['salary_grade'] > 10:
+            value = 2
+        return value 
+
 
 
     # @action(methods=['GET'], detail=False)
     # def test(self, request):
         
-    #     employees = Employee.objects.all()
-    #     stations = Station.objects.all()
+    #     plantillas_queryset = Plantilla.objects.all()
+    #     employees_queryset = Employee.objects.all()
 
-    #     for data_e in employees:
-    #         for data_s in stations:
-    #             if data_e.station == data_s.station_id:
-    #                 station = stations.get(id=data_s.id)
-    #                 employee = employees.get(id=data_e.id)
-    #                 employee.station_link = station
-    #                 employee.save()
-    #                 print(employee.fullname)
-    #                 print("DOne!!")
+    #     for data_p in plantillas_queryset:
+    #         for data_e in employees_queryset:
+    #             if data_p.employee == data_e.employee_id:
+    #                 employee = employees_queryset.get(id=data_e.id)
+    #                 plantilla = plantillas_queryset.get(id=data_p.id)
+    #                 plantilla.employee_link = employee
+    #                 plantilla.save()
+    #                 print(plantilla.employee_name)
+    #                 print("Done!!")
 
     #     return Response({}, 200)
 
