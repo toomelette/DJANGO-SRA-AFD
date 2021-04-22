@@ -30,9 +30,8 @@ function SelectDefaultFilter(props){
 
 
 function SelectFilter(props){ 
-
     return(
-        <div className={ props.divColumn }>
+        <div className={ props.divColumn } style={{ marginTop:10 }}>
             <label className="col-sm-12 col-form-label">{ props.label }</label>
             <div className="col-sm-12">
                 <Select
@@ -49,8 +48,28 @@ function SelectFilter(props){
             </div>
         </div>
     );
-    
 }
 
 
-export { SelectDefaultFilter, SelectFilter }
+function DateRangePicker(props){ 
+    return (
+        <div className={ props.divColumn } style={{ marginTop:20 }}>
+            <label className="col-md-12 col-form-label">{ props.label }</label>
+            <div className="col-md-12">
+                <div className="row">
+                    <div className="col-md-6">
+                        <label className="col-form-label">From</label>
+                        <input type="date" className="form-control" value={props.fromValue} onChange={props.fromSetter}/>  
+                    </div>
+                    <div className="col-md-6">
+                        <label className="col-form-label">To</label>
+                        <input type="date" className="form-control" value={props.toValue} onChange={props.toSetter} />  
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+
+export { SelectDefaultFilter, SelectFilter, DateRangePicker }

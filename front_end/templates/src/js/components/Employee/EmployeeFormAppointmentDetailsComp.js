@@ -42,8 +42,18 @@ const EmployeeFormAppointmentDetails = observer(({ employeeStore }) => {
                     onChange={ (e) => employeeStore.setIsActive(e.target.value) }
                     errorField={ employeeStore.error_fields.is_active }
                 />
+                
+                <RadioButton
+                    col="col-sm-3"
+                    label="Application Status"
+                    name="application_status"
+                    value={ employeeStore.application_status }
+                    options={ employeeStore.APPLICATION_STATUS_OPTIONS.slice(1) }
+                    onChange={ (e) => employeeStore.setApplicationStatus(e.target.value) }
+                    errorField={ employeeStore.error_fields.application_status }
+                />
 
-                <SelectInput
+                {/* <SelectInput
                     col="col-md-3"
                     name="station"
                     label="Station"
@@ -52,7 +62,7 @@ const EmployeeFormAppointmentDetails = observer(({ employeeStore }) => {
                     options={ employeeStore.station_options }
                     onChange={ (value) => employeeStore.setStation(value) }
                     errorField={ employeeStore.error_fields.station }
-                />
+                /> */}
 
                 <InputText 
                     col="col-sm-3"
@@ -74,16 +84,6 @@ const EmployeeFormAppointmentDetails = observer(({ employeeStore }) => {
                     setter={ e => employeeStore.setStepIncrement(e.target.value) }
                 />
                 
-                <RadioButton
-                    col="col-sm-3"
-                    label="Application Status"
-                    name="application_status"
-                    value={ employeeStore.application_status }
-                    options={ [{value:1, label:"Permanent"}, {value:2, label:"Contract of Service"}] }
-                    onChange={ (e) => employeeStore.setApplicationStatus(e.target.value) }
-                    errorField={ employeeStore.error_fields.application_status }
-                />
-                
                 <InputText 
                     col="col-sm-3"
                     type="text"
@@ -103,7 +103,7 @@ const EmployeeFormAppointmentDetails = observer(({ employeeStore }) => {
                     setter={ values => employeeStore.setMonthlySalary(values.value) }
                 />
 
-                <SelectInput
+                {/* <SelectInput
                     col="col-md-3"
                     name="plantilla"
                     label="Plantilla"
@@ -111,7 +111,7 @@ const EmployeeFormAppointmentDetails = observer(({ employeeStore }) => {
                     isDisabled={ false }
                     options={ employeeStore.plantilla_options }
                     onChange={ (value) => employeeStore.setPlantillaItem(value) }
-                />
+                /> */}
 
                 <DatePicker 
                     col="col-sm-3"

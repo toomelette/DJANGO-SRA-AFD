@@ -5,6 +5,7 @@ from django.utils.timezone import now
 
 
 class Station(models.Model):
+
     station_id = models.CharField(max_length=20, unique=True)
     name = models.CharField(max_length=200, default="")
     created_by = models.ForeignKey(User, related_name='station_created_by_user', on_delete=models.PROTECT)
@@ -15,10 +16,33 @@ class Station(models.Model):
 
 
 class Employee(models.Model):
-    SEX_TYPES = ( (0, 'N/A'), (1, 'MALE'), (2, 'FEMALE') )
-    CIVIL_STATUS_TYPES = ( (0, 'N/A'), (1, 'SINGLE'), (2, 'MARRIED'), (3, 'WIDOW') )
-    APPLICATION_STATUS_TYPES = ( (0, 'N/A'), (1, 'PERMANENT'), (2, 'CONTRACT OF SERVICE') )
-    LEVEL_TYPES = ( (0, 'N/A'), (1, 'FIRST'), (2, 'SECOND'), (3, 'RA1080') )
+
+    SEX_TYPES = ( (0,'N/A'), (1,'Male'), (2,'Female') )
+    CIVIL_STATUS_TYPES = ( (0,'N/A'), (1,'Single'), (2,'Married'), (3,'Widow') )
+    APPLICATION_STATUS_TYPES = ( (0,'N/A'), (1,'Permanent'), (2,'Contract of Service') )
+    LEVEL_TYPES = ( (0,'N/A'), (1,'First'), (2,'Second'), (3,'RA1080') )
+
+    SORTABLE_FIELDS = [
+        "employee_id", 
+        "firstname", 
+        "lastname", 
+        "position", 
+        "birthdate", 
+        "no_of_children",
+        "weight",
+        "height",
+        "salary_grade",
+        "monthly_salary",
+        "firstday_gov",
+        "firstday_sra",
+        "first_appointment",
+        "last_appointment",
+        "last_step_increment",
+        "last_adjustment",
+        "last_promotion",
+        "original_appointment",
+        "adjustment_date",
+    ]
     
     #Foreign Keys
     station = models.CharField(max_length=20, blank=True, null=True)
@@ -30,6 +54,7 @@ class Employee(models.Model):
         default=None, 
         on_delete=models.PROTECT
     )
+
     # Personal Information
     employee_id = models.CharField(max_length=20, unique=True)
     firstname = models.CharField(max_length=100, default="")
@@ -89,6 +114,7 @@ class Employee(models.Model):
 
 
 class Plantilla(models.Model):
+
     APPOINTMENT_STATUS_TYPES = ( (1, 'PERMANENT'), (2, 'CO-TERMINUS'), (3, 'PRESIDENT APPOINTEE'))
 
     station = models.CharField(max_length=20, blank=True, null=True)
@@ -100,6 +126,7 @@ class Plantilla(models.Model):
         default=None, 
         on_delete=models.PROTECT
     )
+    
     employee = models.CharField(max_length=20, blank=True, null=True)
     employee_link =  models.ForeignKey(
         Employee, 
@@ -132,12 +159,14 @@ class Plantilla(models.Model):
 
 
 class EmployeeEducationalBackground(models.Model):
+
     employee = models.ForeignKey(
         Employee, 
         db_column="employee_id", 
         related_name='employeeEB_employee', 
         on_delete=models.CASCADE
     )
+
     level = models.CharField(max_length=100, default="")
     school = models.CharField(max_length=200, default="")
     course = models.CharField(max_length=200, default="")
@@ -151,12 +180,14 @@ class EmployeeEducationalBackground(models.Model):
 
 
 class EmployeeEligibility(models.Model):
+
     employee = models.ForeignKey(
         Employee, 
         db_column="employee_id", 
         related_name='employeeELIG_employee', 
         on_delete=models.CASCADE
     )
+
     eligibility = models.CharField(max_length=200, default="")
     level = models.CharField(max_length=100, default="")
     rating = models.DecimalField(max_digits=5, decimal_places=2, default=0)
@@ -168,11 +199,13 @@ class EmployeeEligibility(models.Model):
 
 
 class EmployeeTrainings(models.Model):
+
     employee = models.ForeignKey(Employee, 
         db_column="employee_id", 
         related_name='employeeTRNG_employee', 
         on_delete=models.CASCADE
     )
+
     title = models.CharField(max_length=200, default="")
     category = models.CharField(max_length=100, default="")
     date_from = models.DateField(null=True)
@@ -190,12 +223,14 @@ class EmployeeTrainings(models.Model):
 
 
 class EmployeeServiceRecords(models.Model):
+
     employee = models.ForeignKey(
         Employee, 
         db_column="employee_id", 
         related_name='employeeSR_employee', 
         on_delete=models.CASCADE
     )
+
     seq = models.IntegerField(default=0)
     date_from = models.CharField(max_length=50, default="")
     date_to = models.CharField(max_length=50, default="")

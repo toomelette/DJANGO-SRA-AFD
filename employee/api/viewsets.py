@@ -1,6 +1,7 @@
 
-from employee.models import Employee, Station, Plantilla
+import json
 
+from employee.models import Employee, Station, Plantilla
 from django.db.models import Q
 from rest_framework import viewsets
 from rest_framework.decorators import action
@@ -58,16 +59,61 @@ class EmployeeViewSet(viewsets.ModelViewSet):
 
     def list(self, request):
         search = request.GET.get('q', None)
-        is_active = request.GET.get('ia', None)    
+        is_active = request.GET.get('ia', None)   
+        station = request.GET.get('st', None)  
+        sex = request.GET.get('se', None)
+        civil_status = request.GET.get('cs', None)
+        application_status = request.GET.get('as', None)   
+        level = request.GET.get('l', None)      
+        firstday_gov_from = request.GET.get('fd_g_f', None) 
+        firstday_gov_to = request.GET.get('fd_g_t', None)    
+        firstday_sra_from = request.GET.get('fd_s_f', None) 
+        firstday_sra_to = request.GET.get('fd_s_t', None)        
+        level = request.GET.get('l', None)   
         filter_conditions = Q()
-        if search or is_active:
-            if search:
-                filter_conditions.add(Q(fullname__icontains=search) | Q(employee_id__icontains=search) | Q(position__icontains=search), Q.AND)
-            if is_active:
-                filter_conditions.add(Q(is_active = is_active), Q.AND)
+
+        if search:
+            filter_conditions.add(
+                Q(fullname__icontains=search) 
+                | Q(employee_id__icontains=search) 
+                | Q(position__icontains=search) 
+                | Q(station_link__name__icontains=search),
+                Q.AND
+            )
+        if is_active:
+            filter_conditions.add(Q(is_active = is_active), Q.AND)
+        if station:
+            filter_conditions.add(Q(station = station), Q.AND)
+        if sex:
+            filter_conditions.add(Q(sex = sex), Q.AND)
+        if civil_status:
+            filter_conditions.add(Q(civil_status = civil_status), Q.AND)
+        if application_status:
+            filter_conditions.add(Q(application_status = application_status), Q.AND)
+        if level:
+            filter_conditions.add(Q(level = level), Q.AND)
+        if firstday_gov_from and firstday_gov_to:
+            filter_conditions.add(Q(firstday_gov__range = (firstday_gov_from, firstday_gov_to)), Q.AND)
+        if firstday_sra_from and firstday_sra_to:
+            filter_conditions.add(Q(firstday_sra__range = (firstday_sra_from, firstday_sra_to)), Q.AND)
+            
         page = self.paginate_queryset(self.queryset.filter(filter_conditions).order_by(self.__sort_field()))
         serializer = self.get_serializer(page, many=True)
         return self.get_paginated_response(serializer.data)
+
+
+    def __sort_field(self):
+        field = '-updated_at'
+        sort_field = self.request.GET.get('sort_field', None)
+        sort_order = self.request.GET.get('sort_order', None)
+        available_sort_fields = Employee().SORTABLE_FIELDS
+        if sort_field:
+            if sort_field in available_sort_fields:
+                if sort_order == "desc":
+                    field = "-"+sort_field
+                else:
+                    field = sort_field
+        return field
 
 
     def create(self, request):
@@ -100,9 +146,9 @@ class EmployeeViewSet(viewsets.ModelViewSet):
         employee.employee_id = serializer.data['employee_id'] 
         employee.position = serializer.data['position'].upper()
         employee.is_active = serializer.data['is_active']
-        employee.station = serializer.data['station']
-        employee.station_link = self.__set_station(serializer)
-        employee.plantilla_item = serializer.data['plantilla_item']
+        # employee.station = serializer.data['station']
+        # employee.station_link = self.__set_station(serializer)
+        # employee.plantilla_item = serializer.data['plantilla_item']
         employee.salary_grade = serializer.data['salary_grade']
         employee.step_increment = serializer.data['step_increment']
         employee.application_status = serializer.data['application_status']
@@ -130,39 +176,12 @@ class EmployeeViewSet(viewsets.ModelViewSet):
         return Response({"id":employee.id}, 201)
 
 
-    @action(methods=['delete'], detail=False)
-    def bulk_destroy(self, request):
-        serializer = EmployeeBulkDeleteSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        ids = serializer.data['ids']
-        for data in ids:
-            employee = self.queryset.get(id=data)
-            if employee:
-                employee.delete()
-        return Response({}, 200)
-
-
-    # UTILITY METHODS
-    def __sort_field(self):
-        field = '-updated_at'
-        sort_field = self.request.GET.get('sort_field', None)
-        sort_order = self.request.GET.get('sort_order', None)
-        available_sort_fields = ["firstname", "lastname"]
-        if sort_field:
-            if sort_field in available_sort_fields:
-                if sort_order == "desc":
-                    field = "-"+sort_field
-                else:
-                    field = sort_field
-        return field
-
-
-    def __set_station(self, serializer):
-        if serializer.data['station']:
-            station = Station.objects.get(station_id=serializer.data['station'])
-            return station
-        else:
-            return None
+    # def __set_station(self, serializer):
+    #     if serializer.data['station']:
+    #         station = Station.objects.get(station_id=serializer.data['station'])
+    #         return station
+    #     else:
+    #         return None
 
 
     def __set_fullname(self, serializer):
@@ -182,24 +201,16 @@ class EmployeeViewSet(viewsets.ModelViewSet):
         return value 
 
 
-
-    # @action(methods=['GET'], detail=False)
-    # def test(self, request):
-        
-    #     plantillas_queryset = Plantilla.objects.all()
-    #     employees_queryset = Employee.objects.all()
-
-    #     for data_p in plantillas_queryset:
-    #         for data_e in employees_queryset:
-    #             if data_p.employee == data_e.employee_id:
-    #                 employee = employees_queryset.get(id=data_e.id)
-    #                 plantilla = plantillas_queryset.get(id=data_p.id)
-    #                 plantilla.employee_link = employee
-    #                 plantilla.save()
-    #                 print(plantilla.employee_name)
-    #                 print("Done!!")
-
-    #     return Response({}, 200)
+    @action(methods=['delete'], detail=False)
+    def bulk_destroy(self, request):
+        serializer = EmployeeBulkDeleteSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        ids = serializer.data['ids']
+        for data in ids:
+            employee = self.queryset.get(id=data)
+            if employee:
+                employee.delete()
+        return Response({}, 200)
 
 
 

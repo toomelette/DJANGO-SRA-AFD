@@ -1,19 +1,25 @@
 
 
-import React from 'react'
+import React, {useEffect} from 'react'
 
 import { observer } from 'mobx-react'
 
 import eventBus from '../Utils/EventBus'
-import { SelectFilter } from '../Utils/Forms/FilterInputs'
+import { SelectFilter, DateRangePicker } from '../Utils/Forms/FilterInputs'
 
 
 const EmployeeListFilterModal = observer(({ employeeStore }) => {
 
 
-    const handleIsActiveSelectChange = (value) => {
-        employeeStore.setFilterIsActive(value)
-    }
+    useEffect (() => {
+        let is_mounted = true;
+        if(is_mounted = true){
+            employeeStore.setStationOptions()
+        }
+        return () => {
+            is_mounted = false;
+        } 
+    },[])
 
 
     const handleFilterSubmit = (e) => {
@@ -48,7 +54,75 @@ const EmployeeListFilterModal = observer(({ employeeStore }) => {
                                 value={ employeeStore.filter_is_active }
                                 isDisabled={false}
                                 options={ [{value:"", label:"Select"}, {value:1, label:'Active'}, {value:0, label:'Inactive'} ] }
-                                onChange={ handleIsActiveSelectChange }
+                                onChange={ (value) => employeeStore.setFilterIsActive(value) }
+                            />
+
+                            <SelectFilter
+                                divColumn="col-md-6"
+                                name="station"
+                                label="Station:"
+                                value={ employeeStore.filter_station }
+                                isDisabled={false}
+                                options={ employeeStore.station_options }
+                                onChange={ (value) => employeeStore.setFilterStation(value) }
+                            />
+
+                            <SelectFilter
+                                divColumn="col-md-6"
+                                name="sex"
+                                label="Sex:"
+                                value={ employeeStore.filter_sex }
+                                isDisabled={false}
+                                options={ employeeStore.SEX_OPTIONS }
+                                onChange={ (value) => employeeStore.setFilterSex(value) }
+                            />
+
+                            <SelectFilter
+                                divColumn="col-md-6"
+                                name="civil_status"
+                                label="Civil Status:"
+                                value={ employeeStore.filter_civil_status }
+                                isDisabled={false}
+                                options={ employeeStore.CIVIL_STATUS_OPTIONS }
+                                onChange={ (value) => employeeStore.setFilterCivilStatus(value) }
+                            />
+
+                            <SelectFilter
+                                divColumn="col-md-6"
+                                name="application_status"
+                                label="Application Status:"
+                                value={ employeeStore.filter_application_status }
+                                isDisabled={false}
+                                options={ employeeStore.APPLICATION_STATUS_OPTIONS }
+                                onChange={ (value) => employeeStore.setFilterApplicationStatus(value) }
+                            />
+
+                            <SelectFilter
+                                divColumn="col-md-6"
+                                name="level"
+                                label="Level:"
+                                value={ employeeStore.filter_level }
+                                isDisabled={false}
+                                options={ employeeStore.LEVEL_OPTIONS }
+                                onChange={ (value) => employeeStore.setFilterLevel(value) }
+                            />
+
+                            <DateRangePicker 
+                                divColumn="col-md-12"
+                                label="Firstday in Government:"
+                                fromValue={ employeeStore.filter_fd_gov_from }
+                                fromSetter={ e => employeeStore.setFilterFdGovFrom(e.target.value) }
+                                toValue={ employeeStore.filter_fd_gov_to }
+                                toSetter={ e => employeeStore.setFilterFdGovTo(e.target.value) }
+                            />
+
+                            <DateRangePicker 
+                                divColumn="col-md-12"
+                                label="Firstday in SRA:"
+                                fromValue={ employeeStore.filter_fd_sra_from }
+                                fromSetter={ e => employeeStore.setFilterFdSRAFrom(e.target.value) }
+                                toValue={ employeeStore.filter_fd_sra_to }
+                                toSetter={ e => employeeStore.setFilterFdSRATo(e.target.value) }
                             />
                             
                         </div>

@@ -40,7 +40,7 @@ class EmployeeListSerializer(serializers.ModelSerializer):
           fields = ('id', 'employee_id', 'fullname', 'position', 'is_active', 'station_link', 'plantilla_employee')
 
 
-class EmployeeCreateSerializer(serializers.ModelSerializer): 
+class EmployeeCreateSerializer(serializers.ModelSerializer):
      class Meta:
           model = Employee
           fields = (
@@ -69,8 +69,8 @@ class EmployeeCreateSerializer(serializers.ModelSerializer):
                "employee_id",
                "position",
                "is_active",
-               "station",
-               "plantilla_item",
+               # "station",
+               # "plantilla_item",
                "salary_grade",
                "step_increment",
                "application_status",
@@ -96,6 +96,5 @@ class EmployeeCreateSerializer(serializers.ModelSerializer):
 
 class EmployeeBulkDeleteSerializer(serializers.Serializer):
     ids = serializers.ListField(child=serializers.IntegerField(min_value=1))
-
 
     

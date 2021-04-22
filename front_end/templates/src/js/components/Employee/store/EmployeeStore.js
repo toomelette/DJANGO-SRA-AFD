@@ -4,7 +4,31 @@ import { makeAutoObservable, runInAction } from "mobx"
 
 class EmployeeStore{
 
-    // // List
+    // Constants
+    SEX_OPTIONS = [
+        { value:0, label:"Select" },
+        { value:1, label:"Male" },
+        { value:2, label:"Female" },
+    ]
+    CIVIL_STATUS_OPTIONS = [
+        { value:0, label:"Select" },
+        { value:1, label:"Single" },
+        { value:2, label:"Married" },
+        { value:3, label:"Widow" },
+    ]
+    APPLICATION_STATUS_OPTIONS = [
+        { value:0, label:"Select" },
+        { value:1, label:"Permanent" },
+        { value:2, label:"Contract of Service" },
+    ]
+    LEVEL_OPTIONS = [
+        { value:0, label:"Select" },
+        { value:1, label:"First" },
+        { value:2, label:"Second" },
+        { value:3, label:"RA1080" },
+    ]
+
+    // List
     list = [];
     total_records = 0;
     page_prev = 0;
@@ -14,17 +38,25 @@ class EmployeeStore{
     page_limit = 0;
     query = "";
     filter_is_active = "";
+    filter_station = "";
+    filter_sex = "";
+    filter_civil_status = "";
+    filter_application_status = "";
+    filter_level = "";
+    filter_fd_gov_from = "";
+    filter_fd_gov_to = "";
+    filter_fd_sra_from = "";
+    filter_fd_sra_to = "";
     sort_field = "";
     sort_order = "";
 
-	delaySearch = debounce(() => this.fetch(), 500); // search delay
-    selected_employee = 0; // selected menu id after create or update
-    is_opened_form = 0; // 0 = create form, 1 = update form
-    is_selected_all_rows = false; // is all checkbox selected
-    selected_rows = []; // rows that are selected via checkbox
-
+	delaySearch = debounce(() => this.fetch(), 500);
+    selected_employee = 0;
+    is_opened_form = 0;
+    is_selected_all_rows = false;
+    selected_rows = [];
     station_options = [ { value:"", label:"Select" } ];
-    plantilla_options = [ { value:"", label:"Select" } ];
+    // plantilla_options = [ { value:"", label:"Select" } ];
 
     // FORM
     // - Personal Details
@@ -52,8 +84,8 @@ class EmployeeStore{
     employee_id = "";
     position = "";
     is_active = null;
-    station = { value:"", label:"Select" };
-    plantilla_item = { value:"", label:"Select" };
+    // station = { value:"", label:"Select" };
+    // plantilla_item = { value:"", label:"Select" };
     salary_grade = "";
     step_increment = "";
     application_status = 0;
@@ -89,6 +121,15 @@ class EmployeeStore{
             params: { 
                 q: this.query, 
                 ia: this.filter_is_active.value, 
+                st: this.filter_station.value, 
+                se: this.filter_sex.value, 
+                cs: this.filter_civil_status.value,
+                as: this.filter_application_status.value,
+                l: this.filter_level.value, 
+                fd_g_f: this.filter_fd_gov_from, 
+                fd_g_t: this.filter_fd_gov_to, 
+                fd_s_f: this.filter_fd_sra_from, 
+                fd_s_t: this.filter_fd_sra_to, 
                 page_size: this.page_size, 
                 page: this.page_current, 
                 sort_field: this.sort_field.value,
@@ -145,6 +186,42 @@ class EmployeeStore{
         this.filter_is_active = is_active;
     }
 
+    setFilterStation(station){
+        this.filter_station = station;
+    }
+
+    setFilterSex(sex){
+        this.filter_sex = sex;
+    }
+
+    setFilterCivilStatus(civil_status){
+        this.filter_civil_status = civil_status;
+    }
+
+    setFilterApplicationStatus(application_status){
+        this.filter_application_status = application_status;
+    }
+
+    setFilterLevel(level){
+        this.filter_level = level;
+    }
+
+    setFilterFdGovFrom(from){
+        this.filter_fd_gov_from = from;
+    }
+
+    setFilterFdGovTo(to){
+        this.filter_fd_gov_to = to;
+    }
+
+    setFilterFdSRAFrom(from){
+        this.filter_fd_sra_from = from;
+    }
+
+    setFilterFdSRATo(to){
+        this.filter_fd_sra_to = to;
+    }
+
     setSortField(sort_field){
         this.sort_field = sort_field;
     }
@@ -187,31 +264,31 @@ class EmployeeStore{
         });
     }
 
-    setPlantillaOptions(station){
+    // setPlantillaOptions(station){
 
-        if(station){
-            axios.get('api/plantilla/get_all_open_by_station', {
-                    params:{ 
-                        s:station
-                    }
-                 })
-                 .then((response) => {
-                    runInAction(() => {
-                        let plantillas = response.data;
-                        this.plantilla_options = [{ value:"", label:"Select" }];
-                        if(plantillas.length > 0){
-                            plantillas.forEach(data => {
-                                this.plantilla_options.push({ 
-                                    value:data.plantilla_id.toString(), 
-                                    label:"#"+data.plantilla_id+" | "+data.position
-                                });
-                            });
-                        }
-                    })
-            });
-        }
+    //     if(station){
+    //         axios.get('api/plantilla/get_all_open_by_station', {
+    //                 params:{ 
+    //                     s:station
+    //                 }
+    //              })
+    //              .then((response) => {
+    //                 runInAction(() => {
+    //                     let plantillas = response.data;
+    //                     this.plantilla_options = [{ value:"", label:"Select" }];
+    //                     if(plantillas.length > 0){
+    //                         plantillas.forEach(data => {
+    //                             this.plantilla_options.push({ 
+    //                                 value:data.plantilla_id.toString(), 
+    //                                 label:"#"+data.plantilla_id+" | "+data.position
+    //                             });
+    //                         });
+    //                     }
+    //                 })
+    //         });
+    //     }
         
-    }
+    // }
 
 
     // Form Setters
@@ -240,8 +317,8 @@ class EmployeeStore{
         this.employee_id = "";
         this.position = "";
         this.is_active = "";
-        this.station = { value:"", label:"Select" };
-        this.plantilla_item = { value:"", label:"Select" };
+        // this.station = { value:"", label:"Select" };
+        // this.plantilla_item = { value:"", label:"Select" };
         this.salary_grade = "";
         this.step_increment = "";
         this.application_status = 0;
@@ -359,10 +436,10 @@ class EmployeeStore{
         this.is_active = is_active;
     }
 
-    setStation(station){
-        this.station = station;
-        this.setPlantillaOptions(station.value)
-    }
+    // setStation(station){
+    //     this.station = station;
+    //     this.setPlantillaOptions(station.value)
+    // }
 
     setSalaryGrade(salary_grade){
         this.salary_grade = salary_grade;
@@ -384,9 +461,9 @@ class EmployeeStore{
         this.monthly_salary = monthly_salary;
     }
 
-    setPlantillaItem(plantilla_item){
-        this.plantilla_item = plantilla_item;
-    }
+    // setPlantillaItem(plantilla_item){
+    //     this.plantilla_item = plantilla_item;
+    // }
 
     setFirstdayGov(firstday_gov){
         this.firstday_gov = firstday_gov;
@@ -485,6 +562,15 @@ class EmployeeStore{
         this.page_size = 10;
         this.query = "";
         this.filter_is_active = "";
+        this.filter_station = "";
+        this.filter_sex = "";
+        this.filter_civil_status = "";
+        this.filter_application_status = "";
+        this.filter_level = "";
+        this.filter_fd_gov_from = "", 
+        this.filter_fd_gov_to = "", 
+        this.filter_fd_sra_from = "", 
+        this.filter_fd_sra_to = "", 
         this.sort_field = "";
         this.sort_order = "";
         this.selected_employee = 0;

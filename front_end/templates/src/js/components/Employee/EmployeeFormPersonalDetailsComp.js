@@ -96,7 +96,7 @@ const EmployeeFormPersonalDetails = observer(({ employeeStore }) => {
                     label="Sex"
                     name="sex"
                     value={ employeeStore.sex }
-                    options={ [{value:1, label:"Male"}, {value:2, label:"Female"}] }
+                    options={ employeeStore.SEX_OPTIONS.slice(1) }
                     onChange={ (e) => employeeStore.setSex(e.target.value) }
                     errorField={ employeeStore.error_fields.sex }
                 />
@@ -107,14 +107,7 @@ const EmployeeFormPersonalDetails = observer(({ employeeStore }) => {
                     label="Civil Status:"
                     value={ employeeStore.civil_status }
                     isDisabled={ false }
-                    options={ 
-                        [
-                            { value:0, label:"Select" }, 
-                            { value:1, label:"Single" }, 
-                            { value:2, label:"Married" }, 
-                            { value:3, label:"Widow" } 
-                        ] 
-                    }
+                    options={ employeeStore.CIVIL_STATUS_OPTIONS }
                     onChange={ (value) => employeeStore.setCivilStatus(value) }
                     errorField={ employeeStore.error_fields.civil_status }
                 />

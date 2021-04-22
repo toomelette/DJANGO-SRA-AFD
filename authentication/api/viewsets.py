@@ -37,6 +37,18 @@ class RouteViewSet(viewsets.ModelViewSet):
     pagination_class = RouteListPagination
 
 
+    def list(self, request):
+        search = request.GET.get('q', None)
+        filter_conditions = Q()
+        
+        if search: 
+            filter_conditions.add(Q(name__icontains=search) | Q(category__icontains=search), Q.AND)
+
+        page = self.paginate_queryset(self.queryset.filter(filter_conditions).order_by(self.__sort_field()))
+        serializer = self.get_serializer(page, many=True)
+        return self.get_paginated_response(serializer.data)
+
+
     def __sort_field(self):
         field = '-updated_at'
         sort_field = self.request.GET.get('sort_field', None)
@@ -49,18 +61,6 @@ class RouteViewSet(viewsets.ModelViewSet):
                 else:
                     field = sort_field
         return field
-
-
-    def list(self, request):
-        search = request.GET.get('q', None)
-        filter_conditions = Q()
-        
-        if search: 
-            filter_conditions.add(Q(name__icontains=search) | Q(category__icontains=search), Q.AND)
-
-        page = self.paginate_queryset(self.queryset.filter(filter_conditions).order_by(self.__sort_field()))
-        serializer = self.get_serializer(page, many=True)
-        return self.get_paginated_response(serializer.data)
         
 
     def create(self, request):
@@ -205,6 +205,24 @@ class UserViewSet(viewsets.ModelViewSet):
     pagination_class = UserListPagination
 
 
+    def list(self, request):
+        search = request.GET.get('q', None)
+        online_status = request.GET.get('os', None)
+        su_status = request.GET.get('sus', None)     
+        filter_conditions = Q()
+
+        if search:
+            filter_conditions.add(Q(username__icontains=search) | Q(first_name__icontains=search) | Q(last_name__icontains=search), Q.AND)
+        if online_status:
+            filter_conditions.add(Q(is_active = online_status), Q.AND) 
+        if su_status:
+            filter_conditions.add(Q(is_superuser = su_status), Q.AND)
+        
+        page = self.paginate_queryset(self.queryset.filter(filter_conditions).order_by(self.__sort_field()))
+        serializer = self.get_serializer(page, many=True)
+        return self.get_paginated_response(serializer.data)
+
+
     def __sort_field(self):
         field = '-date_joined'
         sort_field = self.request.GET.get('sort_field', None)
@@ -217,25 +235,6 @@ class UserViewSet(viewsets.ModelViewSet):
                 else:
                     field = sort_field
         return field
-
-
-    def list(self, request):
-        search = request.GET.get('q', None)
-        online_status = request.GET.get('os', None)
-        su_status = request.GET.get('sus', None)     
-        filter_conditions = Q()
-
-        if search or online_status or su_status:
-            if search:
-                filter_conditions.add(Q(username__icontains=search) | Q(first_name__icontains=search) | Q(last_name__icontains=search), Q.AND)
-            if online_status:
-                filter_conditions.add(Q(is_active = online_status), Q.AND) 
-            if su_status:
-                filter_conditions.add(Q(is_superuser = su_status), Q.AND)
-        
-        page = self.paginate_queryset(self.queryset.filter(filter_conditions).order_by(self.__sort_field()))
-        serializer = self.get_serializer(page, many=True)
-        return self.get_paginated_response(serializer.data)
         
 
     def create(self, request):

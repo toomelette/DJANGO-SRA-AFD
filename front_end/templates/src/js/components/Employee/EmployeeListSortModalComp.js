@@ -46,8 +46,25 @@ const EmployeeListSortModal = observer(({ employeeStore }) => {
                                 isDisabled={false}
                                 options={ [
                                     {value : "", label : "Select"},
+                                    {value : "employee_id", label : "Employee No."},
                                     {value : "firstname", label : "Firstname"},
                                     {value : "lastname", label : "Lastname"},
+                                    {value : "position", label : "Position"},
+                                    {value : "birthdate", label : "Birthdate"},
+                                    {value : "no_of_children", label : "Number of Children"},
+                                    {value : "weight", label : "Weight"},
+                                    {value : "height", label : "Height"},
+                                    {value : "salary_grade", label : "Salary Grade"},
+                                    {value : "monthly_salary", label : "Monthly Salary"},
+                                    {value : "firstday_gov", label : "Firstday in Government"},
+                                    {value : "firstday_sra", label : "Firstday in SRA"},
+                                    {value : "first_appointment", label : "First Appointment"},
+                                    {value : "last_appointment", label : "Last Appointment"},
+                                    {value : "last_step_increment", label : "Last Step Increment"},
+                                    {value : "last_adjustment", label : "Last Adjustment"},
+                                    {value : "last_promotion", label : "Last Promotion"},
+                                    {value : "original_appointment", label : "Original Appointment"},
+                                    {value : "adjustment_date", label : "Adjustment Date"},
                                 ] }
                                 onChange={ handleSortFieldChange }
                             />
