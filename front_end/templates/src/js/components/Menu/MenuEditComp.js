@@ -118,7 +118,7 @@ const MenuEdit = observer(({ menuStore }) => {
                     <div className="page-body">
                         <div className="row">
                             <div className="col-sm-12">
-                                <div className="card">
+                                <div className="card z-depth-0">
 
                                     <DivLoader type="Circles" loading={page_loader}/>
                                     <div className="card-header">

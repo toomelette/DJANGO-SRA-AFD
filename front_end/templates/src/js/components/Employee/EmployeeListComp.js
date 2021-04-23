@@ -8,6 +8,7 @@ import { Link, useHistory } from "react-router-dom"
 
 import { TableHeaderDefault } from '../Utils/Table/TableHeaders'
 import { TableFooterDefault } from '../Utils/Table/TableFooters'
+import EmployeeListFilterBadge from './EmployeeListFilterBadgeComp'
 import EmployeeListFilterModal from './EmployeeListFilterModalComp'
 import EmployeeListSortModal from './EmployeeListSortModalComp'
 import EmployeeListBulkDeleteModal from './EmployeeListBulkDeleteModalComp'
@@ -114,11 +115,12 @@ const EmployeeList = observer(({ employeeStore, dashboardMainStore }) => {
                     <div className="page-body">
                         <div className="row">
                             <div className="col-sm-12">
-                                <div className="card table-card">
+                                <div className="card table-card z-depth-0">
 
 
                                     {/* Table Header */}
                                     <div className="card-header"> 
+
                                         <TableHeaderDefault
                                             addButtonClickHandler={ handleCreateButtonClick }
                                             searchInputValue={ employeeStore.query }
@@ -140,8 +142,10 @@ const EmployeeList = observer(({ employeeStore, dashboardMainStore }) => {
                                             paginationPrevClickHandler={ (e) => employeeStore.handlePaginationClick(e, employeeStore.page_prev) }
                                             paginationNextClickHandler={ (e) => employeeStore.handlePaginationClick(e, employeeStore.page_next) }
                                         /> 
-                                    </div>
 
+                                        <EmployeeListFilterBadge employeeStore={employeeStore}/>
+
+                                    </div>
 
                                     {/* TABLE BODY */}
                                     <div className="card-block table-border-style pb-0 pt-0">

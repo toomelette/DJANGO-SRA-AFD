@@ -98,7 +98,6 @@ class Employee(models.Model):
     last_promotion =  models.DateField(null=True)
     original_appointment =  models.DateField(null=True)
     adjustment_date =  models.DateField(null=True)
-    adjustment_date =  models.DateField(null=True)
     tin = models.CharField(max_length=50, default="", blank=True)
     gsis = models.CharField(max_length=50, default="", blank=True)
     philhealth = models.CharField(max_length=50, default="", blank=True)

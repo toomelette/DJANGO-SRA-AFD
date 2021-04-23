@@ -140,7 +140,7 @@ const UserCreate = observer(({ userStore }) => {
 
                         <div className="row">
                             <div className="col-sm-12">
-                                <div className="card">
+                                <div className="card z-depth-0">
 
                                     <DivLoader type="Circles" loading={page_loader}/>
                                     <div className="card-header">
@@ -230,7 +230,7 @@ const UserCreate = observer(({ userStore }) => {
                                                 />
 
                                                 <SelectMultiInline 
-                                                    label="Module Permissions:"
+                                                    label="Permissions:"
                                                     name="user_subroutes"
                                                     value={userStore.user_subroutes}
                                                     errorField={ userStore.error_fields.user_subroutes }

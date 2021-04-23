@@ -114,7 +114,7 @@ const UserList = observer(({ userStore, dashboardMainStore }) => {
                     <div className="page-body">
                         <div className="row">
                             <div className="col-sm-12">
-                                <div className="card table-card">
+                                <div className="card table-card z-depth-0">
 
 
                                     {/* Table Header */}

@@ -68,8 +68,17 @@ class EmployeeViewSet(viewsets.ModelViewSet):
         firstday_gov_from = request.GET.get('fd_g_f', None) 
         firstday_gov_to = request.GET.get('fd_g_t', None)    
         firstday_sra_from = request.GET.get('fd_s_f', None) 
-        firstday_sra_to = request.GET.get('fd_s_t', None)        
-        level = request.GET.get('l', None)   
+        firstday_sra_to = request.GET.get('fd_s_t', None)  
+        first_appointment_from = request.GET.get('f_appt_f', None) 
+        first_appointment_to = request.GET.get('f_appt_t', None) 
+        last_appointment_from = request.GET.get('l_appt_f', None) 
+        last_appointment_to = request.GET.get('l_appt_t', None)   
+        last_step_increment_from = request.GET.get('l_si_f', None) 
+        last_step_increment_to = request.GET.get('l_si_t', None)   
+        last_adjustment_from = request.GET.get('l_adj_f', None) 
+        last_adjustment_to = request.GET.get('l_adj_t', None)  
+        last_promotion_from = request.GET.get('l_prom_f', None) 
+        last_promotion_to = request.GET.get('l_prom_t', None)
         filter_conditions = Q()
 
         if search:
@@ -77,6 +86,14 @@ class EmployeeViewSet(viewsets.ModelViewSet):
                 Q(fullname__icontains=search) 
                 | Q(employee_id__icontains=search) 
                 | Q(position__icontains=search) 
+                | Q(address_present__icontains=search) 
+                | Q(address_permanent__icontains=search) 
+                | Q(place_of_birth__icontains=search) 
+                | Q(tin__icontains=search) 
+                | Q(gsis__icontains=search) 
+                | Q(philhealth__icontains=search) 
+                | Q(pagibig__icontains=search) 
+                | Q(sss__icontains=search) 
                 | Q(station_link__name__icontains=search),
                 Q.AND
             )
@@ -96,6 +113,16 @@ class EmployeeViewSet(viewsets.ModelViewSet):
             filter_conditions.add(Q(firstday_gov__range = (firstday_gov_from, firstday_gov_to)), Q.AND)
         if firstday_sra_from and firstday_sra_to:
             filter_conditions.add(Q(firstday_sra__range = (firstday_sra_from, firstday_sra_to)), Q.AND)
+        if first_appointment_from and first_appointment_to:
+            filter_conditions.add(Q(first_appointment__range = (first_appointment_from, first_appointment_to)), Q.AND)
+        if last_appointment_from and last_appointment_to:
+            filter_conditions.add(Q(last_appointment__range = (last_appointment_from, last_appointment_to)), Q.AND)
+        if last_step_increment_from and last_step_increment_to:
+            filter_conditions.add(Q(last_step_increment__range = (last_step_increment_from, last_step_increment_to)), Q.AND)
+        if last_adjustment_from and last_adjustment_to:
+            filter_conditions.add(Q(last_adjustment__range = (last_adjustment_from, last_adjustment_to)), Q.AND)
+        if last_promotion_from and last_promotion_to:
+            filter_conditions.add(Q(last_promotion__range = (last_promotion_from, last_promotion_from)), Q.AND)
             
         page = self.paginate_queryset(self.queryset.filter(filter_conditions).order_by(self.__sort_field()))
         serializer = self.get_serializer(page, many=True)

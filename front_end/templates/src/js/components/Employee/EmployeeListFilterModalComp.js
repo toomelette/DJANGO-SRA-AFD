@@ -124,6 +124,51 @@ const EmployeeListFilterModal = observer(({ employeeStore }) => {
                                 toValue={ employeeStore.filter_fd_sra_to }
                                 toSetter={ e => employeeStore.setFilterFdSRATo(e.target.value) }
                             />
+
+                            <DateRangePicker 
+                                divColumn="col-md-12"
+                                label="First Appointment:"
+                                fromValue={ employeeStore.filter_first_appt_from }
+                                fromSetter={ e => employeeStore.setFilterFirstApptFrom(e.target.value) }
+                                toValue={ employeeStore.filter_first_appt_to }
+                                toSetter={ e => employeeStore.setFilterFirstApptTo(e.target.value) }
+                            />
+
+                            <DateRangePicker 
+                                divColumn="col-md-12"
+                                label="Last Appointment:"
+                                fromValue={ employeeStore.filter_last_appt_from }
+                                fromSetter={ e => employeeStore.setFilterLastApptFrom(e.target.value) }
+                                toValue={ employeeStore.filter_last_appt_to }
+                                toSetter={ e => employeeStore.setFilterLastApptTo(e.target.value) }
+                            />
+
+                            <DateRangePicker 
+                                divColumn="col-md-12"
+                                label="Last Step Increment:"
+                                fromValue={ employeeStore.filter_last_si_from }
+                                fromSetter={ e => employeeStore.setFilterLastSiFrom(e.target.value) }
+                                toValue={ employeeStore.filter_last_si_to }
+                                toSetter={ e => employeeStore.setFilterLastSiTo(e.target.value) }
+                            />
+
+                            <DateRangePicker 
+                                divColumn="col-md-12"
+                                label="Last Adjustment:"
+                                fromValue={ employeeStore.filter_last_adj_from }
+                                fromSetter={ e => employeeStore.setFilterLastAdjFrom(e.target.value) }
+                                toValue={ employeeStore.filter_last_adj_to }
+                                toSetter={ e => employeeStore.setFilterLastAdjTo(e.target.value) }
+                            />
+
+                            <DateRangePicker 
+                                divColumn="col-md-12"
+                                label="Last Promotion:"
+                                fromValue={ employeeStore.filter_last_prom_from }
+                                fromSetter={ e => employeeStore.setFilterLastPromFrom(e.target.value) }
+                                toValue={ employeeStore.filter_last_prom_to }
+                                toSetter={ e => employeeStore.setFilterLastPromTo(e.target.value) }
+                            />
                             
                         </div>
                     </div>

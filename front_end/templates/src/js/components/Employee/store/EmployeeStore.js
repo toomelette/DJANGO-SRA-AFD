@@ -37,16 +37,26 @@ class EmployeeStore{
     page_size = 10;
     page_limit = 0;
     query = "";
-    filter_is_active = "";
-    filter_station = "";
-    filter_sex = "";
-    filter_civil_status = "";
-    filter_application_status = "";
-    filter_level = "";
+    filter_is_active = { value:"", label:"Select" };
+    filter_station = { value:"", label:"Select" };
+    filter_sex = { value:"", label:"Select" };
+    filter_civil_status = { value:"", label:"Select" };
+    filter_application_status = { value:"", label:"Select" };
+    filter_level = { value:"", label:"Select" };
     filter_fd_gov_from = "";
     filter_fd_gov_to = "";
     filter_fd_sra_from = "";
     filter_fd_sra_to = "";
+    filter_first_appt_from = "";
+    filter_first_appt_to = "";
+    filter_last_appt_from = "";
+    filter_last_appt_to = "";
+    filter_last_si_from = "";
+    filter_last_si_to = "";
+    filter_last_adj_from = "";
+    filter_last_adj_to = "";
+    filter_last_prom_from = "";
+    filter_last_prom_to = "";
     sort_field = "";
     sort_order = "";
 
@@ -130,6 +140,16 @@ class EmployeeStore{
                 fd_g_t: this.filter_fd_gov_to, 
                 fd_s_f: this.filter_fd_sra_from, 
                 fd_s_t: this.filter_fd_sra_to, 
+                f_appt_f: this.filter_first_appt_from,
+                f_appt_t: this.filter_first_appt_to,
+                l_appt_f: this.filter_last_appt_from,
+                l_appt_t: this.filter_last_appt_to,
+                l_si_f: this.filter_last_si_from,
+                l_si_t: this.filter_last_si_to,
+                l_adj_f: this.filter_last_adj_from,
+                l_adj_t: this.filter_last_adj_to,
+                l_prom_f: this.filter_last_prom_from,
+                l_prom_t: this.filter_last_prom_to,
                 page_size: this.page_size, 
                 page: this.page_current, 
                 sort_field: this.sort_field.value,
@@ -183,6 +203,7 @@ class EmployeeStore{
     
     // List Setters
     setFilterIsActive(is_active){
+        console.log(is_active)
         this.filter_is_active = is_active;
     }
 
@@ -220,6 +241,46 @@ class EmployeeStore{
 
     setFilterFdSRATo(to){
         this.filter_fd_sra_to = to;
+    }
+
+    setFilterFirstApptFrom(from){
+        this.filter_first_appt_from = from;
+    }
+
+    setFilterFirstApptTo(to){
+        this.filter_first_appt_to = to;
+    }
+
+    setFilterLastApptFrom(from){
+        this.filter_last_appt_from = from;
+    }
+
+    setFilterLastApptTo(to){
+        this.filter_last_appt_to = to;
+    }
+
+    setFilterLastSiFrom(from){
+        this.filter_last_si_from = from;
+    }
+
+    setFilterLastSiTo(to){
+        this.filter_last_si_to = to;
+    }
+
+    setFilterLastAdjFrom(from){
+        this.filter_last_adj_from = from;
+    }
+
+    setFilterLastAdjTo(to){
+        this.filter_last_adj_to = to;
+    }
+
+    setFilterLastPromFrom(from){
+        this.filter_last_prom_from = from;
+    }
+
+    setFilterLastPromTo(to){
+        this.filter_last_prom_to = to;
     }
 
     setSortField(sort_field){
@@ -561,16 +622,26 @@ class EmployeeStore{
         this.page_next = 2;
         this.page_size = 10;
         this.query = "";
-        this.filter_is_active = "";
-        this.filter_station = "";
-        this.filter_sex = "";
-        this.filter_civil_status = "";
-        this.filter_application_status = "";
-        this.filter_level = "";
+        this.filter_is_active = { value:"", label:"Select" };
+        this.filter_station = { value:"", label:"Select" };
+        this.filter_sex = { value:"", label:"Select" };
+        this.filter_civil_status = { value:"", label:"Select" };
+        this.filter_application_status = { value:"", label:"Select" };
+        this.filter_level = { value:"", label:"Select" };
         this.filter_fd_gov_from = "", 
         this.filter_fd_gov_to = "", 
         this.filter_fd_sra_from = "", 
         this.filter_fd_sra_to = "", 
+        this.filter_first_appt_from = "",
+        this.filter_first_appt_to = "",
+        this.filter_last_appt_from = "",
+        this.filter_last_appt_to = "",
+        this.filter_last_si_from = "",
+        this.filter_last_si_to = "",
+        this.filter_last_adj_from = "",
+        this.filter_last_adj_to = "",
+        this.filter_last_prom_from = "",
+        this.filter_last_prom_to = "",
         this.sort_field = "";
         this.sort_order = "";
         this.selected_employee = 0;

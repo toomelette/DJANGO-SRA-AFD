@@ -103,7 +103,7 @@ const UserDetails = observer(({ userStore, dashboardMainStore }) => {
                         <div className="row">
 
                             <div className="col-sm-12">
-                                <div className="card">
+                                <div className="card z-depth-0">
                                     <DivLoader type="Circles" loading={page_loader}/>
                                     <div className="card-header">
                                         <h5>User Details</h5>
