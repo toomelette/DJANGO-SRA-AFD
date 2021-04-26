@@ -6,7 +6,7 @@ import { observer } from 'mobx-react'
 
 import EmployeeList from './EmployeeListComp.js'
 import EmployeeCreate from './EmployeeCreateComp.js'
-// import EmployeeDetails from './EmployeeDetailsComp.js'
+import EmployeeDetails from './EmployeeDetailsComp.js'
 // import EmployeeEdit from './EmployeeEditComp.js'
 import NotFoundPage from '../ErrorPages/NotFoundPageComp'
 
@@ -30,10 +30,10 @@ const EmployeeMain = observer(({ employeeStore, dashboardMainStore }) => {
                 </Route>
 
                 {/* DETAILS */}
-                {/* <Route exact path="/employees/:employee_id">
+                <Route exact path="/employees/:employee_id">
                     { dashboardMainStore.checkIfSubrouteExist('employee-details-page') ? 
                         <EmployeeDetails employeeStore={employeeStore} dashboardMainStore={dashboardMainStore}/> : <NotFoundPage/> }
-                </Route> */}
+                </Route>
 
                 {/* EDIT */}
                 {/* <Route exact path="/employees/:employee_id/edit">

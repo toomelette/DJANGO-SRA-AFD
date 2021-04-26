@@ -14,6 +14,7 @@ from .serializers import (
     PlantillaListSerializer,
     EmployeeListSerializer,
     EmployeeCreateSerializer,
+    EmployeeDetailsSerializer,
     EmployeeBulkDeleteSerializer
 )
 
@@ -201,6 +202,15 @@ class EmployeeViewSet(viewsets.ModelViewSet):
         employee.updated_by_id = request.user.id
         employee.save()
         return Response({"id":employee.id}, 201)
+
+
+    def retrieve(self, request, pk=None):
+        employee = self.queryset.get(id=pk)
+        if employee:
+            serializer = EmployeeDetailsSerializer(employee)
+            return Response(serializer.data, 200)
+        else:
+            return Response({}, 404)
 
 
     # def __set_station(self, serializer):

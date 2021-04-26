@@ -93,14 +93,15 @@ class EmployeeStore{
     filter_last_adj_to = "";
     filter_last_prom_from = "";
     filter_last_prom_to = "";
-    sort_field = "";
-    sort_order = "";
+    sort_field = { value:"", label:"Select" };
+    sort_order = { value:"", label:"Select" };
 
     station_options = [ { value:"", label:"Select" } ];
     // plantilla_options = [ { value:"", label:"Select" } ];
 
     // FORM Values
     // - Personal Details
+    fullname = "";
     firstname = "";
     middlename = "";
     lastname = "";
@@ -146,7 +147,7 @@ class EmployeeStore{
     philhealth = "";
     pagibig = "";
     sss = "";
-    
+
     error_fields = {};
 
 
@@ -201,37 +202,62 @@ class EmployeeStore{
         });
     }
 
-    // retrieve(id){
-    //     axios.get('api/employee/' + id)
-    //     .then((response) => {
-    //         runInAction(() => {
-    //             const res_subemployees = response.data.subemployee_employee;
-    //             let subemployees = [];
-    //             this.category = response.data.category
-    //             this.name = response.data.name
-    //             this.is_menu = response.data.is_menu
-    //             this.is_dropdown = response.data.is_dropdown
-    //             this.nav_name = response.data.nav_name
-    //             this.icon= response.data.icon
-    //             this.url = response.data.url
-    //             this.url_name = response.data.url_name
-    //             // Set Subemployees
-    //             res_subemployees.forEach(data => {
-    //                 subemployees.push({
-    //                     id: data.id,
-    //                     is_nav: data.is_nav, 
-    //                     name: data.name, 
-    //                     nav_name: data.nav_name, 
-    //                     url: data.url, 
-    //                     url_name: data.url_name, 
-    //                     is_from_query: true, 
-    //                 })
-    //             });
-    //             this.subemployees = subemployees;
-    //             this.error_fields = {};
-    //         })
-    //     });
-    // }
+    retrieve(id){
+        axios.get('api/employee/' + id)
+        .then((response) => {
+            runInAction(() => {
+                // - Personal Details
+                this.fullname = response.data.fullname;
+                this.firstname = response.data.firstname;
+                this.middlename = response.data.middlename;
+                this.lastname = response.data.lastname;
+                this.suffixname = response.data.suffixname;
+                this.address_present = response.data.address_present;
+                this.address_permanent = response.data.address_permanent;
+                this.birthdate = response.data.birthdate;
+                this.place_of_birth = response.data.place_of_birth;
+                this.sex = response.data.sex;
+                this.civil_status = { value:response.data.civil_status, label:"" };
+                this.tel_no = response.data.tel_no;
+                this.cell_no = response.data.cell_no;
+                this.email_address = response.data.email_address;
+                this.spouse_name = response.data.spouse_name;
+                this.spouse_occupation = response.data.spouse_occupation;
+                this.no_of_children = response.data.no_of_children;
+                this.height = response.data.height;
+                this.weight = response.data.weight;
+                this.religion = response.data.religion;
+                this.blood_type = response.data.blood_type;
+                // - Appointment Details
+                this.employee_id = response.data.employee_id;
+                this.position = response.data.position;
+                this.is_active = null;
+                this.salary_grade = "";
+                this.step_increment = "";
+                this.application_status = 0;
+                this.tax_status = "";
+                this.monthly_salary = "";
+                this.firstday_gov = "";
+                this.firstday_sra = "";
+                this.first_appointment = "";
+                this.last_appointment = "";
+                this.last_step_increment = "";
+                this.last_adjustment = "";
+                this.last_promotion = "";
+                this.original_appointment = "";
+                this.adjustment_date = "";
+                this.tin = "";
+                this.gsis = "";
+                this.philhealth = "";
+                this.pagibig = "";
+                this.sss = "";
+
+
+
+                this.error_fields = {};
+            })
+        });
+    }
 
     
     // List Setters
