@@ -142,7 +142,7 @@ const EmployeeList = observer(({ employeeStore, dashboardMainStore }) => {
                                             paginationPrevClickHandler={ (e) => employeeStore.handlePaginationClick(e, employeeStore.page_prev) }
                                             paginationNextClickHandler={ (e) => employeeStore.handlePaginationClick(e, employeeStore.page_next) }
                                         /> 
-
+                                        
                                         <EmployeeListFilterBadge employeeStore={employeeStore}/>
 
                                     </div>

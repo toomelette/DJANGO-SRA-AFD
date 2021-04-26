@@ -122,7 +122,7 @@ class EmployeeViewSet(viewsets.ModelViewSet):
         if last_adjustment_from and last_adjustment_to:
             filter_conditions.add(Q(last_adjustment__range = (last_adjustment_from, last_adjustment_to)), Q.AND)
         if last_promotion_from and last_promotion_to:
-            filter_conditions.add(Q(last_promotion__range = (last_promotion_from, last_promotion_from)), Q.AND)
+            filter_conditions.add(Q(last_promotion__range = (last_promotion_from, last_promotion_to)), Q.AND)
             
         page = self.paginate_queryset(self.queryset.filter(filter_conditions).order_by(self.__sort_field()))
         serializer = self.get_serializer(page, many=True)

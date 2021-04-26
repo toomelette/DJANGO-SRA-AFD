@@ -1,10 +1,11 @@
 
 import { debounce } from 'lodash'
 import { makeAutoObservable, runInAction } from "mobx"
+import moment from 'moment';
+
 
 class EmployeeStore{
 
-    // Constants
     SEX_OPTIONS = [
         { value:0, label:"Select" },
         { value:1, label:"Male" },
@@ -27,8 +28,42 @@ class EmployeeStore{
         { value:2, label:"Second" },
         { value:3, label:"RA1080" },
     ]
+    SORT_FIELD_OPTIONS = [
+        {value : "", label : "Select"},
+        {value : "employee_id", label : "Employee No."},
+        {value : "firstname", label : "Firstname"},
+        {value : "lastname", label : "Lastname"},
+        {value : "position", label : "Position"},
+        {value : "birthdate", label : "Birthdate"},
+        {value : "no_of_children", label : "Number of Children"},
+        {value : "weight", label : "Weight"},
+        {value : "height", label : "Height"},
+        {value : "salary_grade", label : "Salary Grade"},
+        {value : "monthly_salary", label : "Monthly Salary"},
+        {value : "firstday_gov", label : "Firstday in Government"},
+        {value : "firstday_sra", label : "Firstday in SRA"},
+        {value : "first_appointment", label : "First Appointment"},
+        {value : "last_appointment", label : "Last Appointment"},
+        {value : "last_step_increment", label : "Last Step Increment"},
+        {value : "last_adjustment", label : "Last Adjustment"},
+        {value : "last_promotion", label : "Last Promotion"},
+        {value : "original_appointment", label : "Original Appointment"},
+        {value : "adjustment_date", label : "Adjustment Date"},
+    ]
+    SORT_ORDER_OPTIONS = [
+        {value:"", label:"Select"}, 
+        {value:"asc", label:'Ascending'}, 
+        {value:"desc", label:'Descending'}
+    ]
 
-    // List
+	delaySearch = debounce(() => this.fetch(), 500);
+    selected_employee = 0;
+    is_opened_form = 0;
+    is_selected_all_rows = false;
+    selected_rows = [];
+    table_badge = []
+
+    // List Values
     list = [];
     total_records = 0;
     page_prev = 0;
@@ -37,6 +72,7 @@ class EmployeeStore{
     page_size = 10;
     page_limit = 0;
     query = "";
+
     filter_is_active = { value:"", label:"Select" };
     filter_station = { value:"", label:"Select" };
     filter_sex = { value:"", label:"Select" };
@@ -60,15 +96,10 @@ class EmployeeStore{
     sort_field = "";
     sort_order = "";
 
-	delaySearch = debounce(() => this.fetch(), 500);
-    selected_employee = 0;
-    is_opened_form = 0;
-    is_selected_all_rows = false;
-    selected_rows = [];
     station_options = [ { value:"", label:"Select" } ];
     // plantilla_options = [ { value:"", label:"Select" } ];
 
-    // FORM
+    // FORM Values
     // - Personal Details
     firstname = "";
     middlename = "";
@@ -115,7 +146,7 @@ class EmployeeStore{
     philhealth = "";
     pagibig = "";
     sss = "";
-    // - Error Fields
+    
     error_fields = {};
 
 
@@ -127,6 +158,7 @@ class EmployeeStore{
     fetch(){
         this.is_selected_all_rows = false;
         this.selected_rows = [];
+        this.table_badge = [];
         axios.get('api/employee', { 
             params: { 
                 q: this.query, 
@@ -164,6 +196,7 @@ class EmployeeStore{
                 this.page_limit = Math.ceil(response.data.count / this.page_size);
                 employees.forEach(data => array.push({id:data.id, status:false}))
                 this.selected_rows = array;
+                this.setTableBadge()
             })
         });
     }
@@ -203,7 +236,6 @@ class EmployeeStore{
     
     // List Setters
     setFilterIsActive(is_active){
-        console.log(is_active)
         this.filter_is_active = is_active;
     }
 
@@ -289,6 +321,67 @@ class EmployeeStore{
 
     setSortOrder(sort_order){
         this.sort_order = sort_order;
+    }
+
+    setTableBadge(){
+        if(this.filter_is_active.value !== ""){
+            let is_active_string = this.filter_is_active.value === 1 ? "Active" : "Inactive"
+            this.table_badge.push({label:"Status:", value:is_active_string, field:"filter_is_active"})
+        }
+        if(this.filter_station.value !== ""){
+            let station_obj = this.station_options.findIndex(data => data.value === this.filter_station.value)
+            this.table_badge.push({label:"Station:", value:this.station_options[station_obj].label, field:"filter_station"})
+        }
+        if(this.filter_sex.value !== ""){
+            let sex_obj = this.SEX_OPTIONS.findIndex(data => data.value === this.filter_sex.value)
+            this.table_badge.push({label:"Sex:", value:this.SEX_OPTIONS[sex_obj].label, field:"filter_sex"})
+        }
+        if(this.filter_civil_status.value !== ""){
+            let cs_obj = this.CIVIL_STATUS_OPTIONS.findIndex(data => data.value === this.filter_civil_status.value)
+            this.table_badge.push({label:"Civil Status:", value:this.CIVIL_STATUS_OPTIONS[cs_obj].label, field:"filter_civil_status"})
+        }
+        if(this.filter_application_status.value !== ""){
+            let as_obj = this.APPLICATION_STATUS_OPTIONS.findIndex(data => data.value === this.filter_application_status.value)
+            this.table_badge.push({label:"Application Status:", value:this.APPLICATION_STATUS_OPTIONS[as_obj].label, field:"filter_application_status"})
+        }
+        if(this.filter_level.value !== ""){
+            let as_obj = this.LEVEL_OPTIONS.findIndex(data => data.value === this.filter_level.value)
+            this.table_badge.push({label:"Level:", value:this.LEVEL_OPTIONS[as_obj].label, field:"filter_level"})
+        }
+        if(this.filter_fd_gov_from != "" && this.filter_fd_gov_to){
+            let fd_gov = moment(this.filter_fd_gov_from).format("MM/DD/YYYY") +" to "+ moment(this.filter_fd_gov_to).format("MM/DD/YYYY");
+            this.table_badge.push({label:"Firstday Gov:", value:fd_gov, field:"filter_fd_gov"})
+        }
+        if(this.filter_fd_sra_from != "" && this.filter_fd_sra_to){
+            let fd_sra = moment(this.filter_fd_sra_from).format("MM/DD/YYYY") +" to "+ moment(this.filter_fd_sra_to).format("MM/DD/YYYY");
+            this.table_badge.push({label:"Firstday SRA:", value:fd_sra, field:"filter_fd_sra"})
+        }
+        if(this.filter_first_appt_from != "" && this.filter_first_appt_to){
+            let fd_f_appt = moment(this.filter_first_appt_from).format("MM/DD/YYYY") +" to "+ moment(this.filter_first_appt_to).format("MM/DD/YYYY");
+            this.table_badge.push({label:"First Appointment:", value:fd_f_appt, field:"filter_first_appt"})
+        }
+        if(this.filter_last_appt_from != "" && this.filter_last_appt_to){
+            let fd_last_appt = moment(this.filter_last_appt_from).format("MM/DD/YYYY") +" to "+ moment(this.filter_last_appt_to).format("MM/DD/YYYY");
+            this.table_badge.push({label:"Last Appointment:", value:fd_last_appt, field:"filter_last_appt"})
+        }
+        if(this.filter_last_si_from != "" && this.filter_last_si_to){
+            let fd_last_si = moment(this.filter_last_si_from).format("MM/DD/YYYY") +" to "+ moment(this.filter_last_si_to).format("MM/DD/YYYY");
+            this.table_badge.push({label:"Last Step Inc.:", value:fd_last_si, field:"filter_last_si"})
+        }
+        if(this.filter_last_adj_from != "" && this.filter_last_adj_to){
+            let fd_last_adj = moment(this.filter_last_adj_from).format("MM/DD/YYYY") +" to "+ moment(this.filter_last_adj_to).format("MM/DD/YYYY");
+            this.table_badge.push({label:"Last Adjustment:", value:fd_last_adj, field:"filter_last_adj"})
+        }
+        if(this.filter_last_prom_from != "" && this.filter_last_prom_to){
+            let fd_last_prom = moment(this.filter_last_prom_from).format("MM/DD/YYYY") +" to "+ moment(this.filter_last_prom_to).format("MM/DD/YYYY");
+            this.table_badge.push({label:"Last Promotion:", value:fd_last_prom, field:"filter_last_prom"})
+        }
+        if(this.sort_field.value != "" && this.sort_order.value != ""){
+            let sort_field_obj = this.SORT_FIELD_OPTIONS.findIndex(data => data.value === this.sort_field.value)
+            let sort_order_obj = this.SORT_ORDER_OPTIONS.findIndex(data => data.value === this.sort_order.value)
+            let sort_text = this.SORT_FIELD_OPTIONS[sort_field_obj].label +", "+ this.SORT_ORDER_OPTIONS[sort_order_obj].label
+            this.table_badge.push({label:"Sort:", value:sort_text, field:"sort"})
+        }
     }
 
     setSelectedEmployee(selected_employee){
