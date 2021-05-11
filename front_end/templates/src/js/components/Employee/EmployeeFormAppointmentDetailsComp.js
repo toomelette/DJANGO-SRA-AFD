@@ -9,8 +9,7 @@ const EmployeeFormAppointmentDetails = observer(({ employeeStore }) => {
 
 
     return (
-        <div className="col-sm-12">
-            <h4 className="sub-title">Appointment Details</h4>
+        
             <div className="row">
 
                 <InputText 
@@ -235,13 +234,9 @@ const EmployeeFormAppointmentDetails = observer(({ employeeStore }) => {
                     setter={ e => employeeStore.setSss(e.target.value) }
                 />
 
-
-
-                
-                
             </div>
-        </div>
-    );
+
+);
 
     
 });

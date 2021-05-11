@@ -9,6 +9,8 @@ import eventBus from '../Utils/EventBus'
 import DivLoader from '../Utils/DivLoaderComp'
 import numberFormat from '../Utils/DataFilters'
 
+import EmployeeEditPersonalDetailsModal from './EmployeeEditPersonalDetailsModalComp'
+
 
 
 const EmployeeDetails = observer(({ employeeStore, dashboardMainStore }) => {
@@ -36,6 +38,12 @@ const EmployeeDetails = observer(({ employeeStore, dashboardMainStore }) => {
     const handleDeleteRouteModal = (e) => {
         e.preventDefault()
         $("#employee-delete-modal").modal('toggle')
+    }
+
+
+    const handleEditPersonalDetailsModal = (e) => {
+        e.preventDefault()
+        $("#employee-edit-personal-details-modal").modal('toggle')
     }
 
 
@@ -128,11 +136,11 @@ const EmployeeDetails = observer(({ employeeStore, dashboardMainStore }) => {
                                 <div className="card z-depth-0">
                                     <div className="card-header">
                                         <h5>Personal Details</h5>
-                                        { dashboardMainStore.checkIfSubrouteExist('employee-edit-page') ?
-                                            <Link to={`/employeess/${employee_id}/edit`} 
-                                                  className="btn btn-sm btn-primary btn-outline-primary float-right">
+                                        { dashboardMainStore.checkIfSubrouteExist('employee-edit-personal-details') ?
+                                            <button className="btn btn-sm btn-primary btn-outline-primary float-right"
+                                                    onClick={ handleEditPersonalDetailsModal }>
                                                 <i className="ti-pencil-alt ml-1"></i>
-                                            </Link> : <></> 
+                                            </button> : <></> 
                                         }
                                     </div>
                                     <div className="card-block">
@@ -212,17 +220,17 @@ const EmployeeDetails = observer(({ employeeStore, dashboardMainStore }) => {
                                             
                                             <div className="col-md-12 mt-4">{' '}</div>
                                             
-                                            <div className="col-md-4">
+                                            <div className="col-md-3">
                                                 <span> Spouse Name: {'\n'} </span>
                                                 <h5>{ employeeStore.spouse_name }</h5>
                                             </div>
 
-                                            <div className="col-md-4">
+                                            <div className="col-md-6">
                                                 <span> Spouse Occupation: {'\n'} </span>
                                                 <h5>{ employeeStore.spouse_occupation }</h5>
                                             </div>
 
-                                            <div className="col-md-4">
+                                            <div className="col-md-3">
                                                 <span> Number of Children: {'\n'} </span>
                                                 <h5>{ employeeStore.no_of_children }</h5>
                                             </div>
@@ -259,7 +267,7 @@ const EmployeeDetails = observer(({ employeeStore, dashboardMainStore }) => {
                                 <div className="card z-depth-0">
                                     <div className="card-header">
                                         <h5>Appointment Details</h5>
-                                        { dashboardMainStore.checkIfSubrouteExist('employee-edit-page') ?
+                                        { dashboardMainStore.checkIfSubrouteExist('employee-edit-appointment-details') ?
                                             <Link to={`/employeess/${employee_id}/edit`} 
                                                   className="btn btn-sm btn-primary btn-outline-primary float-right">
                                                 <i className="ti-pencil-alt ml-1"></i>
@@ -419,6 +427,9 @@ const EmployeeDetails = observer(({ employeeStore, dashboardMainStore }) => {
                                 </div>
                             </div>
 
+                                        
+                            {/* Employee Edit Personal Details Modal */}
+                            <EmployeeEditPersonalDetailsModal employeeStore={employeeStore}/>
 
                         </div>
                     </div>

@@ -9,8 +9,7 @@ const EmployeeFormPersonalDetails = observer(({ employeeStore }) => {
 
 
     return (
-        <div className="col-sm-12 mb-5">
-            <h4 className="sub-title">Personal Details</h4>
+        
             <div className="row">
 
                 <InputText 
@@ -213,7 +212,6 @@ const EmployeeFormPersonalDetails = observer(({ employeeStore }) => {
                 />
 
             </div>
-        </div>
     );
 
     

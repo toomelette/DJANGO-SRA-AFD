@@ -218,7 +218,7 @@ class EmployeeStore{
                 this.birthdate = response.data.birthdate;
                 this.place_of_birth = response.data.place_of_birth;
                 this.sex = response.data.sex;
-                this.civil_status = { value:response.data.civil_status, label:"" };
+                this.civil_status = this.CIVIL_STATUS_OPTIONS.find(data => data.value == response.data.civil_status);
                 this.tel_no = response.data.tel_no;
                 this.cell_no = response.data.cell_no;
                 this.email_address = response.data.email_address;
@@ -263,7 +263,7 @@ class EmployeeStore{
     getSexLabel(){
         let sex_obj = { value:"", label:"" }
         if(this.sex != 0){
-            sex_obj = this.SEX_OPTIONS.find(data => data.value === this.sex);
+            sex_obj = this.SEX_OPTIONS.find(data => data.value == this.sex );
         }
         return sex_obj.label;
     }
@@ -271,7 +271,7 @@ class EmployeeStore{
     getCivilStatusLabel(){
         let cs_obj = { value:"", label:"" }
         if(this.civil_status.value != 0){
-            cs_obj = this.CIVIL_STATUS_OPTIONS.find(data => data.value === this.civil_status.value);
+            cs_obj = this.CIVIL_STATUS_OPTIONS.find(data => data.value == this.civil_status.value);
         }
         return cs_obj.label;
     }
@@ -279,7 +279,7 @@ class EmployeeStore{
     getApplicationStatusLabel(){
         let appl_obj = { value:"", label:"" }
         if(this.application_status != 0){
-            appl_obj = this.APPLICATION_STATUS_OPTIONS.find(data => data.value === this.application_status);
+            appl_obj = this.APPLICATION_STATUS_OPTIONS.find(data => data.value == this.application_status);
         }
         return appl_obj.label;
     }

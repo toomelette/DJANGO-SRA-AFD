@@ -40,7 +40,7 @@ class EmployeeListSerializer(serializers.ModelSerializer):
           fields = ('id', 'employee_id', 'fullname', 'position', 'is_active', 'station_link')
 
 
-class EmployeeCreateSerializer(serializers.ModelSerializer):
+class EmployeeFormSerializer(serializers.ModelSerializer):
      class Meta:
           model = Employee
           fields = (

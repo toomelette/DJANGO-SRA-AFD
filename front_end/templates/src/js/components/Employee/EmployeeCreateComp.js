@@ -42,7 +42,6 @@ const EmployeeCreate = observer(({ employeeStore }) => {
     const handleCreate = (e, is_save_another) => {
         e.preventDefault()
         SetPageLoader(true)
-        console.log(employeeStore.no_of_children)
         axios.post('api/employee/', { 
             // Personal Details
             firstname: employeeStore.firstname, 
@@ -222,10 +221,16 @@ const EmployeeCreate = observer(({ employeeStore }) => {
                                         <div className="row">
                                             
                                             {/* Personal Details */}
-                                            <EmployeeFormPersonalDetails employeeStore={employeeStore}/>
+                                            <div className="col-sm-12 mb-5">
+                                                <h4 className="sub-title">Personal Details</h4>
+                                                <EmployeeFormPersonalDetails employeeStore={employeeStore}/>
+                                            </div>
 
                                             {/* Appointment Details */}
-                                            <EmployeeFormAppointmentDetails employeeStore={employeeStore}/>
+                                            <div className="col-sm-12">
+                                                <h4 className="sub-title">Appointment Details</h4>
+                                                <EmployeeFormAppointmentDetails employeeStore={employeeStore}/>
+                                            </div>
 
                                         </div>
 
