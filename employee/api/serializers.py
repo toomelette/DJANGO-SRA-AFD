@@ -34,10 +34,10 @@ class PlantillaListSerializer(serializers.ModelSerializer):
 
 class EmployeeListSerializer(serializers.ModelSerializer):
      station_link = StationListSerializer(read_only=True, many=False)
-     plantilla_employee = PlantillaListSerializer(read_only=True, many=True)
+     #plantilla_employee = PlantillaListSerializer(read_only=True, many=True)
      class Meta:
           model = Employee
-          fields = ('id', 'employee_id', 'fullname', 'position', 'is_active', 'station_link', 'plantilla_employee')
+          fields = ('id', 'employee_id', 'fullname', 'position', 'is_active', 'station_link')
 
 
 class EmployeeCreateSerializer(serializers.ModelSerializer):

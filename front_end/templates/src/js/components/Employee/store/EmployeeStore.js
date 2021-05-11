@@ -156,6 +156,7 @@ class EmployeeStore{
     }
 
 
+    // ACTIONS
     fetch(){
         this.is_selected_all_rows = false;
         this.selected_rows = [];
@@ -231,35 +232,59 @@ class EmployeeStore{
                 // - Appointment Details
                 this.employee_id = response.data.employee_id;
                 this.position = response.data.position;
-                this.is_active = null;
-                this.salary_grade = "";
-                this.step_increment = "";
-                this.application_status = 0;
-                this.tax_status = "";
-                this.monthly_salary = "";
-                this.firstday_gov = "";
-                this.firstday_sra = "";
-                this.first_appointment = "";
-                this.last_appointment = "";
-                this.last_step_increment = "";
-                this.last_adjustment = "";
-                this.last_promotion = "";
-                this.original_appointment = "";
-                this.adjustment_date = "";
-                this.tin = "";
-                this.gsis = "";
-                this.philhealth = "";
-                this.pagibig = "";
-                this.sss = "";
-
-
+                this.is_active = response.data.is_active;
+                this.salary_grade = response.data.salary_grade;
+                this.step_increment = response.data.step_increment;
+                this.application_status = response.data.application_status;
+                this.tax_status = response.data.tax_status;
+                this.monthly_salary = response.data.monthly_salary;
+                this.firstday_gov = response.data.firstday_gov;
+                this.firstday_sra = response.data.firstday_sra;
+                this.first_appointment = response.data.first_appointment;
+                this.last_appointment = response.data.last_appointment;
+                this.last_step_increment = response.data.last_step_increment;
+                this.last_adjustment = response.data.last_adjustment;
+                this.last_promotion = response.data.last_promotion;
+                this.original_appointment = response.data.original_appointment;
+                this.adjustment_date = response.data.adjustment_date;
+                this.tin = response.data.tin;
+                this.gsis = response.data.gsis;
+                this.philhealth = response.data.philhealth;
+                this.pagibig = response.data.pagibig;
+                this.sss = response.data.sss;
 
                 this.error_fields = {};
             })
         });
+    }    
+
+
+    // Options Getters
+    getSexLabel(){
+        let sex_obj = { value:"", label:"" }
+        if(this.sex != 0){
+            sex_obj = this.SEX_OPTIONS.find(data => data.value === this.sex);
+        }
+        return sex_obj.label;
     }
 
-    
+    getCivilStatusLabel(){
+        let cs_obj = { value:"", label:"" }
+        if(this.civil_status.value != 0){
+            cs_obj = this.CIVIL_STATUS_OPTIONS.find(data => data.value === this.civil_status.value);
+        }
+        return cs_obj.label;
+    }
+
+    getApplicationStatusLabel(){
+        let appl_obj = { value:"", label:"" }
+        if(this.application_status != 0){
+            appl_obj = this.APPLICATION_STATUS_OPTIONS.find(data => data.value === this.application_status);
+        }
+        return appl_obj.label;
+    }
+
+
     // List Setters
     setFilterIsActive(is_active){
         this.filter_is_active = is_active;

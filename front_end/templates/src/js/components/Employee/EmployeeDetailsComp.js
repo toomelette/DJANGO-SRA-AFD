@@ -7,6 +7,7 @@ import { Link, useParams, useHistory} from 'react-router-dom';
 
 import eventBus from '../Utils/EventBus'
 import DivLoader from '../Utils/DivLoaderComp'
+import numberFormat from '../Utils/DataFilters'
 
 
 
@@ -111,17 +112,18 @@ const EmployeeDetails = observer(({ employeeStore, dashboardMainStore }) => {
                                     </div>
                                     <div className="col-md-6">
                                         <Link to="/employees" 
-                                                className="btn btn-primary btn-outline-primary float-right ml-2">
+                                                className="btn btn-primary float-right ml-2">
                                             <i className="fa fa-navicon"></i> Back to List
                                         </Link>
                                         { dashboardMainStore.checkIfSubrouteExist('employee-delete') ? 
-                                            <button className="btn btn-md btn-danger btn-outline-danger float-right ml-2" 
+                                            <button className="btn btn-md btn-danger float-right ml-2" 
                                                     onClick={ handleDeleteRouteModal }>
                                                 <i className="fa fa-trash"></i> Delete
                                             </button> : <></> 
                                         }
                                     </div>
                                 </div>
+
                                 {/* PERSONAL DETAILS */}
                                 <div className="card z-depth-0">
                                     <div className="card-header">
@@ -134,17 +136,265 @@ const EmployeeDetails = observer(({ employeeStore, dashboardMainStore }) => {
                                         }
                                     </div>
                                     <div className="card-block">
-                                        {/* Menu */}
+
                                         <div className="row">
 
+                                            <div className="col-md-3">
+                                                <span> Firstname: {'\n'} </span>
+                                                <h5>{ employeeStore.firstname }</h5>
+                                            </div>
+
+                                            <div className="col-md-3">
+                                                <span> Middlename: {'\n'} </span>
+                                                <h5>{ employeeStore.middlename }</h5>
+                                            </div>
+
+                                            <div className="col-md-3">
+                                                <span> Lastname: {'\n'} </span>
+                                                <h5>{ employeeStore.lastname }</h5>
+                                            </div>
+
+                                            <div className="col-md-3">
+                                                <span> Suffixname: {'\n'} </span>
+                                                <h5>{ employeeStore.suffixname }</h5>
+                                            </div>
+
+                                            <div className="col-md-12 mt-4">{' '}</div>
+
+                                            <div className="col-md-6">
+                                                <span> Present Address: {'\n'} </span>
+                                                <h5>{ employeeStore.address_present }</h5>
+                                            </div>
+
+                                            <div className="col-md-6">
+                                                <span> Permanent Address: {'\n'} </span>
+                                                <h5>{ employeeStore.address_permanent }</h5>
+                                            </div>
+                                            
+                                            <div className="col-md-12 mt-4">{' '}</div>
+
+                                            <div className="col-md-3">
+                                                <span> Date of Birth: {'\n'} </span>
+                                                <h5>{ moment(employeeStore.birthdate).format("MMM D, YYYY") }</h5>
+                                            </div>
+                                            
+                                            <div className="col-md-6">
+                                                <span> Place of Birth: {'\n'} </span>
+                                                <h5>{ employeeStore.place_of_birth }</h5>
+                                            </div>
+                                            
+                                            <div className="col-md-3">
+                                                <span> Sex: {'\n'} </span>
+                                                <h5>{ employeeStore.getSexLabel() }</h5>
+                                            </div>
+                                            
+                                            <div className="col-md-12 mt-4">{' '}</div>
+                                            
+                                            <div className="col-md-3">
+                                                <span> Civil Status: {'\n'} </span>
+                                                <h5>{ employeeStore.getCivilStatusLabel() }</h5>
+                                            </div>
+                                            
+                                            <div className="col-md-3">
+                                                <span> Telephone No.: {'\n'} </span>
+                                                <h5>{ employeeStore.tel_no }</h5>
+                                            </div>
+                                            
+                                            <div className="col-md-3">
+                                                <span> Cellphone No.: {'\n'} </span>
+                                                <h5>{ employeeStore.cell_no }</h5>
+                                            </div>
+                                            
+                                            <div className="col-md-3">
+                                                <span> Email Address: {'\n'} </span>
+                                                <h5>{ employeeStore.email_address }</h5>
+                                            </div>
+                                            
+                                            <div className="col-md-12 mt-4">{' '}</div>
+                                            
                                             <div className="col-md-4">
-                                                <span>Firstname:{"\n"}</span>
-                                                <span>{ employeeStore.firstname }</span>
+                                                <span> Spouse Name: {'\n'} </span>
+                                                <h5>{ employeeStore.spouse_name }</h5>
+                                            </div>
+
+                                            <div className="col-md-4">
+                                                <span> Spouse Occupation: {'\n'} </span>
+                                                <h5>{ employeeStore.spouse_occupation }</h5>
+                                            </div>
+
+                                            <div className="col-md-4">
+                                                <span> Number of Children: {'\n'} </span>
+                                                <h5>{ employeeStore.no_of_children }</h5>
+                                            </div>
+                                            
+                                            <div className="col-md-12 mt-4">{' '}</div>
+                                            
+                                            <div className="col-md-3">
+                                                <span> Height: {'\n'} </span>
+                                                <h5>{ employeeStore.height }</h5>
+                                            </div>
+                                            
+                                            <div className="col-md-3">
+                                                <span> Weight: {'\n'} </span>
+                                                <h5>{ employeeStore.weight }</h5>
+                                            </div>
+                                            
+                                            <div className="col-md-3">
+                                                <span> Religion: {'\n'} </span>
+                                                <h5>{ employeeStore.religion }</h5>
+                                            </div>
+                                            
+                                            <div className="col-md-3">
+                                                <span> Blood Type: {'\n'} </span>
+                                                <h5>{ employeeStore.blood_type }</h5>
                                             </div>
 
                                         </div>
+
                                     </div>
                                 </div>
+
+                                
+                                {/* APPOINTMENT DETAILS */}
+                                <div className="card z-depth-0">
+                                    <div className="card-header">
+                                        <h5>Appointment Details</h5>
+                                        { dashboardMainStore.checkIfSubrouteExist('employee-edit-page') ?
+                                            <Link to={`/employeess/${employee_id}/edit`} 
+                                                  className="btn btn-sm btn-primary btn-outline-primary float-right">
+                                                <i className="ti-pencil-alt ml-1"></i>
+                                            </Link> : <></> 
+                                        }
+                                    </div>
+                                    <div className="card-block">
+
+                                        <div className="row">
+
+                                            <div className="col-md-3">
+                                                <span> Employee No.: {'\n'} </span>
+                                                <h5>{ employeeStore.employee_id }</h5>
+                                            </div>
+
+                                            <div className="col-md-3">
+                                                <span> Position: {'\n'} </span>
+                                                <h5>{ employeeStore.position }</h5>
+                                            </div>
+                                            
+                                            <div className="col-md-3">
+                                                <span> Active Status: {'\n'} </span>
+                                                <h5>{ employeeStore.is_active == true ? "Active" : "Inactive" }</h5>
+                                            </div>
+                                            
+                                            <div className="col-md-3">
+                                                <span> Application Status: {'\n'} </span>
+                                                <h5>{ employeeStore.getApplicationStatusLabel() }</h5>
+                                            </div>
+                                            
+                                            <div className="col-md-12 mt-4">{' '}</div>
+
+                                            <div className="col-md-3">
+                                                <span>Salary Grade: {'\n'} </span>
+                                                <h5>{ employeeStore.salary_grade }</h5>
+                                            </div>
+                                            
+                                            <div className="col-md-3">
+                                                <span>Step Increment: {'\n'} </span>
+                                                <h5>{ employeeStore.step_increment }</h5>
+                                            </div>
+
+                                            <div className="col-md-3">
+                                                <span>Tax Status: {'\n'} </span>
+                                                <h5>{ employeeStore.tax_status }</h5>
+                                            </div>
+
+                                            <div className="col-md-3">
+                                                <span>Monthly Salary: {'\n'} </span>
+                                                <h5>{ numberFormat(employeeStore.monthly_salary) }</h5>
+                                            </div>
+                                            
+                                            <div className="col-md-12 mt-4">{' '}</div>
+
+                                            <div className="col-md-3">
+                                                <span>Firstday Gov.: {'\n'} </span>
+                                                <h5>{ moment(employeeStore.firstday_gov).format("MMM D, YYYY") }</h5>
+                                            </div>
+                                            
+                                            <div className="col-md-3">
+                                                <span>Firstday SRA: {'\n'} </span>
+                                                <h5>{ moment(employeeStore.firstday_sra).format("MMM D, YYYY") }</h5>
+                                            </div>
+
+                                            <div className="col-md-3">
+                                                <span>First Appointment: {'\n'} </span>
+                                                <h5>{ moment(employeeStore.first_appointment).format("MMM D, YYYY") }</h5>
+                                            </div>
+
+                                            <div className="col-md-3">
+                                                <span>Last Appointment: {'\n'} </span>
+                                                <h5>{ moment(employeeStore.last_appointment).format("MMM D, YYYY") }</h5>
+                                            </div>
+                                            
+                                            <div className="col-md-12 mt-4">{' '}</div>
+
+                                            <div className="col-md-3">
+                                                <span>Last Step Increment: {'\n'} </span>
+                                                <h5>{ moment(employeeStore.last_step_increment).format("MMM D, YYYY") }</h5>
+                                            </div>
+
+                                            <div className="col-md-3">
+                                                <span>Last Adjustment: {'\n'} </span>
+                                                <h5>{ moment(employeeStore.last_adjustment).format("MMM D, YYYY") }</h5>
+                                            </div>
+                                            
+                                            <div className="col-md-3">
+                                                <span>Last Promotion: {'\n'} </span>
+                                                <h5>{ moment(employeeStore.last_promotion).format("MMM D, YYYY") }</h5>
+                                            </div>
+                                            
+                                            <div className="col-md-3">
+                                                <span>Original Appointment: {'\n'} </span>
+                                                <h5>{ moment(employeeStore.original_appointment).format("MMM D, YYYY") }</h5>
+                                            </div>
+                                            
+                                            <div className="col-md-12 mt-4">{' '}</div>
+                                            
+                                            <div className="col-md-3">
+                                                <span>Adjustment Date: {'\n'} </span>
+                                                <h5>{ moment(employeeStore.adjustment_date).format("MMM D, YYYY") }</h5>
+                                            </div>
+
+                                            <div className="col-md-3">
+                                                <span>TIN: {'\n'} </span>
+                                                <h5>{ employeeStore.tin }</h5>
+                                            </div>
+
+                                            <div className="col-md-3">
+                                                <span>GSIS: {'\n'} </span>
+                                                <h5>{ employeeStore.gsis }</h5>
+                                            </div>
+
+                                            <div className="col-md-3">
+                                                <span>PHILHEALTH: {'\n'} </span>
+                                                <h5>{ employeeStore.philhealth }</h5>
+                                            </div>
+                                            
+                                            <div className="col-md-12 mt-4">{' '}</div>
+                                            
+                                            <div className="col-md-3">
+                                                <span>PAGIBIG: {'\n'} </span>
+                                                <h5>{ employeeStore.pagibig }</h5>
+                                            </div>
+
+                                            <div className="col-md-3">
+                                                <span>SSS: {'\n'} </span>
+                                                <h5>{ employeeStore.sss }</h5>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
                             </div>
 
                                                                     
