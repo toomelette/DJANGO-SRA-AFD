@@ -110,7 +110,7 @@ const MenuDetails = observer(({ menuStore, dashboardMainStore }) => {
                                     <div className="card-header">
                                         <h5>Menu Details</h5>
                                         <Link to="/menus" className="btn btn-primary btn-outline-primary float-right pt-2 pb-2 ml-2">
-                                            <i className="fa fa-navicon"></i> Back to List
+                                            <i className="fa fa-arrow-left"></i> Back to List
                                         </Link>
                                         { dashboardMainStore.checkIfSubrouteExist('menu-edit-permissions-page') ?
                                             <button className="btn btn-md btn-danger btn-outline-danger float-right pt-2 pb-2" 

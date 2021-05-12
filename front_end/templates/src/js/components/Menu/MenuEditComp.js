@@ -127,7 +127,7 @@ const MenuEdit = observer(({ menuStore }) => {
                                             <i className="fa fa-arrow-left"></i> Back
                                         </Link>
                                         <Link to="/menus" className="btn btn-primary btn-outline-primary float-right pt-2 pb-2">
-                                            <i className="fa fa-navicon"></i> Back to List
+                                            <i className="fa fa-arrow-left"></i> Back to List
                                         </Link>
                                     </div>
 

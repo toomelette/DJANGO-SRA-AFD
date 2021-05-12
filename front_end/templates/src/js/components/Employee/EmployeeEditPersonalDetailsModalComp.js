@@ -18,7 +18,8 @@ const EmployeeEditPersonalDetailsModal = observer(({ employeeStore }) => {
     const handleUpdatePersonalDetails = (e) => {
         e.preventDefault()
         SetPageLoader(true)
-        axios.put('api/employee/' + employee_id +'/', {
+        axios.patch('api/employee/'+employee_id+'/', {
+            form_type: "PD",
             firstname: employeeStore.firstname, 
             middlename: employeeStore.middlename, 
             lastname: employeeStore.lastname, 
@@ -44,6 +45,7 @@ const EmployeeEditPersonalDetailsModal = observer(({ employeeStore }) => {
                 message: "Employee Personal Details Successfully Updated!", type: "inverse" 
             });
             SetPageLoader(false);
+            $("#employee-edit-personal-details-modal").modal('hide');
         }).catch((error) => {
             if(error.response.status == 400){
                 let field_errors = error.response.data;
@@ -82,7 +84,6 @@ const EmployeeEditPersonalDetailsModal = observer(({ employeeStore }) => {
             }
             SetPageLoader(false);
         });
-        $("#employee-edit-personal-details-modal").modal('hide');
     }
 
 

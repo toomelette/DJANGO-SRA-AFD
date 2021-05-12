@@ -110,6 +110,18 @@ class Employee(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
 
+    def set_fullname(self, lastname, firstname, middlename, suffixname):
+        self.fullname = lastname.upper()+", "+firstname.upper()+" "+suffixname.upper()+" "+middlename[0]
+
+    def set_level(self, salary_grade):
+        value = 0
+        if salary_grade > 0 and salary_grade <= 10:
+            value = 1
+        elif salary_grade > 10:
+            value = 2
+        self.level = value
+
+
 
 
 class Plantilla(models.Model):

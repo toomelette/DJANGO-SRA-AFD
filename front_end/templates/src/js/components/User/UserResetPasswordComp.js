@@ -123,7 +123,7 @@ const UserResetPassword = observer(({ userStore }) => {
                                             <i className="fa fa-arrow-left"></i> Back
                                         </Link>
                                         <Link to="/users" className="btn btn-primary btn-outline-primary float-right pt-2 pb-2">
-                                            <i className="fa fa-navicon"></i> Back to List
+                                            <i className="fa fa-arrow-left"></i> Back to List
                                         </Link>
                                     </div>
 

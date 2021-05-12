@@ -20,7 +20,7 @@ class EmployeeStore{
     APPLICATION_STATUS_OPTIONS = [
         { value:0, label:"Select" },
         { value:1, label:"Permanent" },
-        { value:2, label:"Contract of Service" },
+        { value:2, label:"COS" },
     ]
     LEVEL_OPTIONS = [
         { value:0, label:"Select" },

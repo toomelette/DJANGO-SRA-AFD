@@ -109,7 +109,7 @@ const UserDetails = observer(({ userStore, dashboardMainStore }) => {
                                         <h5>User Details</h5>
                                         <Link to="/users" 
                                               className="btn btn-primary btn-outline-primary float-right pt-2 pb-2 ml-2">
-                                            <i className="fa fa-navicon"></i> Back to List
+                                            <i className="fa fa-arrow-left"></i> Back to List
                                         </Link>
                                         { dashboardMainStore.checkIfSubrouteExist('user-edit-page') ?
                                             <Link to={`/users/${user_id}/edit`} 
