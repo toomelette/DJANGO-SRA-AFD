@@ -110,6 +110,7 @@ class Employee(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
 
+
     def set_fullname(self, lastname, firstname, middlename, suffixname):
         self.fullname = lastname.upper()+", "+firstname.upper()+" "+suffixname.upper()+" "+middlename[0]
 

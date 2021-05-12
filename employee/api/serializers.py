@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
-from employee.models import Employee, Station, Plantilla
+from employee.models import Employee, Station, Plantilla, EmployeeEducationalBackground, EmployeeEligibility
 
 
 class StationListSerializer(serializers.ModelSerializer): 
@@ -32,8 +32,20 @@ class PlantillaListSerializer(serializers.ModelSerializer):
           )
 
 
+class EmployeeEducationalBackgroundListSerializer(serializers.ModelSerializer):
+     class Meta:
+          model = EmployeeEducationalBackground
+          fields = ('employee_id', 'level', 'school', 'course', 'date_from', 'date_to', 'units', 'graduate_year', 'scholarship', 'honor',)
+
+
+class EmployeeEligibilityListSerializer(serializers.ModelSerializer):
+     class Meta:
+          model = EmployeeEducationalBackground
+          fields =  ('employee_id', 'eligibility', 'level', 'rating', 'exam_place', 'exam_date', 'license_no', 'license_validity')
+
+
 class EmployeeListSerializer(serializers.ModelSerializer):
-     station_link = StationListSerializer(read_only=True, many=False)
+     station_link = StationListSerializer(many=False)
      class Meta:
           model = Employee
           fields = ('id', 'employee_id', 'fullname', 'position', 'is_active', 'station_link')
@@ -153,8 +165,9 @@ class EmployeeUpdateAppointmentDetailsFormSerializer(serializers.ModelSerializer
           }
 
 
-
 class EmployeeDetailsSerializer(serializers.ModelSerializer):
+     employeeEB_employee = EmployeeEducationalBackgroundListSerializer(many=True)
+     employeeTRNG_employee = EmployeeEligibilityListSerializer(many=True)
      class Meta:
           model = Employee
           fields = (
@@ -204,6 +217,8 @@ class EmployeeDetailsSerializer(serializers.ModelSerializer):
                "philhealth",
                "pagibig",
                "sss",
+               "employeeEB_employee",
+               "employeeTRNG_employee"
           )
 
 

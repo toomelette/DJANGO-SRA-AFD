@@ -48,6 +48,12 @@ const EmployeeDetails = observer(({ employeeStore, dashboardMainStore }) => {
     }
 
 
+    const handleAddEducationalBackground = (e) => {
+        e.preventDefault()
+        console.log("TEST")
+    }
+
+
     const handleEditAppointmentDetailsModal = (e) => {
         e.preventDefault()
         $("#employee-edit-appointment-details-modal").modal('toggle')
@@ -131,7 +137,7 @@ const EmployeeDetails = observer(({ employeeStore, dashboardMainStore }) => {
                                             <i className="fa fa-arrow-left"></i> Back to List
                                         </Link>
                                         { dashboardMainStore.checkIfSubrouteExist('employee-delete') ? 
-                                            <button className="btn btn-md btn-danger float-right ml-2" 
+                                            <button className="btn btn-md btn-danger btn-danger float-right ml-2" 
                                                     onClick={ handleDeleteRouteModal }>
                                                 <i className="fa fa-trash"></i> Delete
                                             </button> : <></> 
@@ -264,6 +270,42 @@ const EmployeeDetails = observer(({ employeeStore, dashboardMainStore }) => {
                                                 <h5>{ employeeStore.blood_type }</h5>
                                             </div>
 
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                
+                                {/* EDUCATIONAL BACKGROUND */}
+                                <div className="card z-depth-0">
+                                    <div className="card-header">
+                                        <h5>Educational Background</h5>
+                                        { dashboardMainStore.checkIfSubrouteExist('employee-edit-appointment-details') ?
+                                            <button className="btn btn-sm btn-success btn-outline-success float-right"
+                                                    onClick={ handleAddEducationalBackground }>
+                                                <i className="ti-plus ml-1"></i>
+                                            </button> : <></> 
+                                        }
+                                    </div>
+                                    <div className="card-block">
+                                        <div className="table-responsive">
+                                            <table className="table table-hover m-b-0">
+                                            <tbody>
+                                                <tr>
+                                                    <td className="align-middle">
+                                                        <h5>Bago City College</h5>
+                                                        <span>BSIS</span>
+                                                        <p>Tertiary</p>
+                                                        <span>June 2020 - March 2021</span>
+                                                    </td>
+                                                    <td className="align-middle">
+                                                        <a href=""><i className="icon feather icon-edit f-w-600 f-16 m-r-15 text-c-blue"></i></a>
+                                                        <a href=""><i className="feather icon-trash-2 f-w-600 f-16 text-c-red"></i></a>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+
+                                            </table>
                                         </div>
 
                                     </div>

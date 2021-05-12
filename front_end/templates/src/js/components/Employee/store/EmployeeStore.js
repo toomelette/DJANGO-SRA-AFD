@@ -147,6 +147,8 @@ class EmployeeStore{
     philhealth = "";
     pagibig = "";
     sss = "";
+    educational_background = [];
+    eligibility = [];
 
     error_fields = {};
 
@@ -252,6 +254,7 @@ class EmployeeStore{
                 this.philhealth = response.data.philhealth;
                 this.pagibig = response.data.pagibig;
                 this.sss = response.data.sss;
+                this.educational_background = response.data.employeeEB_employee
 
                 this.error_fields = {};
             })
