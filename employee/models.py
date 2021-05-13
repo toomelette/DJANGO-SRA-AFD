@@ -54,7 +54,6 @@ class Employee(models.Model):
         default=None, 
         on_delete=models.PROTECT
     )
-
     # Personal Information
     employee_id = models.CharField(max_length=20, unique=True)
     firstname = models.CharField(max_length=100, default="")
@@ -78,7 +77,6 @@ class Employee(models.Model):
     weight = models.CharField(max_length=20, default="", blank=True)
     religion = models.CharField(max_length=100, default="", blank=True)
     blood_type = models.CharField(max_length=20, default="", blank=True)
-
     # Appointment Details
     position = models.CharField(max_length=200, default="", blank=True)
     is_active = models.BooleanField(null=True, default=None)
@@ -103,13 +101,11 @@ class Employee(models.Model):
     philhealth = models.CharField(max_length=50, default="", blank=True)
     pagibig = models.CharField(max_length=50, default="", blank=True)
     sss = models.CharField(max_length=50, default="", blank=True)
-
     #Default Fields
     created_by = models.ForeignKey(User, related_name='employee_created_by_user', on_delete=models.PROTECT)
     updated_by = models.ForeignKey(User, related_name='employee_updated_by_user', on_delete=models.PROTECT)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
-
 
     def set_fullname(self, lastname, firstname, middlename, suffixname):
         self.fullname = lastname.upper()+", "+firstname.upper()+" "+suffixname.upper()+" "+middlename[0]

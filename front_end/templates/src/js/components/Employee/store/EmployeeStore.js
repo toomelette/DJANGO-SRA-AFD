@@ -72,7 +72,8 @@ class EmployeeStore{
     page_size = 10;
     page_limit = 0;
     query = "";
-
+    
+    // Filter Values
     filter_is_active = { value:"", label:"Select" };
     filter_station = { value:"", label:"Select" };
     filter_sex = { value:"", label:"Select" };
@@ -95,11 +96,10 @@ class EmployeeStore{
     filter_last_prom_to = "";
     sort_field = { value:"", label:"Select" };
     sort_order = { value:"", label:"Select" };
-
     station_options = [ { value:"", label:"Select" } ];
-    // plantilla_options = [ { value:"", label:"Select" } ];
 
     // FORM Values
+
     // - Personal Details
     fullname = "";
     firstname = "";
@@ -122,12 +122,11 @@ class EmployeeStore{
     weight = "";
     religion = "";
     blood_type = "";
+
     // - Appointment Details
     employee_id = "";
     position = "";
     is_active = null;
-    // station = { value:"", label:"Select" };
-    // plantilla_item = { value:"", label:"Select" };
     salary_grade = "";
     step_increment = "";
     application_status = 0;
@@ -147,10 +146,25 @@ class EmployeeStore{
     philhealth = "";
     pagibig = "";
     sss = "";
-    educational_background = [];
-    eligibility = [];
 
     error_fields = {};
+
+    // - Educational Background
+    educ_bg_list = [];
+    educ_bg_level = "";
+    educ_bg_school = "";
+    educ_bg_course = "";
+    educ_bg_date_from = "";
+    educ_bg_date_to = "";
+    educ_bg_units = "";
+    educ_bg_graduate_year = "";
+    educ_bg_scholarship = "";
+    educ_bg_honor = "";
+
+    educ_bg_error_fields = {};
+
+    // - Eligibility
+    eligibility = [];
 
 
     constructor(){
@@ -254,9 +268,10 @@ class EmployeeStore{
                 this.philhealth = response.data.philhealth;
                 this.pagibig = response.data.pagibig;
                 this.sss = response.data.sss;
-                this.educational_background = response.data.employeeEB_employee
-
                 this.error_fields = {};
+
+                this.educ_bg_list = response.data.employeeEB_employee
+                this.educ_bg_error_fields = {};
             })
         });
     }    
@@ -472,32 +487,6 @@ class EmployeeStore{
         });
     }
 
-    // setPlantillaOptions(station){
-
-    //     if(station){
-    //         axios.get('api/plantilla/get_all_open_by_station', {
-    //                 params:{ 
-    //                     s:station
-    //                 }
-    //              })
-    //              .then((response) => {
-    //                 runInAction(() => {
-    //                     let plantillas = response.data;
-    //                     this.plantilla_options = [{ value:"", label:"Select" }];
-    //                     if(plantillas.length > 0){
-    //                         plantillas.forEach(data => {
-    //                             this.plantilla_options.push({ 
-    //                                 value:data.plantilla_id.toString(), 
-    //                                 label:"#"+data.plantilla_id+" | "+data.position
-    //                             });
-    //                         });
-    //                     }
-    //                 })
-    //         });
-    //     }
-        
-    // }
-
 
     // Form Setters
     resetForm(){
@@ -548,8 +537,6 @@ class EmployeeStore{
         this.pagibig = "";
         this.sss = "";
         this.error_fields = {};
-        this.plantilla_options = [{ value:"", label:"Select" }];
-
     }
 
     setFirstname(firstname){
@@ -644,11 +631,6 @@ class EmployeeStore{
         this.is_active = is_active;
     }
 
-    // setStation(station){
-    //     this.station = station;
-    //     this.setPlantillaOptions(station.value)
-    // }
-
     setSalaryGrade(salary_grade){
         this.salary_grade = salary_grade;
     }
@@ -668,10 +650,6 @@ class EmployeeStore{
     setMonthlySalary(monthly_salary){
         this.monthly_salary = monthly_salary;
     }
-
-    // setPlantillaItem(plantilla_item){
-    //     this.plantilla_item = plantilla_item;
-    // }
 
     setFirstdayGov(firstday_gov){
         this.firstday_gov = firstday_gov;
@@ -735,6 +713,57 @@ class EmployeeStore{
 
     setErrorFields(error_fields){
         this.error_fields = error_fields;
+    }
+
+
+    // Educational Background Form Setters
+    educBgResetForm(){
+        this.educ_bg_level = "";
+        this.educ_bg_school = "";
+        this.educ_bg_course = "";
+        this.educ_bg_date_from = "";
+        this.educ_bg_date_to = "";
+        this.educ_bg_units = "";
+        this.educ_bg_graduate_year = "";
+        this.educ_bg_scholarship = "";
+        this.educ_bg_honor = "";
+        this.educ_bg_error_fields = {};
+    }
+
+    setEducBgLevel(level){
+        this.educ_bg_level = level;
+    }
+
+    setEducBgSchool(school){
+        this.educ_bg_school = school;
+    }
+
+    setEducBgCourse(course){
+        this.educ_bg_course = course;
+    }
+
+    setEducBgDateFrom(date_from){
+        this.educ_bg_date_from = date_from;
+    }
+
+    setEducBgDateTo(date_to){
+        this.educ_bg_date_to = date_to;
+    }
+
+    setEducBgUnits(units){
+        this.educ_bg_units = units;
+    }
+
+    setEducBgGraduateYear(graduate_year){
+        this.educ_bg_graduate_year = graduate_year;
+    }
+
+    setEducBgScholarship(scholarship){
+        this.educ_bg_scholarship = scholarship;
+    }
+
+    setEducBgHonor(honor){
+        this.educ_bg_honor = honor;
     }
 
 

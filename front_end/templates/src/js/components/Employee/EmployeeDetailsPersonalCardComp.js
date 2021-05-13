@@ -1,19 +1,26 @@
 
 
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import { observer } from 'mobx-react'
+import moment from 'moment'
 import { useParams } from 'react-router-dom';
 
 import eventBus from '../Utils/EventBus'
 import DivLoader from '../Utils/DivLoaderComp'
-
 import EmployeeFormAppointmentDetails from './EmployeeFormAppointmentDetailsComp'
 
-const EmployeeEditAppointmentDetailsModal = observer(({ employeeStore }) => {
 
-    const [page_loader, SetPageLoader] = useState(false);
+const EmployeeDetailsPersonalCard = observer(({ employeeStore, dashboardMainStore }) => {
     
+    const [page_loader, SetPageLoader] = useState(false);
     const { employee_id } = useParams();
+
+
+    const handleEditPersonalDetailsModal = (e) => {
+        e.preventDefault()
+        $("#employee-edit-personal-details-modal").modal('toggle')
+    }
+
 
     const handleUpdatePersonalDetails = (e) => {
         e.preventDefault()
@@ -93,10 +100,142 @@ const EmployeeEditAppointmentDetailsModal = observer(({ employeeStore }) => {
             }
             SetPageLoader(false);
         });
+
     }
 
 
     return (
+    <>
+        <div className="card z-depth-0">
+            <div className="card-header">
+                <h5>Personal Details</h5>
+                { dashboardMainStore.checkIfSubrouteExist('employee-edit-personal-details') ?
+                    <button onClick={ handleEditPersonalDetailsModal }
+                            className="btn btn-sm btn-primary btn-outline-primary icon-btn float-right">
+                        <i className="icofont icofont-edit"></i>
+                    </button> : <></> 
+                }
+            </div>
+            <div className="card-block">
+
+                <div className="row">
+
+                    <div className="col-md-3">
+                        <span> Firstname: {'\n'} </span>
+                        <h5>{ employeeStore.firstname }</h5>
+                    </div>
+
+                    <div className="col-md-3">
+                        <span> Middlename: {'\n'} </span>
+                        <h5>{ employeeStore.middlename }</h5>
+                    </div>
+
+                    <div className="col-md-3">
+                        <span> Lastname: {'\n'} </span>
+                        <h5>{ employeeStore.lastname }</h5>
+                    </div>
+
+                    <div className="col-md-3">
+                        <span> Suffixname: {'\n'} </span>
+                        <h5>{ employeeStore.suffixname }</h5>
+                    </div>
+
+                    <div className="col-md-12 mt-4">{' '}</div>
+
+                    <div className="col-md-6">
+                        <span> Present Address: {'\n'} </span>
+                        <h5>{ employeeStore.address_present }</h5>
+                    </div>
+
+                    <div className="col-md-6">
+                        <span> Permanent Address: {'\n'} </span>
+                        <h5>{ employeeStore.address_permanent }</h5>
+                    </div>
+                    
+                    <div className="col-md-12 mt-4">{' '}</div>
+
+                    <div className="col-md-3">
+                        <span> Date of Birth: {'\n'} </span>
+                        <h5>{ moment(employeeStore.birthdate).format("MMM D, YYYY") }</h5>
+                    </div>
+                    
+                    <div className="col-md-6">
+                        <span> Place of Birth: {'\n'} </span>
+                        <h5>{ employeeStore.place_of_birth }</h5>
+                    </div>
+                    
+                    <div className="col-md-3">
+                        <span> Sex: {'\n'} </span>
+                        <h5>{ employeeStore.getSexLabel() }</h5>
+                    </div>
+                    
+                    <div className="col-md-12 mt-4">{' '}</div>
+                    
+                    <div className="col-md-3">
+                        <span> Civil Status: {'\n'} </span>
+                        <h5>{ employeeStore.getCivilStatusLabel() }</h5>
+                    </div>
+                    
+                    <div className="col-md-3">
+                        <span> Telephone No.: {'\n'} </span>
+                        <h5>{ employeeStore.tel_no }</h5>
+                    </div>
+                    
+                    <div className="col-md-3">
+                        <span> Cellphone No.: {'\n'} </span>
+                        <h5>{ employeeStore.cell_no }</h5>
+                    </div>
+                    
+                    <div className="col-md-3">
+                        <span> Email Address: {'\n'} </span>
+                        <h5>{ employeeStore.email_address }</h5>
+                    </div>
+                    
+                    <div className="col-md-12 mt-4">{' '}</div>
+                    
+                    <div className="col-md-3">
+                        <span> Spouse Name: {'\n'} </span>
+                        <h5>{ employeeStore.spouse_name }</h5>
+                    </div>
+
+                    <div className="col-md-6">
+                        <span> Spouse Occupation: {'\n'} </span>
+                        <h5>{ employeeStore.spouse_occupation }</h5>
+                    </div>
+
+                    <div className="col-md-3">
+                        <span> Number of Children: {'\n'} </span>
+                        <h5>{ employeeStore.no_of_children }</h5>
+                    </div>
+                    
+                    <div className="col-md-12 mt-4">{' '}</div>
+                    
+                    <div className="col-md-3">
+                        <span> Height: {'\n'} </span>
+                        <h5>{ employeeStore.height }</h5>
+                    </div>
+                    
+                    <div className="col-md-3">
+                        <span> Weight: {'\n'} </span>
+                        <h5>{ employeeStore.weight }</h5>
+                    </div>
+                    
+                    <div className="col-md-3">
+                        <span> Religion: {'\n'} </span>
+                        <h5>{ employeeStore.religion }</h5>
+                    </div>
+                    
+                    <div className="col-md-3">
+                        <span> Blood Type: {'\n'} </span>
+                        <h5>{ employeeStore.blood_type }</h5>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+            
+        {/* EDIT MODAL */}
         <div className="modal" id="employee-edit-appointment-details-modal" role="dialog">
             <div className="modal-dialog" role="document" style={{ maxWidth:'1200px' }}>
                 <div className="modal-content">
@@ -121,10 +260,12 @@ const EmployeeEditAppointmentDetailsModal = observer(({ employeeStore }) => {
                 </div>
             </div>
         </div>
+        
+    </>
     );
 
     
 });
 
 
-export default EmployeeEditAppointmentDetailsModal
+export default EmployeeDetailsPersonalCard

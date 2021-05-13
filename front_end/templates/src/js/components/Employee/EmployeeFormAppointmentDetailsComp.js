@@ -52,17 +52,6 @@ const EmployeeFormAppointmentDetails = observer(({ employeeStore }) => {
                     errorField={ employeeStore.error_fields.application_status }
                 />
 
-                {/* <SelectInput
-                    col="col-md-3"
-                    name="station"
-                    label="Station"
-                    value={ employeeStore.station }
-                    isDisabled={ false }
-                    options={ employeeStore.station_options }
-                    onChange={ (value) => employeeStore.setStation(value) }
-                    errorField={ employeeStore.error_fields.station }
-                /> */}
-
                 <InputText 
                     col="col-sm-3"
                     type="number"
@@ -101,16 +90,6 @@ const EmployeeFormAppointmentDetails = observer(({ employeeStore }) => {
                     value={ employeeStore.monthly_salary }
                     setter={ values => employeeStore.setMonthlySalary(values.value) }
                 />
-
-                {/* <SelectInput
-                    col="col-md-3"
-                    name="plantilla"
-                    label="Plantilla"
-                    value={ employeeStore.plantilla_item }
-                    isDisabled={ false }
-                    options={ employeeStore.plantilla_options }
-                    onChange={ (value) => employeeStore.setPlantillaItem(value) }
-                /> */}
 
                 <DatePicker 
                     col="col-sm-3"
