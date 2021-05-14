@@ -7,9 +7,7 @@ import { observer } from 'mobx-react'
 import EmployeeList from './EmployeeListComp.js'
 import EmployeeCreate from './EmployeeCreateComp.js'
 import EmployeeDetails from './EmployeeDetailsComp.js'
-// import EmployeeEdit from './EmployeeEditComp.js'
 import NotFoundPage from '../ErrorPages/NotFoundPageComp'
-
 
 const EmployeeMain = observer(({ employeeStore, dashboardMainStore }) => {
 
@@ -34,18 +32,6 @@ const EmployeeMain = observer(({ employeeStore, dashboardMainStore }) => {
                     { dashboardMainStore.checkIfSubrouteExist('employee-details-page') ? 
                         <EmployeeDetails employeeStore={employeeStore} dashboardMainStore={dashboardMainStore}/> : <NotFoundPage/> }
                 </Route>
-
-                {/* EDIT */}
-                {/* <Route exact path="/employees/:employee_id/edit">
-                    { dashboardMainStore.checkIfSubrouteExist('employee-edit-page') ? 
-                        <EmployeeEdit employeeStore={employeeStore}/> : <NotFoundPage/> }
-                </Route> */}
-
-                {/* EDIT Permissions*/}
-                {/* <Route exact path="/employees/:employee_id/edit_permissions">
-                    { dashboardMainStore.checkIfSubrouteExist('employee-edit-permissions-page') ? 
-                        <EmployeeEditPermission employeeStore={employeeStore}/> : <NotFoundPage/> }
-                </Route> */}
     
                 {/* Page not found */}
                 <Route exact path="/employees/*">

@@ -18,7 +18,6 @@ const EmployeeList = observer(({ employeeStore, dashboardMainStore }) => {
 
     const history = useHistory();
 
-
     useEffect (() => {
         let is_mounted = true;
         if(is_mounted = true){
@@ -29,17 +28,14 @@ const EmployeeList = observer(({ employeeStore, dashboardMainStore }) => {
         } 
     },[])
 
-
     const redirectToEmployeeCreate = useCallback(() => {
         history.push('/employees/create'), [history]
     });
-
 
     const redirectToEmployeeDetails = useCallback((id) => {
         employeeStore.setIsOpenedForm(1)
         history.push('employees/' + id), [history]
     });
-
 
     const handleCreateButtonClick = (e) => {
         e.preventDefault()
@@ -50,37 +46,31 @@ const EmployeeList = observer(({ employeeStore, dashboardMainStore }) => {
         employeeStore.setIsOpenedForm(0)
     }
 
-
     const handleOpenEmployeeDetails = (e, id) => {
         e.preventDefault()
         redirectToEmployeeDetails(id)
     }
-
 
     const handleFilterButtonClick = (e) => {
         e.preventDefault()
         $("#employee-filter-modal").modal('toggle')
     }
 
-
     const handleSortButtonClick = (e) => {
         e.preventDefault()
         $("#employee-sort-modal").modal('toggle')
     }
 
-    
     const handleDeleteButtonClick = (e) => {
         e.preventDefault()
         $("#employee-bulk-delete-modal").modal('toggle')
     }
-
 
     const tableRowIsChecked = (id) => {
         return employeeStore.selected_rows.some(data => {
             return data.id === id && data.status === true;
         })
     }
-
 
     return (
     <div className="pcoded-content">

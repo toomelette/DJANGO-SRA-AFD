@@ -4,8 +4,8 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { observer } from 'mobx-react';
 import { Link, useParams, useHistory} from 'react-router-dom';
 
+import eventBus from '../Utils/EventBus'
 import DivLoader from '../Utils/DivLoaderComp'
-
 import EmployeeDetailsPersonalCard from './EmployeeDetailsPersonalCardComp'
 import EmployeeDetailsEducationalBackgroundCard from './EmployeeDetailsEducationalBackgroundCardComp'
 import EmployeeDetailsAppointmentCard from './EmployeeDetailsAppointmentCardComp'
@@ -29,7 +29,7 @@ const EmployeeDetails = observer(({ employeeStore, dashboardMainStore }) => {
 
 
     const redirectBackToEmployeeList = useCallback(() => {
-        // history.push('/employees'), [history]
+        history.push('/employees'), [history]
     });
 
 
@@ -41,28 +41,28 @@ const EmployeeDetails = observer(({ employeeStore, dashboardMainStore }) => {
 
     const handleDeleteEmployeeSubmit = (e) => {
         e.preventDefault()
-        // SetPageLoader(true)
-        // axios.delete('api/employee/'+employee_id+'/')
-        //      .then((response) => {
-        //         eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
-        //             message: "Employee has been successfully Deleted!", type: "inverse"
-        //         });
-        //         redirectBackToEmployeeList()
-        //         SetPageLoader(false)
-        //      }).catch((error) => {
-        //         if(error.response.status == 404){
-        //             eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
-        //                 message: "Data Not Found!", type: "danger" 
-        //             });
-        //         }
-        //         if(error.response.status == 500){
-        //             eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
-        //                 message: "There's an error trying to send data to the server!", type: "danger" 
-        //             });
-        //         }
-        //         SetPageLoader(false)
-        //     });
-        // $("#employee-delete-modal").modal('hide');
+        SetPageLoader(true)
+        axios.delete('api/employee/'+employee_id+'/')
+             .then((response) => {
+                eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
+                    message: "Employee has been successfully Deleted!", type: "inverse"
+                });
+                SetPageLoader(false)
+                redirectBackToEmployeeList()
+             }).catch((error) => {
+                if(error.response.status == 404){
+                    eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
+                        message: "Data Not Found!", type: "danger" 
+                    });
+                }
+                if(error.response.status == 500){
+                    eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
+                        message: "There's an error trying to send data to the server!", type: "danger" 
+                    });
+                }
+                SetPageLoader(false)
+            });
+        $("#employee-delete-modal").modal('hide');
     }
 
 

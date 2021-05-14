@@ -6,24 +6,20 @@ import { SelectFilter } from '../Utils/Forms/FilterInputs'
 
 
 const EmployeeListSortModal = observer(({ employeeStore }) => {
-
     
     const handleSortFieldChange = (values) => {
         employeeStore.setSortField(values)
     }
 
-
     const handleSortOrderChange = (values) => {
         employeeStore.setSortOrder(values)
     }
-
 
     const handleSortSubmit = (e) => {
         e.preventDefault()
         employeeStore.handleSortSubmit()
         $("#employee-sort-modal").modal('hide')
     }
-
 
     return (
         <div className="modal" id="employee-sort-modal" role="dialog">

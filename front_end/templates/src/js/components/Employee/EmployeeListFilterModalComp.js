@@ -21,7 +21,6 @@ const EmployeeListFilterModal = observer(({ employeeStore }) => {
         } 
     },[])
 
-
     const handleFilterSubmit = (e) => {
         e.preventDefault()
         eventBus.dispatch("SHOW_FULLPAGE_LOADER", { is_loading: true, is_dashboard: true })

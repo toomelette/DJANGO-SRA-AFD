@@ -2,7 +2,7 @@
 import { debounce } from 'lodash'
 import { makeAutoObservable, runInAction } from "mobx"
 import moment from 'moment';
-
+import { defaultValueSetter } from '../../Utils/DataFilters'
 
 class EmployeeStore{
 
@@ -232,8 +232,8 @@ class EmployeeStore{
                 this.suffixname = response.data.suffixname;
                 this.address_present = response.data.address_present;
                 this.address_permanent = response.data.address_permanent;
-                this.birthdate = response.data.birthdate;
-                this.place_of_birth = response.data.place_of_birth;
+                this.birthdate = defaultValueSetter(response.data.birthdate, null, "");
+                this.place_of_birth = response.data.place_of_birth
                 this.sex = response.data.sex;
                 this.civil_status = this.CIVIL_STATUS_OPTIONS.find(data => data.value == response.data.civil_status);
                 this.tel_no = response.data.tel_no;
@@ -241,7 +241,7 @@ class EmployeeStore{
                 this.email_address = response.data.email_address;
                 this.spouse_name = response.data.spouse_name;
                 this.spouse_occupation = response.data.spouse_occupation;
-                this.no_of_children = response.data.no_of_children;
+                this.no_of_children = defaultValueSetter(response.data.no_of_children, 0, "");
                 this.height = response.data.height;
                 this.weight = response.data.weight;
                 this.religion = response.data.religion;
@@ -250,20 +250,20 @@ class EmployeeStore{
                 this.employee_id = response.data.employee_id;
                 this.position = response.data.position;
                 this.is_active = response.data.is_active;
-                this.salary_grade = response.data.salary_grade;
-                this.step_increment = response.data.step_increment;
+                this.salary_grade = defaultValueSetter(response.data.salary_grade, 0, "");
+                this.step_increment = defaultValueSetter(response.data.step_increment, 0, "");
                 this.application_status = response.data.application_status;
                 this.tax_status = response.data.tax_status;
-                this.monthly_salary = response.data.monthly_salary;
-                this.firstday_gov = response.data.firstday_gov;
-                this.firstday_sra = response.data.firstday_sra;
-                this.first_appointment = response.data.first_appointment;
-                this.last_appointment = response.data.last_appointment;
-                this.last_step_increment = response.data.last_step_increment;
-                this.last_adjustment = response.data.last_adjustment;
-                this.last_promotion = response.data.last_promotion;
-                this.original_appointment = response.data.original_appointment;
-                this.adjustment_date = response.data.adjustment_date;
+                this.monthly_salary = defaultValueSetter(response.data.monthly_salary, 0, "");
+                this.firstday_gov = defaultValueSetter(response.data.firstday_gov, null, "");
+                this.firstday_sra = defaultValueSetter(response.data.firstday_sra, null, "");
+                this.first_appointment = defaultValueSetter(response.data.first_appointment, null, "");
+                this.last_appointment = defaultValueSetter(response.data.last_appointment, null, "");
+                this.last_step_increment = defaultValueSetter(response.data.last_step_increment, null, "");
+                this.last_adjustment = defaultValueSetter(response.data.last_adjustment, null, "");
+                this.last_promotion = defaultValueSetter(response.data.last_promotion, null, "");
+                this.original_appointment = defaultValueSetter(response.data.original_appointment, null, "");
+                this.adjustment_date = defaultValueSetter(response.data.adjustment_date, null, "");
                 this.tin = response.data.tin;
                 this.gsis = response.data.gsis;
                 this.philhealth = response.data.philhealth;
@@ -726,7 +726,7 @@ class EmployeeStore{
                 this.educ_bg_course = response.data.course;
                 this.educ_bg_date_from = response.data.date_from;
                 this.educ_bg_date_to = response.data.date_to;
-                this.educ_bg_units = response.data.units == 0 ? "" : response.data.units;
+                this.educ_bg_units = defaultValueSetter(response.data.units, "0.00", "")
                 this.educ_bg_graduate_year = response.data.graduate_year;
                 this.educ_bg_scholarship = response.data.scholarship;
                 this.educ_bg_honor = response.data.honor;

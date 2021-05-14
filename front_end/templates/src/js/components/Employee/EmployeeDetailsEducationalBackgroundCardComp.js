@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom';
 
 import eventBus from '../Utils/EventBus'
 import DivLoader from '../Utils/DivLoaderComp'
+import { defaultValueSetter } from '../Utils/DataFilters'
 import EmployeeFormEducationalBackground from './EmployeeFormEducationalBackgroundComp'
 
 const EmployeeDetailsEducationalBackgroundCard = observer(({ employeeStore, dashboardMainStore }) => {
@@ -35,7 +36,7 @@ const EmployeeDetailsEducationalBackgroundCard = observer(({ employeeStore, dash
             course: employeeStore.educ_bg_course, 
             date_from: employeeStore.educ_bg_date_from, 
             date_to: employeeStore.educ_bg_date_to, 
-            units: employeeStore.educ_bg_units == "" ? 0 : employeeStore.educ_bg_units, 
+            units: defaultValueSetter(employeeStore.educ_bg_units, "", 0), 
             graduate_year: employeeStore.educ_bg_graduate_year, 
             scholarship: employeeStore.educ_bg_scholarship, 
             honor: employeeStore.educ_bg_honor, 
@@ -97,7 +98,7 @@ const EmployeeDetailsEducationalBackgroundCard = observer(({ employeeStore, dash
             course: employeeStore.educ_bg_course, 
             date_from: employeeStore.educ_bg_date_from, 
             date_to: employeeStore.educ_bg_date_to, 
-            units: employeeStore.educ_bg_units == "" ? 0 : employeeStore.educ_bg_units, 
+            units: defaultValueSetter(employeeStore.educ_bg_units, "", 0),
             graduate_year: employeeStore.educ_bg_graduate_year, 
             scholarship: employeeStore.educ_bg_scholarship, 
             honor: employeeStore.educ_bg_honor, 

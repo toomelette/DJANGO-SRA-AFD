@@ -149,81 +149,82 @@ class EmployeeViewSet(viewsets.ModelViewSet):
     def create(self, request):
         serializer = EmployeeCreateFormSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        employee = Employee()
-        # Personal Details
-        employee.firstname = serializer.data['firstname'].upper()
-        employee.middlename = serializer.data['middlename'].upper()
-        employee.lastname = serializer.data['lastname'].upper()
-        employee.suffixname = serializer.data['suffixname']
-        employee.set_fullname(
-            serializer.data['lastname'], 
-            serializer.data['firstname'], 
-            serializer.data['middlename'], 
-            serializer.data['suffixname']
-        )
-        employee.address_present = serializer.data['address_present']
-        employee.address_permanent = serializer.data['address_permanent']
-        employee.birthdate = serializer.data['birthdate']
-        employee.place_of_birth = serializer.data['place_of_birth']
-        employee.sex = serializer.data['sex']
-        employee.civil_status = serializer.data['civil_status']
-        employee.tel_no = serializer.data['tel_no']
-        employee.cell_no = serializer.data['cell_no']
-        employee.email_address = serializer.data['email_address']
-        employee.spouse_name = serializer.data['spouse_name']
-        employee.spouse_occupation = serializer.data['spouse_occupation']
-        employee.no_of_children = serializer.data['no_of_children']
-        employee.height = serializer.data['height']
-        employee.weight = serializer.data['weight']
-        employee.religion = serializer.data['religion']
-        employee.blood_type = serializer.data['blood_type']
-        # Appointment Details
-        employee.employee_id = serializer.data['employee_id'] 
-        employee.position = serializer.data['position'].upper()
-        employee.is_active = serializer.data['is_active']
-        employee.salary_grade = serializer.data['salary_grade']
-        employee.step_increment = serializer.data['step_increment']
-        employee.application_status = serializer.data['application_status']
-        employee.tax_status = serializer.data['tax_status']
-        employee.monthly_salary = serializer.data['monthly_salary']
-        employee.set_level(serializer.data['salary_grade'])
-        employee.firstday_gov = serializer.data['firstday_gov']
-        employee.firstday_sra = serializer.data['firstday_sra']
-        employee.first_appointment = serializer.data['first_appointment']
-        employee.last_appointment = serializer.data['last_appointment']
-        employee.last_step_increment = serializer.data['last_step_increment']
-        employee.last_adjustment = serializer.data['last_adjustment']
-        employee.last_promotion = serializer.data['last_promotion']
-        employee.original_appointment = serializer.data['original_appointment']
-        employee.adjustment_date = serializer.data['adjustment_date']
-        employee.adjustment_date = serializer.data['adjustment_date']
-        employee.tin = serializer.data['tin']
-        employee.gsis = serializer.data['gsis']
-        employee.philhealth = serializer.data['philhealth']
-        employee.pagibig = serializer.data['pagibig']
-        employee.sss = serializer.data['sss']
-        employee.created_by_id = request.user.id
-        employee.updated_by_id = request.user.id
-        employee.save()
-        return Response({"id":employee.id}, 201)
+        try:
+            employee = Employee()
+            # Personal Details
+            employee.firstname = serializer.data['firstname'].upper()
+            employee.middlename = serializer.data['middlename'].upper()
+            employee.lastname = serializer.data['lastname'].upper()
+            employee.suffixname = serializer.data['suffixname']
+            employee.set_fullname(
+                serializer.data['lastname'], 
+                serializer.data['firstname'], 
+                serializer.data['middlename'], 
+                serializer.data['suffixname']
+            )
+            employee.address_present = serializer.data['address_present']
+            employee.address_permanent = serializer.data['address_permanent']
+            employee.birthdate = serializer.data['birthdate']
+            employee.place_of_birth = serializer.data['place_of_birth']
+            employee.sex = serializer.data['sex']
+            employee.civil_status = serializer.data['civil_status']
+            employee.tel_no = serializer.data['tel_no']
+            employee.cell_no = serializer.data['cell_no']
+            employee.email_address = serializer.data['email_address']
+            employee.spouse_name = serializer.data['spouse_name']
+            employee.spouse_occupation = serializer.data['spouse_occupation']
+            employee.no_of_children = serializer.data['no_of_children']
+            employee.height = serializer.data['height']
+            employee.weight = serializer.data['weight']
+            employee.religion = serializer.data['religion']
+            employee.blood_type = serializer.data['blood_type']
+            # Appointment Details
+            employee.employee_id = serializer.data['employee_id'] 
+            employee.position = serializer.data['position'].upper()
+            employee.is_active = serializer.data['is_active']
+            employee.salary_grade = serializer.data['salary_grade']
+            employee.step_increment = serializer.data['step_increment']
+            employee.application_status = serializer.data['application_status']
+            employee.tax_status = serializer.data['tax_status']
+            employee.monthly_salary = serializer.data['monthly_salary']
+            employee.set_level(serializer.data['salary_grade'])
+            employee.firstday_gov = serializer.data['firstday_gov']
+            employee.firstday_sra = serializer.data['firstday_sra']
+            employee.first_appointment = serializer.data['first_appointment']
+            employee.last_appointment = serializer.data['last_appointment']
+            employee.last_step_increment = serializer.data['last_step_increment']
+            employee.last_adjustment = serializer.data['last_adjustment']
+            employee.last_promotion = serializer.data['last_promotion']
+            employee.original_appointment = serializer.data['original_appointment']
+            employee.adjustment_date = serializer.data['adjustment_date']
+            employee.adjustment_date = serializer.data['adjustment_date']
+            employee.tin = serializer.data['tin']
+            employee.gsis = serializer.data['gsis']
+            employee.philhealth = serializer.data['philhealth']
+            employee.pagibig = serializer.data['pagibig']
+            employee.sss = serializer.data['sss']
+            employee.created_by_id = request.user.id
+            employee.updated_by_id = request.user.id
+            employee.save()
+            return Response({"id":employee.id}, 201)
+        except:
+            return Response({}, 500)
+
 
 
     def retrieve(self, request, pk=None):
-        employee = self.queryset.get(id=pk)
-        if employee:
-            serializer = EmployeeDetailsSerializer(employee)
-            return Response(serializer.data, 200)
-        else:
-            return Response({}, 404)
+        employee = get_object_or_404(self.queryset, id=pk)
+        serializer = EmployeeDetailsSerializer(employee)
+        return Response(serializer.data, 200)
 
 
     def partial_update(self, request, pk=None):
-        employee = self.queryset.get(id=pk)
-        if employee: 
-            # Personal Details
-            if request.data['form_type'] == "PD":
-                serializer = EmployeeUpdatePersonalDetailsFormSerializer(data=request.data)
-                serializer.is_valid(raise_exception=True)
+        # Personal Details
+        if request.data['form_type'] == "PD":
+            serializer = EmployeeUpdatePersonalDetailsFormSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            try:
+                employee = get_object_or_404(self.queryset, id=pk)
                 employee.firstname = serializer.data['firstname'].upper()
                 employee.middlename = serializer.data['middlename'].upper()
                 employee.lastname = serializer.data['lastname'].upper()
@@ -254,10 +255,14 @@ class EmployeeViewSet(viewsets.ModelViewSet):
                 employee.updated_by_id = request.user.id
                 employee.save()
                 return Response({}, 201)
-            # Appointment Details
-            elif request.data['form_type'] == "AD":
-                serializer = EmployeeUpdateAppointmentDetailsFormSerializer(data=request.data)
-                serializer.is_valid(raise_exception=True)
+            except:
+                return Response({}, 500)
+        # Appointment Details
+        elif request.data['form_type'] == "AD":
+            serializer = EmployeeUpdateAppointmentDetailsFormSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            try:
+                employee = get_object_or_404(self.queryset, id=pk)
                 employee.employee_id = serializer.data['employee_id'] 
                 employee.position = serializer.data['position'].upper()
                 employee.is_active = serializer.data['is_active']
@@ -286,10 +291,19 @@ class EmployeeViewSet(viewsets.ModelViewSet):
                 employee.updated_by_id = request.user.id
                 employee.save()
                 return Response({}, 201)
-            else:
-                return Response({"form_type" : "Invalid Form Type!"}, 400)
-        else: 
-            return Response({}, 404)
+            except:
+                return Response({}, 500)
+        else:
+            return Response({"form_type" : "Invalid Form Type!"}, 400)
+
+
+    def destroy(self, request, pk=None):
+        try:
+            employee = get_object_or_404(self.queryset, id=pk)
+            employee.delete()
+            return Response({}, 200)
+        except:
+            return Response({}, 500)
 
 
     @action(methods=['delete'], detail=False)
@@ -297,11 +311,13 @@ class EmployeeViewSet(viewsets.ModelViewSet):
         serializer = EmployeeBulkDeleteSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         ids = serializer.data['ids']
-        for data in ids:
-            employee = self.queryset.get(id=data)
-            if employee:
+        try:
+            for data in ids:            
+                employee = get_object_or_404(self.queryset, id=data)
                 employee.delete()
-        return Response({}, 200)
+            return Response({}, 200)
+        except:
+            return Response({}, 500)
 
 
 

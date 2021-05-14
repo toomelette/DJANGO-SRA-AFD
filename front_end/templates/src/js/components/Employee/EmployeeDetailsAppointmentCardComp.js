@@ -7,8 +7,8 @@ import moment from 'moment'
 
 import eventBus from '../Utils/EventBus'
 import DivLoader from '../Utils/DivLoaderComp'
-import numberFormat from '../Utils/DataFilters'
-import EmployeeFormPersonalDetails from './EmployeeFormPersonalDetailsComp'
+import { numberFormat, defaultValueSetter } from '../Utils/DataFilters'
+import EmployeeFormAppointmentDetails from './EmployeeFormAppointmentDetailsComp'
 
 const EmployeeDetailsAppointmentCard = observer(({ employeeStore, dashboardMainStore }) => {
 
@@ -22,61 +22,66 @@ const EmployeeDetailsAppointmentCard = observer(({ employeeStore, dashboardMainS
     }
     
 
-    const handleUpdatePersonalDetails = (e) => {
+    const handleUpdateAppointmentDetails = (e) => {
         e.preventDefault()
         SetPageLoader(true)
         axios.patch('api/employee/'+employee_id+'/', {
-            form_type: "PD",
-            firstname: employeeStore.firstname, 
-            middlename: employeeStore.middlename, 
-            lastname: employeeStore.lastname, 
-            suffixname: employeeStore.suffixname, 
-            address_present: employeeStore.address_present, 
-            address_permanent: employeeStore.address_permanent, 
-            birthdate: employeeStore.birthdate === "" ? null : employeeStore.birthdate,
-            place_of_birth: employeeStore.place_of_birth, 
-            sex: employeeStore.sex, 
-            civil_status: employeeStore.civil_status.value,
-            tel_no: employeeStore.tel_no, 
-            cell_no: employeeStore.cell_no, 
-            email_address: employeeStore.email_address, 
-            spouse_name: employeeStore.spouse_name, 
-            spouse_occupation: employeeStore.spouse_occupation, 
-            no_of_children: employeeStore.no_of_children === "" ? 0 : employeeStore.no_of_children, 
-            height: employeeStore.height, 
-            weight: employeeStore.weight, 
-            religion: employeeStore.religion, 
-            blood_type: employeeStore.blood_type, 
+            form_type: "AD",
+            employee_id: employeeStore.employee_id,
+            position: employeeStore.position,
+            is_active: employeeStore.is_active,
+            salary_grade: defaultValueSetter(employeeStore.salary_grade, "", 0),
+            step_increment: defaultValueSetter(employeeStore.step_increment, "", 0),
+            application_status: employeeStore.application_status,
+            tax_status: employeeStore.tax_status,
+            monthly_salary: defaultValueSetter(employeeStore.monthly_salary, "", 0),
+            firstday_gov: defaultValueSetter(employeeStore.firstday_gov, "", null),
+            firstday_sra: defaultValueSetter(employeeStore.firstday_sra, "", null),
+            first_appointment: defaultValueSetter(employeeStore.first_appointment, "", null),
+            last_appointment: defaultValueSetter(employeeStore.last_appointment, "", null),
+            last_step_increment: defaultValueSetter(employeeStore.last_step_increment, "", null),
+            last_adjustment: defaultValueSetter(employeeStore.last_adjustment, "", null),
+            last_promotion: defaultValueSetter(employeeStore.last_promotion, "", null),
+            original_appointment: defaultValueSetter(employeeStore.original_appointment, "", null),
+            adjustment_date: defaultValueSetter(employeeStore.adjustment_date, "", null),
+            tin: employeeStore.tin,
+            gsis: employeeStore.gsis,
+            philhealth: employeeStore.philhealth,
+            pagibig: employeeStore.pagibig,
+            sss: employeeStore.sss,
         }).then((response) => {
             eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
-                message: "Employee Personal Details Successfully Updated!", type: "inverse" 
+                message: "Employee Appointment Details Successfully Updated!", type: "inverse" 
             });
             SetPageLoader(false);
-            $("#employee-edit-personal-details-modal").modal('hide');
+            $("#employee-edit-appointment-details-modal").modal('hide');
         }).catch((error) => {
             if(error.response.status == 400){
                 let field_errors = error.response.data;
                 employeeStore.setErrorFields({
-                    firstname: field_errors.firstname?.toString(), 
-                    middlename: field_errors.middlename?.toString(), 
-                    lastname: field_errors.lastname?.toString(),
-                    suffixname: field_errors.suffixname?.toString(), 
-                    address_present: field_errors.address_present?.toString(), 
-                    address_permanent: field_errors.address_permanent?.toString(), 
-                    birthdate: field_errors.birthdate?.toString(), 
-                    place_of_birth: field_errors.place_of_birth?.toString(), 
-                    sex: field_errors.sex?.toString(), 
-                    civil_status: field_errors.civil_status?.toString(), 
-                    tel_no: field_errors.tel_no?.toString(), 
-                    cell_no: field_errors.cell_no?.toString(), 
-                    email_address: field_errors.email_address?.toString(), 
-                    spouse_name: field_errors.spouse_name?.toString(), 
-                    spouse_occupation: field_errors.spouse_occupation?.toString(), 
-                    no_of_children: field_errors.no_of_children?.toString(), 
-                    height: field_errors.height?.toString(), 
-                    weight: field_errors.weight?.toString(), 
-                    religion: field_errors.religion?.toString(), 
-                    blood_type: field_errors.blood_type?.toString(),
+                    employee_id: field_errors.employee_id?.toString(),
+                    position: field_errors.position?.toString(),
+                    is_active: field_errors.is_active?.toString(),
+                    salary_grade: field_errors.salary_grade?.toString(),
+                    step_increment: field_errors.step_increment?.toString(),
+                    application_status: field_errors.application_status?.toString(),
+                    tax_status: field_errors.tax_status?.toString(),
+                    monthly_salary: field_errors.monthly_salary?.toString(),
+                    firstday_gov: field_errors.firstday_gov?.toString(),
+                    firstday_sra: field_errors.firstday_sra?.toString(),
+                    first_appointment: field_errors.first_appointment?.toString(),
+                    last_appointment: field_errors.last_appointment?.toString(),
+                    last_step_increment: field_errors.last_step_increment?.toString(),
+                    last_adjustment: field_errors.last_adjustment?.toString(),
+                    last_promotion: field_errors.last_promotion?.toString(),
+                    original_appointment: field_errors.original_appointment?.toString(),
+                    adjustment_date: field_errors.adjustment_date?.toString(),
+                    tin: field_errors.tin?.toString(),
+                    gsis: field_errors.gsis?.toString(),
+                    philhealth: field_errors.philhealth?.toString(),
+                    pagibig: field_errors.pagibig?.toString(),
+                    sss: field_errors.sss?.toString(),
+                    non_field_errors: field_errors.non_field_errors?.toString(),
                 });
             }
             if(error.response.status == 404){
@@ -156,51 +161,60 @@ const EmployeeDetailsAppointmentCard = observer(({ employeeStore, dashboardMainS
 
                     <div className="col-md-3">
                         <span>Firstday Gov.: {'\n'} </span>
-                        <h5>{ moment(employeeStore.firstday_gov).format("MMM D, YYYY") }</h5>
+                        <h5>{ employeeStore.firstday_gov === "" ? "" : 
+                        moment(employeeStore.firstday_gov).format("MMM D, YYYY") }</h5>
                     </div>
                     
                     <div className="col-md-3">
                         <span>Firstday SRA: {'\n'} </span>
-                        <h5>{ moment(employeeStore.firstday_sra).format("MMM D, YYYY") }</h5>
+                        <h5>{ employeeStore.firstday_sra === "" ? "" : 
+                        moment(employeeStore.firstday_sra).format("MMM D, YYYY") }</h5>
                     </div>
 
                     <div className="col-md-3">
                         <span>First Appointment: {'\n'} </span>
-                        <h5>{ moment(employeeStore.first_appointment).format("MMM D, YYYY") }</h5>
+                        <h5>{ employeeStore.first_appointment === "" ? "" : 
+                        moment(employeeStore.first_appointment).format("MMM D, YYYY") }</h5>
                     </div>
 
                     <div className="col-md-3">
                         <span>Last Appointment: {'\n'} </span>
-                        <h5>{ moment(employeeStore.last_appointment).format("MMM D, YYYY") }</h5>
+                        <h5>{ employeeStore.last_appointment === "" ? "" : 
+                        moment(employeeStore.last_appointment).format("MMM D, YYYY") }</h5>
                     </div>
                     
                     <div className="col-md-12 mt-4">{' '}</div>
 
                     <div className="col-md-3">
                         <span>Last Step Increment: {'\n'} </span>
-                        <h5>{ moment(employeeStore.last_step_increment).format("MMM D, YYYY") }</h5>
+                        <h5>{ employeeStore.last_step_increment === "" ? "" : 
+                        moment(employeeStore.last_step_increment).format("MMM D, YYYY") }</h5>
                     </div>
 
                     <div className="col-md-3">
                         <span>Last Adjustment: {'\n'} </span>
-                        <h5>{ moment(employeeStore.last_adjustment).format("MMM D, YYYY") }</h5>
+                        <h5>{ employeeStore.last_adjustment === "" ? "" : 
+                        moment(employeeStore.last_adjustment).format("MMM D, YYYY") }</h5>
                     </div>
                     
                     <div className="col-md-3">
                         <span>Last Promotion: {'\n'} </span>
-                        <h5>{ moment(employeeStore.last_promotion).format("MMM D, YYYY") }</h5>
+                        <h5>{ employeeStore.last_promotion === "" ? "" : 
+                        moment(employeeStore.last_promotion).format("MMM D, YYYY") }</h5>
                     </div>
                     
                     <div className="col-md-3">
                         <span>Original Appointment: {'\n'} </span>
-                        <h5>{ moment(employeeStore.original_appointment).format("MMM D, YYYY") }</h5>
+                        <h5>{ employeeStore.original_appointment === "" ? "" : 
+                        moment(employeeStore.original_appointment).format("MMM D, YYYY") }</h5>
                     </div>
                     
                     <div className="col-md-12 mt-4">{' '}</div>
                     
                     <div className="col-md-3">
                         <span>Adjustment Date: {'\n'} </span>
-                        <h5>{ moment(employeeStore.adjustment_date).format("MMM D, YYYY") }</h5>
+                        <h5>{ employeeStore.adjustment_date === "" ? "" : 
+                        moment(employeeStore.adjustment_date).format("MMM D, YYYY") }</h5>
                     </div>
 
                     <div className="col-md-3">
@@ -236,24 +250,24 @@ const EmployeeDetailsAppointmentCard = observer(({ employeeStore, dashboardMainS
         </div>
 
         {/* EDIT MODAL */}
-        <div className="modal" id="employee-edit-personal-details-modal" role="dialog">
+        <div className="modal" id="employee-edit-appointment-details-modal" role="dialog">
             <div className="modal-dialog" role="document" style={{ maxWidth:'1200px' }}>
                 <div className="modal-content">
                     <DivLoader type="Circles" loading={page_loader}/>
                     <div className="modal-header">
-                        <h4 className="modal-title">Edit Personal Details</h4>
+                        <h4 className="modal-title">Edit Appointment Details</h4>
                         <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div className="modal-body">
-                        <EmployeeFormPersonalDetails employeeStore={employeeStore}/>
+                        <EmployeeFormAppointmentDetails employeeStore={employeeStore}/>
                     </div>
                     <div className="modal-footer">
                         <button type="button" className="btn btn-default waves-effect" data-dismiss="modal">
                             Close
                         </button>
-                        <button type="button" className="btn btn-primary waves-effect waves-light" onClick={ handleUpdatePersonalDetails }>
+                        <button type="button" className="btn btn-primary waves-effect waves-light" onClick={ handleUpdateAppointmentDetails }>
                             Save
                         </button>
                     </div>
