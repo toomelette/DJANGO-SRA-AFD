@@ -177,13 +177,13 @@ class EmployeeEducationalBackground(models.Model):
 
     level = models.CharField(max_length=100, default="")
     school = models.CharField(max_length=200, default="")
-    course = models.CharField(max_length=200, default="")
-    date_from =  models.CharField(max_length=200, default="")
-    date_to =  models.CharField(max_length=200, default="")
-    units = models.DecimalField(max_digits=5, decimal_places=2, default=0)
-    graduate_year =  models.CharField(max_length=20, default="")
-    scholarship =  models.CharField(max_length=200, default="")
-    honor =  models.CharField(max_length=200, default="")
+    course = models.CharField(max_length=200, default="", blank=True)
+    date_from =  models.CharField(max_length=200, default="", blank=True)
+    date_to =  models.CharField(max_length=200, default="", blank=True)
+    units = models.DecimalField(max_digits=5, decimal_places=2, default=0, blank=True)
+    graduate_year =  models.CharField(max_length=20, default="", blank=True)
+    scholarship =  models.CharField(max_length=200, default="", blank=True)
+    honor =  models.CharField(max_length=200, default="", blank=True)
 
 
 
@@ -195,7 +195,7 @@ class EmployeeEligibility(models.Model):
         related_name='employeeELIG_employee', 
         on_delete=models.CASCADE
     )
-
+    
     eligibility = models.CharField(max_length=200, default="")
     level = models.CharField(max_length=100, default="")
     rating = models.DecimalField(max_digits=5, decimal_places=2, default=0)

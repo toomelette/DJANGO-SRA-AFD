@@ -17,17 +17,6 @@ const EmployeeCreate = observer(({ employeeStore }) => {
     const [page_loader, SetPageLoader] = useState(false);
 
 
-    // useEffect (() => {
-    //     let is_mounted = true;
-    //     if(is_mounted = true){
-    //         employeeStore.setStationOptions()
-    //     }
-    //     return () => {
-    //         is_mounted = false;
-    //     } 
-    // },[])
-
-
     const redirectBackToEmployeeList = useCallback(() => {
         history.push('/employees'), [history]
     });
@@ -68,8 +57,6 @@ const EmployeeCreate = observer(({ employeeStore }) => {
             employee_id: employeeStore.employee_id,
             position: employeeStore.position,
             is_active: employeeStore.is_active,
-            // station: employeeStore.station.value,
-            // plantilla_item: employeeStore.plantilla_item.value,
             salary_grade: employeeStore.salary_grade === "" ? 0 : employeeStore.salary_grade,
             step_increment: employeeStore.step_increment === "" ? 0 : employeeStore.step_increment,
             application_status: employeeStore.application_status,
@@ -129,8 +116,6 @@ const EmployeeCreate = observer(({ employeeStore }) => {
                     employee_id: field_errors.employee_id?.toString(),
                     position: field_errors.position?.toString(),
                     is_active: field_errors.is_active?.toString(),
-                    // station: field_errors.station?.toString(),
-                    // plantilla_item: field_errors.plantilla_item?.toString(),
                     salary_grade: field_errors.salary_grade?.toString(),
                     step_increment: field_errors.step_increment?.toString(),
                     application_status: field_errors.application_status?.toString(),

@@ -6,6 +6,7 @@ import moment from 'moment';
 
 class EmployeeStore{
 
+    // Static Values
     SEX_OPTIONS = [
         { value:0, label:"Select" },
         { value:1, label:"Male" },
@@ -56,12 +57,6 @@ class EmployeeStore{
         {value:"desc", label:'Descending'}
     ]
 
-	delaySearch = debounce(() => this.fetch(), 500);
-    selected_employee = 0;
-    is_opened_form = 0;
-    is_selected_all_rows = false;
-    selected_rows = [];
-    table_badge = []
 
     // List Values
     list = [];
@@ -72,6 +67,12 @@ class EmployeeStore{
     page_size = 10;
     page_limit = 0;
     query = "";
+    selected_employee = 0;
+    is_opened_form = 0;
+    is_selected_all_rows = false;
+    selected_rows = [];
+    table_badge = [];
+	delaySearch = debounce(() => this.fetch(), 500);
     
     // Filter Values
     filter_is_active = { value:"", label:"Select" };
@@ -98,8 +99,7 @@ class EmployeeStore{
     sort_order = { value:"", label:"Select" };
     station_options = [ { value:"", label:"Select" } ];
 
-    // FORM Values
-
+    // Form Values
     // - Personal Details
     fullname = "";
     firstname = "";
@@ -122,7 +122,6 @@ class EmployeeStore{
     weight = "";
     religion = "";
     blood_type = "";
-
     // - Appointment Details
     employee_id = "";
     position = "";
@@ -146,11 +145,14 @@ class EmployeeStore{
     philhealth = "";
     pagibig = "";
     sss = "";
-
     error_fields = {};
 
-    // - Educational Background
+    // Educational Background List Values
     educ_bg_list = [];
+    educ_bg_id = "";
+    educ_bg_is_opened_form = 0;
+
+    // Educational Background Form Values
     educ_bg_level = "";
     educ_bg_school = "";
     educ_bg_course = "";
@@ -160,10 +162,9 @@ class EmployeeStore{
     educ_bg_graduate_year = "";
     educ_bg_scholarship = "";
     educ_bg_honor = "";
-
     educ_bg_error_fields = {};
 
-    // - Eligibility
+    // Eligibility
     eligibility = [];
 
 
@@ -172,7 +173,7 @@ class EmployeeStore{
     }
 
 
-    // ACTIONS
+    // Employee Actions
     fetch(){
         this.is_selected_all_rows = false;
         this.selected_rows = [];
@@ -303,7 +304,7 @@ class EmployeeStore{
     }
 
 
-    // List Setters
+    // List Values Setters
     setFilterIsActive(is_active){
         this.filter_is_active = is_active;
     }
@@ -488,7 +489,7 @@ class EmployeeStore{
     }
 
 
-    // Form Setters
+    // Form Values Setters
     resetForm(){
         this.firstname = "";
         this.middlename = "";
@@ -514,8 +515,6 @@ class EmployeeStore{
         this.employee_id = "";
         this.position = "";
         this.is_active = "";
-        // this.station = { value:"", label:"Select" };
-        // this.plantilla_item = { value:"", label:"Select" };
         this.salary_grade = "";
         this.step_increment = "";
         this.application_status = 0;
@@ -530,7 +529,6 @@ class EmployeeStore{
         this.last_promotion = "";
         this.original_appointment = "";
         this.adjustment_date = "";
-        // - ID's
         this.tin = "";
         this.gsis = "";
         this.philhealth = "";
@@ -716,8 +714,36 @@ class EmployeeStore{
     }
 
 
+    // Educational Background Actions
+    retrieveEducBg(id){
+        this.educBgResetForm();
+        axios.get('api/employee_educ_bg/' + id)
+        .then((response) => {
+            runInAction(() => {
+                this.educ_bg_id = response.data.id;
+                this.educ_bg_level = response.data.level;
+                this.educ_bg_school = response.data.school;
+                this.educ_bg_course = response.data.course;
+                this.educ_bg_date_from = response.data.date_from;
+                this.educ_bg_date_to = response.data.date_to;
+                this.educ_bg_units = response.data.units == 0 ? "" : response.data.units;
+                this.educ_bg_graduate_year = response.data.graduate_year;
+                this.educ_bg_scholarship = response.data.scholarship;
+                this.educ_bg_honor = response.data.honor;
+            })
+        });
+    }    
+
+
+    // Educational Background List Values Setters
+    setEducBgIsOpenedForm(is_opened_form){
+        this.educ_bg_is_opened_form = is_opened_form;
+    }
+
+
     // Educational Background Form Setters
     educBgResetForm(){
+        this.educ_bg_id = "";
         this.educ_bg_level = "";
         this.educ_bg_school = "";
         this.educ_bg_course = "";
@@ -728,6 +754,10 @@ class EmployeeStore{
         this.educ_bg_scholarship = "";
         this.educ_bg_honor = "";
         this.educ_bg_error_fields = {};
+    }
+
+    setEducBgId(id){
+        this.educ_bg_id = id;
     }
 
     setEducBgLevel(level){
@@ -766,8 +796,12 @@ class EmployeeStore{
         this.educ_bg_honor = honor;
     }
 
+    setEducBgErrorFields(error_fields){
+        this.educ_bg_error_fields = error_fields;
+    }
 
-    // List Handlers
+
+    // List Table Handlers
     handleSearch(e){
         e.preventDefault()
         this.page_prev = 0;
@@ -849,5 +883,4 @@ class EmployeeStore{
 }
 
 const employeeStore = new EmployeeStore()
-
 export default employeeStore

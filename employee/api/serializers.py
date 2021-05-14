@@ -32,16 +32,20 @@ class PlantillaListSerializer(serializers.ModelSerializer):
           )
 
 
-class EmployeeEducationalBackgroundListSerializer(serializers.ModelSerializer):
+#NESTED
+class EmployeeEducationalBackgroundSerializer(serializers.ModelSerializer):
      class Meta:
           model = EmployeeEducationalBackground
-          fields = ('employee_id', 'level', 'school', 'course', 'date_from', 'date_to', 'units', 'graduate_year', 'scholarship', 'honor',)
+          fields = ('id', 'employee', 'level', 'school', 'course', 'date_from', 'date_to', 'units', 'graduate_year', 'scholarship', 'honor')
+          read_only_fields = ('id',)
 
 
-class EmployeeEligibilityListSerializer(serializers.ModelSerializer):
+#NESTED
+class EmployeeEligibilitySerializer(serializers.ModelSerializer):
      class Meta:
-          model = EmployeeEducationalBackground
-          fields =  ('employee_id', 'eligibility', 'level', 'rating', 'exam_place', 'exam_date', 'license_no', 'license_validity')
+          model = EmployeeEligibility
+          fields =  ('id', 'employee', 'eligibility', 'level', 'rating', 'exam_place', 'exam_date', 'license_no', 'license_validity')
+          read_only_fields = ('id',)
 
 
 class EmployeeListSerializer(serializers.ModelSerializer):
@@ -159,15 +163,13 @@ class EmployeeUpdateAppointmentDetailsFormSerializer(serializers.ModelSerializer
                "sss",
           )
           extra_kwargs = {
-               'employee_id': {
-                    'validators': [],
-               }
+               'employee_id': {'validators': []}
           }
 
 
 class EmployeeDetailsSerializer(serializers.ModelSerializer):
-     employeeEB_employee = EmployeeEducationalBackgroundListSerializer(many=True)
-     employeeTRNG_employee = EmployeeEligibilityListSerializer(many=True)
+     employeeEB_employee = EmployeeEducationalBackgroundSerializer(many=True)
+     employeeTRNG_employee = EmployeeEligibilitySerializer(many=True)
      class Meta:
           model = Employee
           fields = (

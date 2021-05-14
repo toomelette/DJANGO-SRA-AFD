@@ -1,12 +1,11 @@
-
 import json
 
-from employee.models import Employee, Station, Plantilla
+from employee.models import Station, Plantilla, Employee, EmployeeEducationalBackground
 from django.db.models import Q
+from django.shortcuts import get_object_or_404
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from django.db import connection
 
 from .pagination import EmployeeListPagination
 from .serializers import (
@@ -18,6 +17,7 @@ from .serializers import (
     EmployeeUpdateAppointmentDetailsFormSerializer,
     EmployeeDetailsSerializer,
     EmployeeBulkDeleteSerializer,
+    EmployeeEducationalBackgroundSerializer
 )
 
 
@@ -302,6 +302,71 @@ class EmployeeViewSet(viewsets.ModelViewSet):
             if employee:
                 employee.delete()
         return Response({}, 200)
+
+
+
+class EmployeeEducationalBackgroundViewSet(viewsets.ModelViewSet):
+    queryset = EmployeeEducationalBackground.objects.all()
+    serializer_class = EmployeeEducationalBackgroundSerializer
+
+
+    def create(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        try:    
+            employee = get_object_or_404(Employee.objects, id=serializer.data['employee'])
+            employee_educ_bg = EmployeeEducationalBackground()
+            employee_educ_bg.employee = employee
+            employee_educ_bg.level = serializer.data['level']
+            employee_educ_bg.school = serializer.data['school']
+            employee_educ_bg.course = serializer.data['course']
+            employee_educ_bg.date_from = serializer.data['date_from']
+            employee_educ_bg.date_to = serializer.data['date_to']
+            employee_educ_bg.units = serializer.data['units']
+            employee_educ_bg.graduate_year = serializer.data['graduate_year']
+            employee_educ_bg.scholarship = serializer.data['scholarship']
+            employee_educ_bg.honor = serializer.data['honor']
+            employee_educ_bg.save()
+            return Response({}, 201)
+        except:
+            return Response({}, 500)
+
+
+    def retrieve(self, request, pk=None):
+        employee_educ_bg = get_object_or_404(self.queryset, id=pk)
+        serializer = self.get_serializer(employee_educ_bg)
+        return Response(serializer.data, 200)
+        
+
+    def update(self, request, pk=None):
+        try:
+            employee_educ_bg = get_object_or_404(self.queryset, id=pk)
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            employee_educ_bg.level = serializer.data['level']
+            employee_educ_bg.school = serializer.data['school']
+            employee_educ_bg.course = serializer.data['course']
+            employee_educ_bg.date_from = serializer.data['date_from']
+            employee_educ_bg.date_to = serializer.data['date_to']
+            employee_educ_bg.units = serializer.data['units']
+            employee_educ_bg.graduate_year = serializer.data['graduate_year']
+            employee_educ_bg.scholarship = serializer.data['scholarship']
+            employee_educ_bg.honor = serializer.data['honor']
+            employee_educ_bg.save()
+            return Response({}, 201)
+        except:
+            return Response({}, 500)
+
+
+    def destroy(self, request, pk=None):
+        try:
+            employee_educ_bg = get_object_or_404(self.queryset, id=pk)
+            employee_educ_bg.delete()
+            return Response({}, 200)
+        except:
+            return Response({}, 500)
+
+
 
 
 
