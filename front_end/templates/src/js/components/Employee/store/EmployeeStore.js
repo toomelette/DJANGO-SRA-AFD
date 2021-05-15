@@ -147,6 +147,7 @@ class EmployeeStore{
     sss = "";
     error_fields = {};
 
+
     // Educational Background List Values
     educ_bg_list = [];
     educ_bg_id = "";
@@ -164,8 +165,23 @@ class EmployeeStore{
     educ_bg_honor = "";
     educ_bg_error_fields = {};
 
-    // Eligibility
-    eligibility = [];
+
+    // Eligibility List Values
+    elig_list = [];
+    elig_id = "";
+    elig_is_opened_form = 0;
+
+    // Eligibility Form Values
+    elig_eligibility = "";
+    elig_level = "";
+    elig_rating = "";
+    elig_exam_place = "";
+    elig_exam_date = "";
+    elig_license_no = "";
+    elig_license_validity = "";
+    elig_error_fields = {};
+
+
 
 
     constructor(){
@@ -273,6 +289,9 @@ class EmployeeStore{
 
                 this.educ_bg_list = response.data.employeeEB_employee
                 this.educ_bg_error_fields = {};
+
+                this.elig_list = response.data.employeeELIG_employee
+                this.elig_error_fields = {};
             })
         });
     }    
@@ -798,6 +817,81 @@ class EmployeeStore{
 
     setEducBgErrorFields(error_fields){
         this.educ_bg_error_fields = error_fields;
+    }
+
+
+    // Eligibility Actions
+    retrieveElig(id){
+        this.eligResetForm();
+        axios.get('api/employee_elig/' + id)
+        .then((response) => {
+            runInAction(() => {
+                this.elig_id = response.data.id;
+                this.elig_eligibility = response.data.eligibility;
+                this.elig_level = response.data.level;
+                this.elig_rating = defaultValueSetter(response.data.rating, "0.00", "");
+                this.elig_exam_place = response.data.exam_place;
+                this.elig_exam_date = response.data.exam_date;
+                this.elig_license_no = response.data.license_no;
+                this.elig_license_validity = response.data.license_validity;
+                this.educ_bg_scholarship = response.data.scholarship;
+                this.educ_bg_honor = response.data.honor;
+            })
+        });
+    } 
+
+    // Eligibility List Values Setters
+    setEligIsOpenedForm(is_opened_form){
+        this.elig_is_opened_form = is_opened_form;
+    }
+
+    // Eligibility Form Value Setters
+    eligResetForm(){
+        this.elig_id = "";
+        this.elig_eligibility = "";
+        this.elig_level = "";
+        this.elig_rating = "";
+        this.elig_exam_place = "";
+        this.elig_exam_date = "";
+        this.elig_license_no = "";
+        this.elig_license_validity = "";
+        this.elig_error_fields = {};
+    }
+
+    setEligId(id){
+        this.elig_id = id;
+    }
+
+    setEligEligibility(eligibility){
+        this.elig_eligibility = eligibility;
+    }
+
+    setEligLevel(level){
+        this.elig_level = level;
+    }
+
+    setEligRating(rating){
+        this.elig_rating = rating;
+    }
+
+    setEligExamPlace(exam_place){
+        this.elig_exam_place = exam_place;
+    }
+
+    setEligExamDate(exam_date){
+        this.elig_exam_date = exam_date;
+    }
+
+    setEligLicenseNo(license_no){
+        this.elig_license_no = license_no;
+    }
+
+    setEligLicenseValidity(license_validity){
+        this.elig_license_validity = license_validity;
+    }
+
+    setEligErrorFields(error_fields){
+        this.elig_error_fields = error_fields;
     }
 
 

@@ -169,7 +169,7 @@ class EmployeeUpdateAppointmentDetailsFormSerializer(serializers.ModelSerializer
 
 class EmployeeDetailsSerializer(serializers.ModelSerializer):
      employeeEB_employee = EmployeeEducationalBackgroundSerializer(many=True)
-     employeeTRNG_employee = EmployeeEligibilitySerializer(many=True)
+     employeeELIG_employee = EmployeeEligibilitySerializer(many=True)
      class Meta:
           model = Employee
           fields = (
@@ -220,7 +220,7 @@ class EmployeeDetailsSerializer(serializers.ModelSerializer):
                "pagibig",
                "sss",
                "employeeEB_employee",
-               "employeeTRNG_employee"
+               "employeeELIG_employee"
           )
 
 

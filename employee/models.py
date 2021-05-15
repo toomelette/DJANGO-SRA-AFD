@@ -197,12 +197,12 @@ class EmployeeEligibility(models.Model):
     )
     
     eligibility = models.CharField(max_length=200, default="")
-    level = models.CharField(max_length=100, default="")
-    rating = models.DecimalField(max_digits=5, decimal_places=2, default=0)
-    exam_place = models.CharField(max_length=200, default="")
-    exam_date = models.DateField(null=True)
-    license_no = models.CharField(max_length=50, default="")
-    license_validity = models.DateField(null=True)
+    level = models.CharField(max_length=100, default="", blank=True)
+    rating = models.DecimalField(max_digits=5, decimal_places=2, default=0, blank=True)
+    exam_place = models.CharField(max_length=200, default="", blank=True)
+    exam_date =  models.CharField(max_length=100, default="", blank=True)
+    license_no = models.CharField(max_length=50, default="", blank=True)
+    license_validity = models.CharField(max_length=100, default="", blank=True)
 
 
 

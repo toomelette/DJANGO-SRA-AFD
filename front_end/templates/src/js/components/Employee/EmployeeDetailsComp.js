@@ -8,6 +8,7 @@ import eventBus from '../Utils/EventBus'
 import DivLoader from '../Utils/DivLoaderComp'
 import EmployeeDetailsPersonalCard from './EmployeeDetailsPersonalCardComp'
 import EmployeeDetailsEducationalBackgroundCard from './EmployeeDetailsEducationalBackgroundCardComp'
+import EmployeeDetailsEligibilityCard from './EmployeeDetailsEligibilityCardComp'
 import EmployeeDetailsAppointmentCard from './EmployeeDetailsAppointmentCardComp'
 
 
@@ -129,6 +130,9 @@ const EmployeeDetails = observer(({ employeeStore, dashboardMainStore }) => {
                                 
                                 {/* EDUCATIONAL BACKGROUND */}
                                 <EmployeeDetailsEducationalBackgroundCard employeeStore={employeeStore} dashboardMainStore={dashboardMainStore}/>
+                                
+                                {/* ELIGIBILITY */}
+                                <EmployeeDetailsEligibilityCard employeeStore={employeeStore} dashboardMainStore={dashboardMainStore}/>
                                 
                                 {/* APPOINTMENT DETAILS */}
                                 <EmployeeDetailsAppointmentCard employeeStore={employeeStore} dashboardMainStore={dashboardMainStore}/>

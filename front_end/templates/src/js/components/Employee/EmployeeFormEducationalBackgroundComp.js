@@ -5,7 +5,7 @@ import { observer } from 'mobx-react'
 import { InputText } from '../Utils/Forms/DefaultInputs'
 
 
-const EmployeeFormPersonalDetails = observer(({ employeeStore }) => {
+const EmployeeFormEducationalBackground = observer(({ employeeStore }) => {
 
 
     return (
@@ -109,4 +109,4 @@ const EmployeeFormPersonalDetails = observer(({ employeeStore }) => {
 });
 
 
-export default EmployeeFormPersonalDetails
+export default EmployeeFormEducationalBackground

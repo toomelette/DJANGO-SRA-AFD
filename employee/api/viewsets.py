@@ -1,6 +1,6 @@
 import json
 
-from employee.models import Station, Plantilla, Employee, EmployeeEducationalBackground
+from employee.models import Station, Plantilla, Employee, EmployeeEducationalBackground, EmployeeEligibility
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets
@@ -17,7 +17,8 @@ from .serializers import (
     EmployeeUpdateAppointmentDetailsFormSerializer,
     EmployeeDetailsSerializer,
     EmployeeBulkDeleteSerializer,
-    EmployeeEducationalBackgroundSerializer
+    EmployeeEducationalBackgroundSerializer,
+    EmployeeEligibilitySerializer
 )
 
 
@@ -378,6 +379,65 @@ class EmployeeEducationalBackgroundViewSet(viewsets.ModelViewSet):
         try:
             employee_educ_bg = get_object_or_404(self.queryset, id=pk)
             employee_educ_bg.delete()
+            return Response({}, 200)
+        except:
+            return Response({}, 500)
+
+
+
+class EmployeeEligibilityViewSet(viewsets.ModelViewSet):
+    queryset = EmployeeEligibility.objects.all()
+    serializer_class = EmployeeEligibilitySerializer
+
+
+    def create(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        try:    
+            employee = get_object_or_404(Employee.objects, id=serializer.data['employee'])
+            employee_elig = EmployeeEligibility()
+            employee_elig.employee = employee
+            employee_elig.eligibility = serializer.data['eligibility']
+            employee_elig.level = serializer.data['level']
+            employee_elig.rating = serializer.data['rating']
+            employee_elig.exam_place = serializer.data['exam_place']
+            employee_elig.exam_date = serializer.data['exam_date']
+            employee_elig.license_no = serializer.data['license_no']
+            employee_elig.license_validity = serializer.data['license_validity']
+            employee_elig.save()
+            return Response({}, 201)
+        except:
+            return Response({}, 500)
+
+
+    def retrieve(self, request, pk=None):
+        employee_elig = get_object_or_404(self.queryset, id=pk)
+        serializer = self.get_serializer(employee_elig)
+        return Response(serializer.data, 200)
+        
+
+    def update(self, request, pk=None):
+        try:
+            employee_elig = get_object_or_404(self.queryset, id=pk)
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            employee_elig.eligibility = serializer.data['eligibility']
+            employee_elig.level = serializer.data['level']
+            employee_elig.rating = serializer.data['rating']
+            employee_elig.exam_place = serializer.data['exam_place']
+            employee_elig.exam_date = serializer.data['exam_date']
+            employee_elig.license_no = serializer.data['license_no']
+            employee_elig.license_validity = serializer.data['license_validity']
+            employee_elig.save()
+            return Response({}, 201)
+        except:
+            return Response({}, 500)
+
+
+    def destroy(self, request, pk=None):
+        try:
+            employee_elig = get_object_or_404(self.queryset, id=pk)
+            employee_elig.delete()
             return Response({}, 200)
         except:
             return Response({}, 500)
