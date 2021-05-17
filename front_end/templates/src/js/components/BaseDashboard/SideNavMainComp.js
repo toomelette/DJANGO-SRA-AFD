@@ -80,6 +80,15 @@ const SideNavMain = observer(({ dashboardMainStore }) => {
                         </> : ""
                     }
 
+                    { getMenus('ACCTG').length > 0 ?
+                        <>
+                            <div className="pcoded-navigation-label" style={{ color:'#f1f7ff' }}>ACCOUNTING</div>
+                            <ul className="pcoded-item pcoded-left-item">
+                                { getMenus('ACCTG') }
+                            </ul>
+                        </> : ""
+                    }
+
                 </div>
             </div>
         </nav>

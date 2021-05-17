@@ -177,11 +177,11 @@ const EmployeeDetailsEducationalBackgroundCard = observer(({ employeeStore, dash
         <div className="card z-depth-0">
             <div className="card-header">
                 <h5>Educational Background</h5>
-                { dashboardMainStore.checkIfSubrouteExist('employee-edit-appointment-details') ?
-                <button onClick={ handleOpenCreateEducationalBackgroundModal }
-                        className="btn btn-sm btn-success btn-outline-success icon-btn float-right">
-                    <i className="icofont icofont-plus"></i>
-                </button> : <></> 
+                { dashboardMainStore.checkIfSubrouteExist('employee-edit-educational-background') ?
+                    <button onClick={ handleOpenCreateEducationalBackgroundModal }
+                            className="btn btn-sm btn-success btn-outline-success icon-btn float-right">
+                        <i className="icofont icofont-plus"></i>
+                    </button> : <></> 
                 }
             </div>
             <div className="card-block">
@@ -198,14 +198,17 @@ const EmployeeDetailsEducationalBackgroundCard = observer(({ employeeStore, dash
                                             <h6>{ val.level }</h6>
                                             { val.date_from && val.date_to ? <h6> {val.date_from} - {val.date_to} </h6> : ""}
                                         </td>
-                                        <td className="align-middle">
-                                            <a href="" onClick={ e => handleOpenEditEducationalBackgroundModal(e, val.id) }>
-                                                <i className="feather icon-edit f-w-1000 f-18 m-r-15 text-c-blue"></i>
-                                            </a>
-                                            <a href="" onClick={ e => handleOpenDeleteEducationalBackgroundModal(e, val.id) }>
-                                                <i className="feather icon-trash-2 f-w-1000 f-18 text-c-red"></i>
-                                            </a>
-                                        </td>
+
+                                        { dashboardMainStore.checkIfSubrouteExist('employee-edit-educational-background') ?
+                                            <td className="align-middle">
+                                                <a href="" onClick={ e => handleOpenEditEducationalBackgroundModal(e, val.id) }>
+                                                    <i className="feather icon-edit f-w-1000 f-18 m-r-15 text-c-blue"></i>
+                                                </a>
+                                                <a href="" onClick={ e => handleOpenDeleteEducationalBackgroundModal(e, val.id) }>
+                                                    <i className="feather icon-trash-2 f-w-1000 f-18 text-c-red"></i>
+                                                </a>
+                                            </td>: <td></td> 
+                                        }
                                     </tr>
                                 ) 
                             }) }

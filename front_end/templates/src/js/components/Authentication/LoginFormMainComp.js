@@ -1,7 +1,7 @@
 
 require('../../config');
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import axios from "axios";
 import eventBus from "../Utils/EventBus";
@@ -12,13 +12,22 @@ function LoginFormMain(props){
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error_fields, setErrorFields] = useState({ username: "", password: "", non_field_errors: "" });
+
+
+    useEffect(() => {
+        let is_mounted = true;
+        if(is_mounted == true){
+            window.localStorage.clear()
+        }
+        return () => {
+            is_mounted = false;
+        } 
+    }, []);
   
 
     const handleSubmit = (event) => {
-
         event.preventDefault()
         eventBus.dispatch("SHOW_FULLPAGE_LOADER", { is_loading: true, is_dashboard: false })
-
         axios.post('auth/token/login/', {
                 username: username,
                 password: password,
@@ -40,7 +49,6 @@ function LoginFormMain(props){
                 })
                 eventBus.dispatch("SHOW_FULLPAGE_LOADER", { is_loading: false, is_dashboard: false })
             });
-
     }
 
 
