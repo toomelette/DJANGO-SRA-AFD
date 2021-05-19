@@ -7,20 +7,21 @@ import { observer } from 'mobx-react'
 import eventBus from "../Utils/EventBus"
 
 // Modules
+import NotFoundPage from '../ErrorPages/NotFoundPageComp'
 import SideNavMain from './SideNavMainComp'
 import ProfileMain from '../Profile/ProfileMain'
 import HomeMain from '../Home/HomeMain'
 import UserMain from '../User/UserMain'
 import MenuMain from '../Menu/MenuMain'
 import EmployeeMain from '../Employee/EmployeeMain'
-
-import NotFoundPage from '../ErrorPages/NotFoundPageComp'
+import PayrollMain from '../Payroll/PayrollMain'
 
 // Stores
 import dashboardMainStore from './store/DashboardMainStore'
 import userStore from '../User/store/UserStore'
 import menuStore from '../Menu/store/MenuStore'
 import employeeStore from '../Employee/store/EmployeeStore'
+import payrollStore from '../Payroll/store/payrollStore'
 
 const DashboardMain = observer(({ dashboardMainStore }) => {
 
@@ -171,6 +172,13 @@ const DashboardMain = observer(({ dashboardMainStore }) => {
                             <Route path="/employees">
                                 { dashboardMainStore.checkIfRouteExist('employee-module') ?
                                     <EmployeeMain employeeStore={employeeStore} dashboardMainStore={dashboardMainStore}/>: <NotFoundPage/>
+                                }
+                            </Route>
+    
+                            {/* Payroll */}
+                            <Route path="/payroll">
+                                { dashboardMainStore.checkIfRouteExist('payroll-module') ?
+                                    <PayrollMain payrollStore={payrollStore} dashboardMainStore={dashboardMainStore}/>: <NotFoundPage/>
                                 }
                             </Route>
     

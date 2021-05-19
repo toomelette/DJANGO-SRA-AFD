@@ -114,6 +114,7 @@ const MenuList = observer(({ menuStore, dashboardMainStore }) => {
                                             deleteButton={ dashboardMainStore.checkIfSubrouteExist('menu-delete') }
                                             deleteButtonDisable= { menuStore.selected_rows.some(data => data.status === true) }
                                             deleteButtonClickHandler={ (e) => handleOpenBulkDeleteModal(e) }
+                                            entriesSelect={true}
                                             entriesSelectPageSize={ menuStore.page_size }
                                             entriesSelectChangeHandler={ (e) => menuStore.handlePageSizeClick(e) }
                                             paginationPagePrev={ menuStore.page_prev }

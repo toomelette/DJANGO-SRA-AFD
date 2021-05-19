@@ -132,6 +132,7 @@ const UserList = observer(({ userStore, dashboardMainStore }) => {
                                             deleteButtonDisable= { userStore.selected_rows.some(data => data.status === true) }
                                             deleteButtonClickHandler={ handleDeleteButtonClick }
                                             createButton={dashboardMainStore.checkIfSubrouteExist('user-create-page')}
+                                            entriesSelect={true}
                                             entriesSelectPageSize={ userStore.page_size }
                                             entriesSelectChangeHandler={ (e) => userStore.handlePageSizeClick(e) }
                                             paginationPagePrev={ userStore.page_prev }

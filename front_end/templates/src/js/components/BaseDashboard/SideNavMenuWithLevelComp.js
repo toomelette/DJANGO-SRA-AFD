@@ -42,7 +42,7 @@ function SideNavMenuWithLevel(props){
 
 
     const hasActiveSubmenuPath = (url) => {
-        return location.pathname.includes(url);
+        return url === location.pathname;
     }
 
 

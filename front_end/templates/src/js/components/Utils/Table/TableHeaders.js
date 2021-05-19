@@ -173,9 +173,13 @@ function TableHeaderDefault(props){
 
             <div className="col-md-3 d-flex flex-row mt-1">
 
-                <div style={{ width:'50%' }}>
-                    <EntriesSelect pageSize={ props.entriesSelectPageSize } changeHandler={ props.entriesSelectChangeHandler } />
-                </div>
+                { props.entriesSelect === true ? 
+                    (
+                        <div style={{ width:'50%' }}>
+                            <EntriesSelect pageSize={ props.entriesSelectPageSize } changeHandler={ props.entriesSelectChangeHandler } />
+                        </div>
+                    ) : "" 
+                }
 
                 <div className="pl-4 mt-1 float-right">
                     <HeaderPaginationDefault

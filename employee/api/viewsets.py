@@ -1,4 +1,3 @@
-import json
 
 from employee.models import Station, Plantilla, Employee, EmployeeEducationalBackground, EmployeeEligibility
 from django.db.models import Q

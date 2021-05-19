@@ -124,6 +124,7 @@ const EmployeeList = observer(({ employeeStore, dashboardMainStore }) => {
                                             deleteButtonDisable= { employeeStore.selected_rows.some(data => data.status === true) }
                                             deleteButtonClickHandler={ handleDeleteButtonClick }
                                             createButton={dashboardMainStore.checkIfSubrouteExist('employee-create-page')}
+                                            entriesSelect={true}
                                             entriesSelectPageSize={ employeeStore.page_size }
                                             entriesSelectChangeHandler={ (e) => employeeStore.handlePageSizeClick(e) }
                                             paginationPagePrev={ employeeStore.page_prev }
