@@ -5,9 +5,11 @@ import { HashRouter, Switch, Route } from "react-router-dom"
 import { observer } from 'mobx-react'
 
 import PayrollDeductions from './PayrollDeductionListComp.js'
+import PayrollAllowances from './PayrollAllowanceListComp.js'
 import NotFoundPage from '../ErrorPages/NotFoundPageComp'
 
 import payrollDeductionStore from './store/payrollDeductionStore'
+import payrollAllowanceStore from './store/payrollAllowanceStore'
 
 const PayrollMain = observer(({ payrollStore, dashboardMainStore }) => {
 
@@ -15,10 +17,16 @@ const PayrollMain = observer(({ payrollStore, dashboardMainStore }) => {
         <HashRouter>
             <Switch>
 
-                {/* LIST */}
+                {/* DEDUCTION LIST */}
                 <Route exact path="/payroll/deductions">
                     { dashboardMainStore.checkIfSubrouteExist('payroll-deductions-manage-page') ? 
                         <PayrollDeductions payrollDeductionStore={payrollDeductionStore} dashboardMainStore={dashboardMainStore}/> : <NotFoundPage/> }
+                </Route>
+
+                {/* ALLOWANCE LIST */}
+                <Route exact path="/payroll/allowance">
+                    { dashboardMainStore.checkIfSubrouteExist('payroll-deductions-manage-page') ? 
+                        <PayrollAllowances payrollAllowanceStore={payrollAllowanceStore} dashboardMainStore={dashboardMainStore}/> : <NotFoundPage/> }
                 </Route>
 
                 {/* CREATE */}

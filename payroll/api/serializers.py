@@ -1,10 +1,17 @@
 from rest_framework import serializers
-from payroll.models import Deductions
+from payroll.models import Deductions, Allowances
 
 
 
-class DeductionListSerializer(serializers.ModelSerializer): 
+class DeductionSerializer(serializers.ModelSerializer): 
      class Meta:
           model = Deductions
           fields = ('id', 'code', 'name', 'description')
+          read_only_fields = ('id',)
+
+
+class AllowanceSerializer(serializers.ModelSerializer): 
+     class Meta:
+          model = Allowances
+          fields = ('id', 'code', 'name', 'description', 'amount')
           read_only_fields = ('id',)

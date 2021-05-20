@@ -1,7 +1,7 @@
 import { debounce } from 'lodash'
 import { makeAutoObservable, runInAction } from "mobx"
 
-class PayrollDeductionStore{
+class PayrollAllowanceStore{
 
     //  list vars
     list = [];
@@ -13,14 +13,15 @@ class PayrollDeductionStore{
     page_size = 10;
     page_limit = 0;
 	delaySearch = debounce(() => this.fetch(), 500);
-    selected_deduction = "";
+    selected_allowance = "";
     is_opened_form = 0;
 
     // form vars
-    deduction_id = "";
+    allowance_id = "";
     code = "";
     name = "";
     description="";
+    amount = "";
     error_fields={};
 
 
@@ -33,7 +34,7 @@ class PayrollDeductionStore{
 
     // Actions
     fetch(){
-        axios.get('api/deduction', { 
+        axios.get('api/allowance', { 
             params: { 
                 q: this.query, 
                 page_size: this.page_size, 
@@ -49,13 +50,14 @@ class PayrollDeductionStore{
     }
 
     retrieve(id){
-        axios.get('api/deduction/' + id)
+        axios.get('api/allowance/' + id)
         .then((response) => {
             runInAction(() => {
-                this.deduction_id = response.data.id;
+                this.allowance_id = response.data.id;
                 this.code = response.data.code;
                 this.name = response.data.name;
                 this.description = response.data.description;
+                this.amount = response.data.amount;
                 this.elig_error_fields = {};
             })
         });
@@ -108,23 +110,24 @@ class PayrollDeductionStore{
         this.is_opened_form = is_opened_form;
     }
 
-    setSelectedDeduction(id){
-        this.selected_deduction = id;
+    setSelectedAllowance(id){
+        this.selected_allowance = id;
     }
 
 
 
     // Form Setters
     resetForm(){
-        this.deduction_id = "";
+        this.allowance_id = "";
         this.code = "";
         this.name = "";
         this.description= "";
+        this.amount= "";
         this.error_fields= {};
     }
 
-    setDeductionId(deduction_id){
-        this.deduction_id = deduction_id;
+    setAllowanceId(allowance_id){
+        this.allowance_id = allowance_id;
     }
 
     setCode(code){
@@ -139,6 +142,11 @@ class PayrollDeductionStore{
         this.description = description;
     }
 
+    setAmount(amount){
+        this.amount = amount;
+    }
+
+
     setErrorFields(ef){
         this.error_fields = ef;
     }
@@ -147,5 +155,5 @@ class PayrollDeductionStore{
 
 }
 
-const payrollDeductionStore = new PayrollDeductionStore()
-export default payrollDeductionStore
+const payrollAllowanceStore = new PayrollAllowanceStore()
+export default payrollAllowanceStore

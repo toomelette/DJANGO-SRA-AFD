@@ -14,7 +14,7 @@ class Deductions(models.Model):
 
 
 class Allowances(models.Model):
-    code = models.CharField(max_length=50, unique=True)
+    code = models.CharField(max_length=50, default="")
     name = models.CharField(max_length=200, default="")
     description = models.CharField(max_length=200, default="", blank=True)
     amount = models.DecimalField(max_digits=13, decimal_places=2, default=0, blank=True)
@@ -22,16 +22,6 @@ class Allowances(models.Model):
     updated_by = models.ForeignKey(User, related_name='payrollAllowances_updated_by_user', on_delete=models.PROTECT)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
-
-
-# class GsisPolicies(models.Model):
-#     code = models.CharField(max_length=50, unique=True)
-#     name = models.CharField(max_length=200, default="")
-#     description = models.CharField(max_length=200, default="", blank=True)
-#     created_by = models.ForeignKey(User, related_name='payrollGP_created_by_user', on_delete=models.PROTECT)
-#     updated_by = models.ForeignKey(User, related_name='payrollGP_updated_by_user', on_delete=models.PROTECT)
-#     created_at = models.DateTimeField(auto_now_add=True, null=True)
-#     updated_at = models.DateTimeField(auto_now=True, null=True)
 
 
 class Template(models.Model):
@@ -82,15 +72,6 @@ class TemplateAllowances(models.Model):
     amount = models.DecimalField(max_digits=13, decimal_places=2, default=0, blank=True)
 
 
-# class TemplateGsisPolicies(models.Model):
-#     template = models.ForeignKey(Template, db_column="template_id", related_name='payrollTGP_template', on_delete=models.CASCADE)
-#     gsis_policy = models.ForeignKey(GsisPolicies, db_column="gsis_policy_id", related_name='payrollTGP_gsis_policy', on_delete=models.PROTECT)
-#     code = models.CharField(max_length=50)
-#     name = models.CharField(max_length=200, default="", blank=True)
-#     description = models.CharField(max_length=200, default="", blank=True)
-#     amount = models.DecimalField(max_digits=13, decimal_places=2, default=0, blank=True)
-
-
 class Payroll(models.Model):
     PAYGROUP_TYPES = ( (0,'N/A'), (1,'Male'), (2,'Female') )
     STATUS_TYPES = ( (0,'N/A'), (1,'REGULAR'), (2,'COS') )
@@ -137,14 +118,5 @@ class PayrollAllowances(models.Model):
     name = models.CharField(max_length=200, default="", blank=True)
     description = models.CharField(max_length=200, default="", blank=True)
     amount = models.DecimalField(max_digits=13, decimal_places=2, default=0, blank=True)
-
-
-# class PayrollGsisPolicies(models.Model):
-#     payroll = models.ForeignKey(Payroll, db_column="payroll_id", related_name='payrollPGP_payroll', on_delete=models.CASCADE)
-#     gsis_policy = models.ForeignKey(GsisPolicies, db_column="gsis_policy_id", related_name='payrollPGP_gsis_policy', on_delete=models.PROTECT)
-#     code = models.CharField(max_length=50)
-#     name = models.CharField(max_length=200, default="", blank=True)
-#     description = models.CharField(max_length=200, default="", blank=True)
-#     amount = models.DecimalField(max_digits=13, decimal_places=2, default=0, blank=True)
 
 

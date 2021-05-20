@@ -294,8 +294,85 @@ class EmployeeStore{
                 this.elig_error_fields = {};
             })
         });
-    }    
+    }   
 
+    handleSearch(e){
+        e.preventDefault()
+        this.page_prev = 0;
+        this.page_current = 1;
+        this.page_next = 2;
+        this.query = e.target.value;
+        this.delaySearch();
+    }
+
+    handleFilterSubmit(){
+        this.page_prev = 0;
+        this.page_current = 1;
+        this.page_next = 2;
+        this.fetch();
+    }
+
+    handleSortSubmit(){
+        this.page_prev = 0;
+        this.page_current = 1;
+        this.page_next = 2;
+        this.fetch();
+    }
+
+    handleRefreshClick(e){
+        e.preventDefault()
+        this.page_prev = 0;
+        this.page_current = 1;
+        this.page_next = 2;
+        this.page_size = 10;
+        this.query = "";
+        this.filter_is_active = { value:"", label:"Select" };
+        this.filter_station = { value:"", label:"Select" };
+        this.filter_sex = { value:"", label:"Select" };
+        this.filter_civil_status = { value:"", label:"Select" };
+        this.filter_application_status = { value:"", label:"Select" };
+        this.filter_level = { value:"", label:"Select" };
+        this.filter_fd_gov_from = "", 
+        this.filter_fd_gov_to = "", 
+        this.filter_fd_sra_from = "", 
+        this.filter_fd_sra_to = "", 
+        this.filter_first_appt_from = "",
+        this.filter_first_appt_to = "",
+        this.filter_last_appt_from = "",
+        this.filter_last_appt_to = "",
+        this.filter_last_si_from = "",
+        this.filter_last_si_to = "",
+        this.filter_last_adj_from = "",
+        this.filter_last_adj_to = "",
+        this.filter_last_prom_from = "",
+        this.filter_last_prom_to = "",
+        this.sort_field = "";
+        this.sort_order = "";
+        this.selected_employee = 0;
+        this.fetch();
+    }
+
+    handlePageSizeClick(e){
+        e.preventDefault()
+        if(e.target.value > 0){
+            this.page_prev = 0;
+            this.page_current = 1;
+            this.page_next = 2;
+            this.page_size = e.target.value;
+            this.fetch();
+        }
+    }
+
+    handlePaginationClick(e, page_current){
+        e.preventDefault()
+        if(page_current > 0 && page_current <= this.page_limit){
+            this.page_prev = page_current - 1;
+            this.page_current = page_current;
+            this.page_next = page_current + 1;
+            this.fetch();
+        }
+    } 
+    
 
     // Options Getters
     getSexLabel(){
@@ -892,85 +969,6 @@ class EmployeeStore{
 
     setEligErrorFields(error_fields){
         this.elig_error_fields = error_fields;
-    }
-
-
-    // List Table Handlers
-    handleSearch(e){
-        e.preventDefault()
-        this.page_prev = 0;
-        this.page_current = 1;
-        this.page_next = 2;
-        this.query = e.target.value;
-        this.delaySearch();
-    }
-
-    handleFilterSubmit(){
-        this.page_prev = 0;
-        this.page_current = 1;
-        this.page_next = 2;
-        this.fetch();
-    }
-
-    handleSortSubmit(){
-        this.page_prev = 0;
-        this.page_current = 1;
-        this.page_next = 2;
-        this.fetch();
-    }
-
-    handleRefreshClick(e){
-        e.preventDefault()
-        this.page_prev = 0;
-        this.page_current = 1;
-        this.page_next = 2;
-        this.page_size = 10;
-        this.query = "";
-        this.filter_is_active = { value:"", label:"Select" };
-        this.filter_station = { value:"", label:"Select" };
-        this.filter_sex = { value:"", label:"Select" };
-        this.filter_civil_status = { value:"", label:"Select" };
-        this.filter_application_status = { value:"", label:"Select" };
-        this.filter_level = { value:"", label:"Select" };
-        this.filter_fd_gov_from = "", 
-        this.filter_fd_gov_to = "", 
-        this.filter_fd_sra_from = "", 
-        this.filter_fd_sra_to = "", 
-        this.filter_first_appt_from = "",
-        this.filter_first_appt_to = "",
-        this.filter_last_appt_from = "",
-        this.filter_last_appt_to = "",
-        this.filter_last_si_from = "",
-        this.filter_last_si_to = "",
-        this.filter_last_adj_from = "",
-        this.filter_last_adj_to = "",
-        this.filter_last_prom_from = "",
-        this.filter_last_prom_to = "",
-        this.sort_field = "";
-        this.sort_order = "";
-        this.selected_employee = 0;
-        this.fetch();
-    }
-
-    handlePageSizeClick(e){
-        e.preventDefault()
-        if(e.target.value > 0){
-            this.page_prev = 0;
-            this.page_current = 1;
-            this.page_next = 2;
-            this.page_size = e.target.value;
-            this.fetch();
-        }
-    }
-
-    handlePaginationClick(e, page_current){
-        e.preventDefault()
-        if(page_current > 0 && page_current <= this.page_limit){
-            this.page_prev = page_current - 1;
-            this.page_current = page_current;
-            this.page_next = page_current + 1;
-            this.fetch();
-        }
     }
 
 
