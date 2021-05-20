@@ -51,14 +51,9 @@ const EmployeeDetails = observer(({ employeeStore, dashboardMainStore }) => {
                 SetPageLoader(false)
                 redirectBackToEmployeeList()
              }).catch((error) => {
-                if(error.response.status == 404){
+                if(error.response.status == 404 || error.response.status == 500){
                     eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
-                        message: "Data Not Found!", type: "danger" 
-                    });
-                }
-                if(error.response.status == 500){
-                    eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
-                        message: "There's an error trying to send data to the server!", type: "danger" 
+                        message: "Error Occured!", type: "danger" 
                     });
                 }
                 SetPageLoader(false)

@@ -84,9 +84,9 @@ const MenuCreate = observer(({ menuStore }) => {
                     subroutes: field_errors.subroutes,
                 });
             }
-            if(error.response.status === 500){
+            if(error.response.status == 404 || error.response.status == 500){
                 eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
-                    message: "There's an error trying to send data to the server!", type: "danger" 
+                    message: "Error Occured!", type: "danger" 
                 });
             }
             SetIsPageLoading(false);

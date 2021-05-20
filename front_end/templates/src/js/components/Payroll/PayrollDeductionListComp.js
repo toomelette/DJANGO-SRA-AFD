@@ -61,6 +61,11 @@ const PayrollParameters = observer(({ payrollDeductionStore, dashboardMainStore 
                     non_field_errors: field_errors.non_field_errors?.toString(),
                 });
             }
+            if(error.response.status == 404 || error.response.status == 500){
+                eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
+                    message: "Error Occured!", type: "danger" 
+                });
+            }
             SetPageLoader(false);
         });
     }
@@ -100,6 +105,11 @@ const PayrollParameters = observer(({ payrollDeductionStore, dashboardMainStore 
                     non_field_errors: field_errors.non_field_errors?.toString(),
                 });
             }
+            if(error.response.status == 404 || error.response.status == 500){
+                eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
+                    message: "Error Occured!", type: "danger" 
+                });
+            }
             SetPageLoader(false);
         });
     }
@@ -123,6 +133,13 @@ const PayrollParameters = observer(({ payrollDeductionStore, dashboardMainStore 
             payrollDeductionStore.fetch()
             SetPageLoader(false);
             $("#deduction-delete-modal").modal('hide');
+        }).catch((err) => {
+            if(error.response.status == 404 || error.response.status == 500){
+                eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
+                    message: "Error Occured!", type: "danger" 
+                });
+            }
+            SetPageLoader(false);
         });
     }
 
@@ -174,7 +191,7 @@ const PayrollParameters = observer(({ payrollDeductionStore, dashboardMainStore 
                                             filterButton={false}
                                             sortButton={false}
                                             deleteButton={false}
-                                            createButton={true}
+                                            createButton={ dashboardMainStore.checkIfSubrouteExist('payroll-deductions-create') }
                                             createButtonClickHandler={ handleCreateButtonClick }
                                             entriesSelect={true}
                                             entriesSelectPageSize={ payrollDeductionStore.page_size }
@@ -201,21 +218,29 @@ const PayrollParameters = observer(({ payrollDeductionStore, dashboardMainStore 
                                                 </thead>
                                                 <tbody>
                                                 { payrollDeductionStore.list.map((val, key) => {
-                                                    return (
-                                                        <tr key={key} className={ val.id == payrollDeductionStore.selected_deduction ? "table-info" : "" }>
-                                                            <td className="align-middle">{ val.code }</td>
-                                                            <td className="align-middle">{ val.name }</td>
-                                                            <td className="align-middle">{ val.description }</td>
-                                                            <td className="align-middle">
-                                                                <a href="" onClick={ e => handleOpenEditModal(e, val.id) }>
-                                                                    <i className="feather icon-edit f-w-1000 f-18 m-r-15 text-c-blue"></i>
-                                                                </a>
-                                                                <a href="" onClick={ e => handleOpenDeleteModal(e, val.id) }>
-                                                                    <i className="feather icon-trash-2 f-w-1000 f-18 text-c-red"></i>
-                                                                </a>
-                                                            </td>
-                                                        </tr>
-                                                    )
+                                                return (
+                                                    <tr key={key} className={ val.id == payrollDeductionStore.selected_deduction ? "table-info" : "" }>
+                                                        <td className="align-middle">{ val.code }</td>
+                                                        <td className="align-middle">{ val.name }</td>
+                                                        <td className="align-middle">{ val.description }</td>
+                                                        <td className="align-middle">
+                                                            { dashboardMainStore.checkIfSubrouteExist('payroll-deductions-edit') ? 
+                                                                (
+                                                                    <a href="" onClick={ e => handleOpenEditModal(e, val.id) }>
+                                                                        <i className="feather icon-edit f-w-1000 f-18 m-r-15 text-c-blue"></i>
+                                                                    </a>
+                                                                ) : <></>
+                                                            }
+                                                            { dashboardMainStore.checkIfSubrouteExist('payroll-deductions-delete') ? 
+                                                                (
+                                                                    <a href="" onClick={ e => handleOpenDeleteModal(e, val.id) }>
+                                                                        <i className="feather icon-trash-2 f-w-1000 f-18 text-c-red"></i>
+                                                                    </a>
+                                                                ) : <></>
+                                                            }
+                                                        </td>
+                                                    </tr>
+                                                )
                                                 }) }
                                                 </tbody>
                                             </table>

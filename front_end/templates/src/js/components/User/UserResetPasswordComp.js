@@ -59,14 +59,9 @@ const UserResetPassword = observer(({ userStore }) => {
                     new_password_confirm: field_errors.new_password_confirm?.toString(),
                 });
             }
-            if(error.response.status == 404){
+            if(error.response.status == 404 || error.response.status == 500){
                 eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
-                    message: "Data Not Found!", type: "danger" 
-                });
-            }
-            if(error.response.status == 500){
-                eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
-                    message: "There's an error trying to send data to the server!", type: "danger" 
+                    message: "Error Occured!", type: "danger" 
                 });
             }
             SetLoader(false);
