@@ -164,7 +164,7 @@ function TableHeaderDefault(props){
                 { props.createButton === true ?
                     (
                         <div className="pl-2">
-                            <CreateButton onClick={ props.addButtonClickHandler }/>
+                            <CreateButton onClick={ props.createButtonClickHandler }/>
                         </div>
                     ) : ""
                 }

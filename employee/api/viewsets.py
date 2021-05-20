@@ -355,9 +355,9 @@ class EmployeeEducationalBackgroundViewSet(viewsets.ModelViewSet):
         
 
     def update(self, request, pk=None):
+        employee_educ_bg = get_object_or_404(self.queryset, id=pk)
+        serializer = self.get_serializer(data=request.data)
         try:
-            employee_educ_bg = get_object_or_404(self.queryset, id=pk)
-            serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             employee_educ_bg.level = serializer.data['level']
             employee_educ_bg.school = serializer.data['school']
@@ -416,10 +416,10 @@ class EmployeeEligibilityViewSet(viewsets.ModelViewSet):
         
 
     def update(self, request, pk=None):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
         try:
             employee_elig = get_object_or_404(self.queryset, id=pk)
-            serializer = self.get_serializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
             employee_elig.eligibility = serializer.data['eligibility']
             employee_elig.level = serializer.data['level']
             employee_elig.rating = serializer.data['rating']

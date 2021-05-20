@@ -112,7 +112,7 @@ const EmployeeList = observer(({ employeeStore, dashboardMainStore }) => {
                                     <div className="card-header"> 
 
                                         <TableHeaderDefault
-                                            addButtonClickHandler={ handleCreateButtonClick }
+                                            createButtonClickHandler={ handleCreateButtonClick }
                                             searchInputValue={ employeeStore.query }
                                             searchInputHandler={ (e) => employeeStore.handleSearch(e) }
                                             filterButton={true}

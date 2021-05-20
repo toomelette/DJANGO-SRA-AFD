@@ -120,7 +120,7 @@ const UserList = observer(({ userStore, dashboardMainStore }) => {
                                     {/* Table Header */}
                                     <div className="card-header"> 
                                         <TableHeaderDefault
-                                            addButtonClickHandler={ handleCreateButtonClick }
+                                            createButtonClickHandler={ handleCreateButtonClick }
                                             searchInputValue={ userStore.query }
                                             searchInputHandler={ (e) => userStore.handleSearch(e) }
                                             filterButton={true}

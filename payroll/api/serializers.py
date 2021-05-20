@@ -7,3 +7,4 @@ class DeductionListSerializer(serializers.ModelSerializer):
      class Meta:
           model = Deductions
           fields = ('id', 'code', 'name', 'description')
+          read_only_fields = ('id',)

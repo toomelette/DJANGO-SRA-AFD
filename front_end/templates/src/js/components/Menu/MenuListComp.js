@@ -104,7 +104,7 @@ const MenuList = observer(({ menuStore, dashboardMainStore }) => {
                                     {/* Table Header */}
                                     <div className="card-header p-b-0"> 
                                         <TableHeaderDefault
-                                            addButtonClickHandler={ redirectToMenuCreate }
+                                            createButtonClickHandler={ redirectToMenuCreate }
                                             searchInputValue={ menuStore.query }
                                             searchInputHandler={ (e) => menuStore.handleSearch(e) }
                                             sortButton={ true }

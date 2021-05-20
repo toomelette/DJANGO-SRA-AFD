@@ -4,8 +4,10 @@ import React from "react"
 import { HashRouter, Switch, Route } from "react-router-dom"
 import { observer } from 'mobx-react'
 
-import PayrollParameters from './PayrollParametersComp.js'
+import PayrollDeductions from './PayrollDeductionListComp.js'
 import NotFoundPage from '../ErrorPages/NotFoundPageComp'
+
+import payrollDeductionStore from './store/payrollDeductionStore'
 
 const PayrollMain = observer(({ payrollStore, dashboardMainStore }) => {
 
@@ -14,9 +16,9 @@ const PayrollMain = observer(({ payrollStore, dashboardMainStore }) => {
             <Switch>
 
                 {/* LIST */}
-                <Route exact path="/payroll/parameters">
-                    { dashboardMainStore.checkIfSubrouteExist('payroll-parameters-manage-page') ? 
-                        <PayrollParameters payrollStore={payrollStore} dashboardMainStore={dashboardMainStore}/> : <NotFoundPage/> }
+                <Route exact path="/payroll/deductions">
+                    { dashboardMainStore.checkIfSubrouteExist('payroll-deductions-manage-page') ? 
+                        <PayrollDeductions payrollDeductionStore={payrollDeductionStore} dashboardMainStore={dashboardMainStore}/> : <NotFoundPage/> }
                 </Route>
 
                 {/* CREATE */}
