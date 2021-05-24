@@ -2,7 +2,6 @@ from rest_framework import serializers
 from payroll.models import Deductions, Allowances
 
 
-
 class DeductionSerializer(serializers.ModelSerializer): 
      class Meta:
           model = Deductions

@@ -1,6 +1,7 @@
 import json
 
-from payroll.models import Deductions, Allowances
+from payroll.models import Deductions, Allowances, Template, TemplateData, TemplateDataDeductions, Mock
+from employee.models import Employee, Station
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets
@@ -135,3 +136,22 @@ class AllowanceViewSet(viewsets.ModelViewSet):
             return Response({}, 200)
         except:
             return Response({}, 500)
+
+
+
+class TemplateViewSet(viewsets.ModelViewSet):
+    queryset = Template.objects.all()
+
+    def list(self, request):
+        tdd_queryset = TemplateDataDeductions.objects.all()
+        m_queryset = Mock.objects.all()
+
+        for data_m in m_queryset:
+            deduc_list = dict()
+            deduc_list.update({ 'd1' : data_m.d1 })
+            deduc_list.update({ 'd2' : data_m.d2 })
+            print(deduc_list)
+            
+
+            
+        return Response({"status":"Success"}, 200)
