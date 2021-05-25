@@ -4,13 +4,13 @@ from rest_framework.validators import UniqueValidator
 from employee.models import Employee, Station, Plantilla, EmployeeEducationalBackground, EmployeeEligibility
 
 
-class StationListSerializer(serializers.ModelSerializer): 
+class StationSerializer(serializers.ModelSerializer): 
      class Meta:
           model = Station
           fields = ('id', 'station_id', 'name')
 
 
-class PlantillaListSerializer(serializers.ModelSerializer): 
+class PlantillaSerializer(serializers.ModelSerializer): 
      class Meta:
           model = Plantilla
           fields = (
@@ -49,7 +49,7 @@ class EmployeeEligibilitySerializer(serializers.ModelSerializer):
 
 
 class EmployeeListSerializer(serializers.ModelSerializer):
-     station_link = StationListSerializer(many=False)
+     station_link = StationSerializer(many=False)
      class Meta:
           model = Employee
           fields = ('id', 'employee_id', 'fullname', 'position', 'is_active', 'station_link')

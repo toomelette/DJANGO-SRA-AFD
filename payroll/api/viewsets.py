@@ -1,15 +1,30 @@
 import json
-
-from payroll.models import Deductions, Allowances, Template, TemplateData, TemplateDataDeductions, Mock
-from employee.models import Employee, Station
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from .pagination import DeductionListPagination, AllowanceListPagination
-from .serializers import DeductionSerializer, AllowanceSerializer
+from employee.models import Employee, Station
+from payroll.models import (
+    Deductions, 
+    Allowances, 
+    Template, 
+    TemplateData, 
+    TemplateDataDeductions, Mock
+)
+from .pagination import (
+    DeductionListPagination, 
+    AllowanceListPagination, 
+    TemplateListPagination,
+    TemplateDataListPagination
+)
+from .serializers import (
+    DeductionSerializer, 
+    AllowanceSerializer, 
+    TemplateSerializer, 
+    TemplateDataSerializer
+)
 
 
 
@@ -141,17 +156,55 @@ class AllowanceViewSet(viewsets.ModelViewSet):
 
 class TemplateViewSet(viewsets.ModelViewSet):
     queryset = Template.objects.all()
+    serializer_class = TemplateSerializer
+    pagination_class = TemplateListPagination
 
     def list(self, request):
-        tdd_queryset = TemplateDataDeductions.objects.all()
-        m_queryset = Mock.objects.all()
+        search = request.GET.get('q', None)
+        filter_conditions = Q()
+        if search:
+            filter_conditions.add(
+                Q(name__icontains=search) | Q(description__icontains=search) | Q(process_date__icontains=search), Q.AND
+            )
+        page = self.paginate_queryset(self.queryset.filter(filter_conditions).order_by('-updated_at'))
+        serializer = self.get_serializer(page, many=True)
+        return self.get_paginated_response(serializer.data)
 
-        for data_m in m_queryset:
-            deduc_list = dict()
-            deduc_list.update({ 'd1' : data_m.d1 })
-            deduc_list.update({ 'd2' : data_m.d2 })
-            print(deduc_list)
-            
 
-            
-        return Response({"status":"Success"}, 200)
+
+class TemplateDataViewSet(viewsets.ModelViewSet):
+    queryset = TemplateData.objects.all()
+    serializer_class = TemplateDataSerializer
+    pagination_class = TemplateDataListPagination
+
+    def list(self, request):
+        template_id = request.GET.get('ti', None)
+        search = request.GET.get('q', None)
+        filter_conditions = Q()
+        if template_id:
+            filter_conditions.add(Q(template_id=template_id), Q.AND)
+        page = self.paginate_queryset(self.queryset.filter(filter_conditions).order_by('-updated_at'))
+        serializer = self.get_serializer(page, many=True)
+        return self.get_paginated_response(serializer.data)
+
+
+
+class TestViewSet(viewsets.ModelViewSet):
+    queryset = TemplateData.objects.all()
+    serializer_class = TemplateDataSerializer
+    pagination_class = TemplateDataListPagination
+
+    def list(self, request):
+        td = TemplateData.objects.all()
+        st = Station.objects.all()
+        for data_td in td:
+            try:
+                st_obj = st.get(station_id=data_td.station_no)
+                td_obj = td.get(id=data_td.id)
+                td_obj.station = st_obj
+                td_obj.save()
+                print(td_obj.fullname)
+                print(st_obj.name)
+            except:
+                print('Error!!')
+        return Response({'status':'Success!!'}, 200)

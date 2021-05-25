@@ -25,6 +25,8 @@ class Allowances(models.Model):
 
 
 class Template(models.Model):
+    name = models.CharField(max_length=100, default="")
+    description = models.CharField(max_length=200, default="", blank=True)
     process_date = models.DateField(null=True)
     created_by = models.ForeignKey(User, related_name='template_created_by_user', on_delete=models.PROTECT)
     updated_by = models.ForeignKey(User, related_name='template_updated_by_user', on_delete=models.PROTECT)

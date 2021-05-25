@@ -8,8 +8,8 @@ from rest_framework.response import Response
 
 from .pagination import EmployeeListPagination
 from .serializers import (
-    StationListSerializer,
-    PlantillaListSerializer,
+    StationSerializer,
+    PlantillaSerializer,
     EmployeeListSerializer,
     EmployeeCreateFormSerializer,
     EmployeeUpdatePersonalDetailsFormSerializer,
@@ -24,7 +24,7 @@ from .serializers import (
 
 class StationViewSet(viewsets.ModelViewSet):
     queryset = Station.objects.all()
-    serializer_class = StationListSerializer
+    serializer_class = StationSerializer
 
 
     @action(methods=['get'], detail=False)
@@ -37,7 +37,7 @@ class StationViewSet(viewsets.ModelViewSet):
 
 class PlantillaViewSet(viewsets.ModelViewSet):
     queryset = Plantilla.objects.all()
-    serializer_class = PlantillaListSerializer
+    serializer_class = PlantillaSerializer
 
 
     @action(methods=['get'], detail=False)

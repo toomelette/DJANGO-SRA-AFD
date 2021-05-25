@@ -1,7 +1,19 @@
 from rest_framework.routers import DefaultRouter
 from authentication.api.viewsets import RouteViewSet, SubrouteViewSet, UserViewSet
-from employee.api.viewsets import StationViewSet, PlantillaViewSet, EmployeeViewSet, EmployeeEducationalBackgroundViewSet, EmployeeEligibilityViewSet
-from payroll.api.viewsets import DeductionViewSet, AllowanceViewSet, TemplateViewSet
+from employee.api.viewsets import (
+    StationViewSet, 
+    PlantillaViewSet, 
+    EmployeeViewSet, 
+    EmployeeEducationalBackgroundViewSet, 
+    EmployeeEligibilityViewSet
+)
+from payroll.api.viewsets import (
+    DeductionViewSet, 
+    AllowanceViewSet, 
+    TemplateViewSet, 
+    TemplateDataViewSet, 
+    TestViewSet
+)
 
 router = DefaultRouter()
 
@@ -21,5 +33,8 @@ router.register('employee_elig', EmployeeEligibilityViewSet, basename='employee_
 router.register('deduction', DeductionViewSet, basename='deduction')
 router.register('allowance', AllowanceViewSet, basename='allowance')
 router.register('template', TemplateViewSet, basename='template')
+router.register('template_data', TemplateDataViewSet, basename='template_data')
+
+router.register('test', TestViewSet, basename='test')
 
 urlpatterns = router.urls
