@@ -26,7 +26,6 @@ class StationViewSet(viewsets.ModelViewSet):
     queryset = Station.objects.all()
     serializer_class = StationSerializer
 
-
     @action(methods=['get'], detail=False)
     def get_all(self, request):
         station_queryset = Station.objects.all()
@@ -38,7 +37,6 @@ class StationViewSet(viewsets.ModelViewSet):
 class PlantillaViewSet(viewsets.ModelViewSet):
     queryset = Plantilla.objects.all()
     serializer_class = PlantillaSerializer
-
 
     @action(methods=['get'], detail=False)
     def get_all_open_by_station(self, request):
@@ -58,7 +56,6 @@ class EmployeeViewSet(viewsets.ModelViewSet):
     queryset = Employee.objects.all()
     serializer_class = EmployeeListSerializer
     pagination_class = EmployeeListPagination
-
 
     def list(self, request):
         search = request.GET.get('q', None)
@@ -320,11 +317,17 @@ class EmployeeViewSet(viewsets.ModelViewSet):
             return Response({}, 500)
 
 
+    @action(methods=['get'], detail=False)
+    def get_all(self, request):
+        employee_queryset = Employee.objects.all()
+        serializer = self.get_serializer(employee_queryset, many=True)
+        return Response(serializer.data, 200)
+
+
 
 class EmployeeEducationalBackgroundViewSet(viewsets.ModelViewSet):
     queryset = EmployeeEducationalBackground.objects.all()
     serializer_class = EmployeeEducationalBackgroundSerializer
-
 
     def create(self, request):
         serializer = self.get_serializer(data=request.data)
@@ -387,7 +390,6 @@ class EmployeeEducationalBackgroundViewSet(viewsets.ModelViewSet):
 class EmployeeEligibilityViewSet(viewsets.ModelViewSet):
     queryset = EmployeeEligibility.objects.all()
     serializer_class = EmployeeEligibilitySerializer
-
 
     def create(self, request):
         serializer = self.get_serializer(data=request.data)

@@ -13,7 +13,7 @@ import DivLoader from '../Utils/DivLoaderComp'
 import PayrollAllowanceForm from './PayrollAllowanceFormComp'
 
 
-const PayrollParameters = observer(({ payrollAllowanceStore, dashboardMainStore }) => {
+const PayrollAllowanceList = observer(({ payrollAllowanceStore, dashboardMainStore }) => {
 
     const [page_loader, SetPageLoader] = useState(false);
 
@@ -359,4 +359,4 @@ const PayrollParameters = observer(({ payrollAllowanceStore, dashboardMainStore 
 });
 
 
-export default PayrollParameters
+export default PayrollAllowanceList

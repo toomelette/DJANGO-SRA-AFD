@@ -12,7 +12,7 @@ import DivLoader from '../Utils/DivLoaderComp'
 import PayrollDeductionForm from './PayrollDeductionFormComp'
 
 
-const PayrollParameters = observer(({ payrollDeductionStore, dashboardMainStore }) => {
+const PayrollDeductionList = observer(({ payrollDeductionStore, dashboardMainStore }) => {
 
     const [page_loader, SetPageLoader] = useState(false);
 
@@ -352,4 +352,4 @@ const PayrollParameters = observer(({ payrollDeductionStore, dashboardMainStore 
 });
 
 
-export default PayrollParameters
+export default PayrollDeductionList

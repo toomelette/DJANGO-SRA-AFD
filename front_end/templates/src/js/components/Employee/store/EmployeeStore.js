@@ -73,6 +73,7 @@ class EmployeeStore{
     selected_rows = [];
     table_badge = [];
 	delaySearch = debounce(() => this.fetch(), 500);
+    employee_options = [];
     
     // Filter Values
     filter_is_active = { value:"", label:"Select" };
@@ -286,12 +287,22 @@ class EmployeeStore{
                 this.pagibig = response.data.pagibig;
                 this.sss = response.data.sss;
                 this.error_fields = {};
-
                 this.educ_bg_list = response.data.employeeEB_employee
                 this.educ_bg_error_fields = {};
-
                 this.elig_list = response.data.employeeELIG_employee
                 this.elig_error_fields = {};
+            })
+        });
+    }
+
+    getAll(){
+        this.employee_options = [];
+        axios.get('api/employee/get_all')
+        .then((response) => {
+            runInAction(() => {
+                response.data.map(data => {
+                    this.employee_options.push({value:data.id, label:data.fullname})
+                })
             })
         });
     }   

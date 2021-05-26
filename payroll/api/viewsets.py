@@ -189,22 +189,22 @@ class TemplateDataViewSet(viewsets.ModelViewSet):
 
 
 
-class TestViewSet(viewsets.ModelViewSet):
-    queryset = TemplateData.objects.all()
-    serializer_class = TemplateDataSerializer
-    pagination_class = TemplateDataListPagination
+# class TestViewSet(viewsets.ModelViewSet):
+#     queryset = TemplateData.objects.all()
+#     serializer_class = TemplateDataSerializer
+#     pagination_class = TemplateDataListPagination
 
-    def list(self, request):
-        td = TemplateData.objects.all()
-        st = Station.objects.all()
-        for data_td in td:
-            try:
-                st_obj = st.get(station_id=data_td.station_no)
-                td_obj = td.get(id=data_td.id)
-                td_obj.station = st_obj
-                td_obj.save()
-                print(td_obj.fullname)
-                print(st_obj.name)
-            except:
-                print('Error!!')
-        return Response({'status':'Success!!'}, 200)
+#     def list(self, request):
+#         td = TemplateData.objects.all()
+#         st = Station.objects.all()
+#         for data_td in td:
+#             try:
+#                 st_obj = st.get(station_id=data_td.station_no)
+#                 td_obj = td.get(id=data_td.id)
+#                 td_obj.station = st_obj
+#                 td_obj.save()
+#                 print(td_obj.fullname)
+#                 print(st_obj.name)
+#             except:
+#                 print('Error!!')
+#         return Response({'status':'Success!!'}, 200)

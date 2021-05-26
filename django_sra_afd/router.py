@@ -12,7 +12,7 @@ from payroll.api.viewsets import (
     AllowanceViewSet, 
     TemplateViewSet, 
     TemplateDataViewSet, 
-    TestViewSet
+    #TestViewSet
 )
 
 router = DefaultRouter()
@@ -35,6 +35,6 @@ router.register('allowance', AllowanceViewSet, basename='allowance')
 router.register('template', TemplateViewSet, basename='template')
 router.register('template_data', TemplateDataViewSet, basename='template_data')
 
-router.register('test', TestViewSet, basename='test')
+#router.register('test', TestViewSet, basename='test')
 
 urlpatterns = router.urls

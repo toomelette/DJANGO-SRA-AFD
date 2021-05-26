@@ -178,7 +178,7 @@ const DashboardMain = observer(({ dashboardMainStore }) => {
                             {/* Payroll */}
                             <Route path="/payroll">
                                 { dashboardMainStore.checkIfRouteExist('payroll-module') ?
-                                    <PayrollMain payrollStore={payrollStore} dashboardMainStore={dashboardMainStore}/>: <NotFoundPage/>
+                                    <PayrollMain payrollStore={payrollStore} employeeStore={employeeStore} dashboardMainStore={dashboardMainStore}/>: <NotFoundPage/>
                                 }
                             </Route>
     
