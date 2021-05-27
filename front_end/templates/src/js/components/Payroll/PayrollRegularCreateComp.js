@@ -6,13 +6,12 @@ import { Link, useHistory } from 'react-router-dom'
 import eventBus from '../Utils/EventBus'
 import DivLoader from '../Utils/DivLoaderComp'
 
-import PayrollTemplateFormDetails from './PayrollTemplateFormDetailsComp'
-import PayrollTemplateFormContent from './PayrollTemplateFormContentComp'
-import payrollTemplateStore from './store/payrollTemplateStore'
+import PayrollRegularFormDetails from './PayrollRegularFormDetailsComp'
+import PayrollRegularFormContent from './PayrollRegularFormContentComp'
 
 
 
-const PayrollTemplateCreate = observer(({ templateStore, employeeStore, dashboardMainStore }) => {
+const PayrollRegularCreate = observer(({ payrollRegularStore, employeeStore, dashboardMainStore }) => {
     
     const history = useHistory();
     const [page_loader, SetPageLoader] = useState(false);
@@ -25,7 +24,7 @@ const PayrollTemplateCreate = observer(({ templateStore, employeeStore, dashboar
 
     const handleResetForm = (e) =>{
         e.preventDefault()
-        templateStore.resetForm()
+        payrollRegularStore.resetForm()
     }
 
 
@@ -33,17 +32,17 @@ const PayrollTemplateCreate = observer(({ templateStore, employeeStore, dashboar
         e.preventDefault()
         SetPageLoader(true)
         // axios.post('api/template/', { 
-        //     name: templateStore.name, 
-        //     description: templateStore.description, 
-        //     process_date: templateStore.process_date, 
-        //     template_data: templateStore.template_data, 
+        //     name: payrollRegularStore.name, 
+        //     description: payrollRegularStore.description, 
+        //     process_date: payrollRegularStore.process_date, 
+        //     template_data: payrollRegularStore.template_data, 
         // }).then((response) => {
         //     eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
         //         message: "Template Successfully Created!", type: "inverse" 
         //     });
-        //     templateStore.fetch();
-        //     templateStore.setSelectedTemplate(response.data.id);
-        //     templateStore.resetForm()
+        //     payrollRegularStore.fetch();
+        //     payrollRegularStore.setSelectedTemplate(response.data.id);
+        //     payrollRegularStore.resetForm()
         //     if (is_save_another == 0){
         //         redirectBackToTemplateList()
         //     }
@@ -51,7 +50,7 @@ const PayrollTemplateCreate = observer(({ templateStore, employeeStore, dashboar
         // }).catch((error) => {
         //     if(error.response.status == 400){
         //         let field_errors = error.response.data;
-        //         templateStore.setErrorFields({
+        //         payrollRegularStore.setErrorFields({
         //             // Personal Details
         //             name: field_errors.name?.toString(), 
         //             description: field_errors.description?.toString(), 
@@ -79,8 +78,8 @@ const PayrollTemplateCreate = observer(({ templateStore, employeeStore, dashboar
                     <div className="page-header-title">
                         <i className="feather icon-user bg-c-blue"></i>
                         <div className="d-inline">
-                            <h5>Templates</h5>
-                            <span>Create a Template</span>
+                            <h5>Payroll Regular</h5>
+                            <span>Create Regular Payroll</span>
                         </div>
                     </div>
                 </div>
@@ -91,7 +90,7 @@ const PayrollTemplateCreate = observer(({ templateStore, employeeStore, dashboar
                                 <Link to="/"><i className="feather icon-home"></i></Link>
                             </li>
                             <li className="breadcrumb-item">
-                                <Link to="/payroll/templates">Templates</Link>
+                                <Link to="/payroll/payroll_regular">Payroll Regular</Link>
                             </li>
                             <li className="breadcrumb-item">
                                 Create
@@ -112,8 +111,8 @@ const PayrollTemplateCreate = observer(({ templateStore, employeeStore, dashboar
 
                                     <DivLoader type="Circles" loading={page_loader}/>
                                     <div className="card-header">
-                                        <h5>Create Template</h5>
-                                        <Link to="/payroll/templates" className="btn btn-primary btn-outline-primary float-right pt-2 pb-2">
+                                        <h5>Create Regular Payroll</h5>
+                                        <Link to="/payroll/payroll_regular" className="btn btn-primary btn-outline-primary float-right pt-2 pb-2">
                                             <i className="fa fa-arrow-left"></i> Back to List
                                         </Link>
                                     </div>
@@ -124,11 +123,11 @@ const PayrollTemplateCreate = observer(({ templateStore, employeeStore, dashboar
                                             {/* Template Details */}
                                             <div className="col-sm-12 mb-5">
                                                 <h4 className="sub-title">Template Details</h4>
-                                                <PayrollTemplateFormDetails payrollTemplateStore={payrollTemplateStore} />
+                                                <PayrollRegularFormDetails payrollRegularStore={payrollRegularStore} />
                                             </div>
                                             
                                             {/* Template Data */}
-                                            <PayrollTemplateFormContent payrollTemplateStore={payrollTemplateStore} employeeStore={employeeStore}/>
+                                            <PayrollRegularFormContent payrollRegularStore={payrollRegularStore} employeeStore={employeeStore}/>
 
                                         </div>
 
@@ -163,4 +162,4 @@ const PayrollTemplateCreate = observer(({ templateStore, employeeStore, dashboar
 });
 
 
-export default PayrollTemplateCreate
+export default PayrollRegularCreate

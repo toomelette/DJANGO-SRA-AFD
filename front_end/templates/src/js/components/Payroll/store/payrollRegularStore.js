@@ -1,8 +1,8 @@
 import { debounce } from 'lodash'
 import { makeAutoObservable, runInAction } from "mobx"
 
-class PayrollTemplateStore{
-
+class PayrollRegularStore{
+    
     //  list vars
     list = [];
     total_records = 0;
@@ -13,19 +13,19 @@ class PayrollTemplateStore{
     page_size = 10;
     page_limit = 0;
 	delaySearch = debounce(() => this.fetch(), 500);
-    selected_template = "";
+    selected_data = "";
     is_opened_form = 0;
 
     // form vars
-    template_id = "";
-    name = "";
-    description = "";
+    payroll_regular_id = "";
     process_date = "";
-    template_data = [];
+    description = "";
+    remarks = "";
+    payroll_regular_data = [];
     error_fields = {};
 
-    // form vars TEMPLATE CONTENT
-    td_employee_id = "";
+    // form vars PayrollRegular Content
+    prd_employee_id = "";
 
 
 
@@ -37,7 +37,7 @@ class PayrollTemplateStore{
 
     // Actions
     fetch(){
-        axios.get('api/template', { 
+        axios.get('api/payroll_regular', { 
             params: { 
                 q: this.query, 
                 page_size: this.page_size, 
@@ -52,18 +52,18 @@ class PayrollTemplateStore{
         });
     }
 
-    retrieve(id){
-        axios.get('api/template/' + id)
-        .then((response) => {
-            runInAction(() => {
-                this.template_id = response.data.id;
-                // this.code = response.data.code;
-                // this.name = response.data.name;
-                // this.description = response.data.description;
-                this.elig_error_fields = {};
-            })
-        });
-    }   
+    // retrieve(id){
+    //     axios.get('api/payroll_regular/' + id)
+    //     .then((response) => {
+    //         runInAction(() => {
+    //             this.payroll_id = response.data.id;
+    //             // this.code = response.data.code;
+    //             // this.name = response.data.name;
+    //             // this.description = response.data.description;
+    //             this.elig_error_fields = {};
+    //         })
+    //     });
+    // }   
 
     handleSearch(e){
         e.preventDefault()
@@ -107,36 +107,36 @@ class PayrollTemplateStore{
 
 
 
-    // List Setters
+    // // List Setters
     setIsOpenedForm(is_opened_form){
         this.is_opened_form = is_opened_form;
     }
 
-    setSelectedDeduction(id){
-        this.selected_template = id;
+    setSelectedData(id){
+        this.selected_data = id;
     }
 
 
 
-    // Form Setters
+    // // Form Setters
     resetForm(){
-        this.template_id = "";
-        this.name = "";
-        this.description= "";
-        this.process_date= "";
-        this.error_fields= {};
+        this.payroll_regular_id = "";
+        this.description = "";
+        this.remarks = "";
+        this.process_date = "";
+        this.error_fields = {};
     }
 
-    setTemplateId(template_id){
-        this.template_id = template_id;
-    }
-
-    setName(name){
-        this.name = name;
+    setPayrollRegularId(payroll_regular_id){
+        this.payroll_regular_id = payroll_regular_id;
     }
 
     setDescription(description){
         this.description = description;
+    }
+
+    setRemarks(remarks){
+        this.remarks = remarks;
     }
 
     setProcessDate(process_date){
@@ -147,7 +147,7 @@ class PayrollTemplateStore{
         this.error_fields = ef;
     }
 
-    setTdEmployeeId(employee_id){
+    setPrdEmployeeId(employee_id){
         this.td_employee_id = employee_id;
     }
 
@@ -155,5 +155,5 @@ class PayrollTemplateStore{
 
 }
 
-const payrollTemplateStore = new PayrollTemplateStore()
-export default payrollTemplateStore
+const payrollRegularStore = new PayrollRegularStore()
+export default payrollRegularStore

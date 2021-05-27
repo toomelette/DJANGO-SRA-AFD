@@ -9,7 +9,7 @@ import DivLoader from '../Utils/DivLoaderComp'
 import { SelectInput } from '../Utils/Forms/DefaultInputs'
 
 
-const PayrollTemplateFormContent = observer(({ payrollTemplateStore, employeeStore}) => {
+const PayrollRegularTemplateFormContent = observer(({ payrollRegularStore, employeeStore}) => {
 
 
     const [page_loader, SetPageLoader] = useState(false);
@@ -79,7 +79,7 @@ const PayrollTemplateFormContent = observer(({ payrollTemplateStore, employeeSto
                 <div className="modal-content">
                     <DivLoader type="Circles" loading={page_loader}/>
                     <div className="modal-header">
-                        <h4 className="modal-title">Add Template Content</h4>
+                        <h4 className="modal-title">Add Regular Payroll Content</h4>
                         <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -92,7 +92,7 @@ const PayrollTemplateFormContent = observer(({ payrollTemplateStore, employeeSto
                             </button>
                             <p>
                                 <strong>Note!</strong>{" "}
-                                Please check the selected employee appointment information if it is updated before adding it into the template content.
+                                Please check the selected employee appointment information if it is updated before adding it into the regular payroll content.
                             </p>
                         </div>
 
@@ -100,11 +100,11 @@ const PayrollTemplateFormContent = observer(({ payrollTemplateStore, employeeSto
                             col="col-md-12"
                             name="employee"
                             label="Employee:"
-                            value={ payrollTemplateStore.td_employee_id }
+                            value={ payrollRegularStore.prd_employee_id }
                             isDisabled={ false }
                             options={ employeeStore.employee_options }
-                            onChange={ (value) => payrollTemplateStore.setTdEmployeeId(value) }
-                            errorField={ payrollTemplateStore.error_fields.td_employee_id }
+                            onChange={ (value) => payrollRegularStore.setTdEmployeeId(value) }
+                            errorField={ payrollRegularStore.error_fields.td_employee_id }
                         />
 
                     </div>
@@ -132,7 +132,7 @@ const PayrollTemplateFormContent = observer(({ payrollTemplateStore, employeeSto
                         </button>
                     </div>
                     <div className="modal-body">
-                        <EmployeeFormEducationalBackground payrollTemplateStore={payrollTemplateStore}/>
+                        <EmployeeFormEducationalBackground payrollRegularStore={payrollRegularStore}/>
                     </div>
                     <div className="modal-footer">
                         <button type="button" className="btn btn-default waves-effect" data-dismiss="modal">
@@ -174,4 +174,4 @@ const PayrollTemplateFormContent = observer(({ payrollTemplateStore, employeeSto
 });
 
 
-export default PayrollTemplateFormContent
+export default PayrollRegularTemplateFormContent

@@ -9,21 +9,21 @@ from employee.models import Employee, Station
 from payroll.models import (
     Deductions, 
     Allowances, 
-    Template, 
-    TemplateData, 
-    TemplateDataDeductions, Mock
+    PayrollRegular, 
+    PayrollRegularData, 
+    Mock
 )
 from .pagination import (
     DeductionListPagination, 
     AllowanceListPagination, 
-    TemplateListPagination,
-    TemplateDataListPagination
+    PayrollRegularListPagination,
+    PayrollRegularDataListPagination
 )
 from .serializers import (
     DeductionSerializer, 
     AllowanceSerializer, 
-    TemplateSerializer, 
-    TemplateDataSerializer
+    PayrollRegularSerializer,
+    PayrollRegularDataSerializer
 )
 
 
@@ -113,7 +113,6 @@ class AllowanceViewSet(viewsets.ModelViewSet):
             allowance.code = serializer.data['code']
             allowance.name = serializer.data['name']
             allowance.description = serializer.data['description']
-            allowance.amount = serializer.data['amount']
             allowance.created_by_id = request.user.id
             allowance.updated_by_id = request.user.id
             allowance.save()
@@ -136,7 +135,6 @@ class AllowanceViewSet(viewsets.ModelViewSet):
             allowance.code = serializer.data['code']
             allowance.name = serializer.data['name']
             allowance.description = serializer.data['description']
-            allowance.amount = serializer.data['amount']
             allowance.updated_by_id = request.user.id
             allowance.save()
             return Response({'id':allowance.id}, 201)
@@ -154,10 +152,10 @@ class AllowanceViewSet(viewsets.ModelViewSet):
 
 
 
-class TemplateViewSet(viewsets.ModelViewSet):
-    queryset = Template.objects.all()
-    serializer_class = TemplateSerializer
-    pagination_class = TemplateListPagination
+class PayrollRegularViewSet(viewsets.ModelViewSet):
+    queryset = PayrollRegular.objects.all()
+    serializer_class = PayrollRegularSerializer
+    pagination_class = PayrollRegularListPagination
 
     def list(self, request):
         search = request.GET.get('q', None)
@@ -172,30 +170,30 @@ class TemplateViewSet(viewsets.ModelViewSet):
 
 
 
-class TemplateDataViewSet(viewsets.ModelViewSet):
-    queryset = TemplateData.objects.all()
-    serializer_class = TemplateDataSerializer
-    pagination_class = TemplateDataListPagination
+# class PayrollRegularDataViewSet(viewsets.ModelViewSet):
+#     queryset = PayrollRegularData.objects.all()
+#     serializer_class = PayrollRegularDataSerializer
+#     pagination_class = PayrollRegularDataListPagination
 
-    def list(self, request):
-        template_id = request.GET.get('ti', None)
-        search = request.GET.get('q', None)
-        filter_conditions = Q()
-        if template_id:
-            filter_conditions.add(Q(template_id=template_id), Q.AND)
-        page = self.paginate_queryset(self.queryset.filter(filter_conditions).order_by('-updated_at'))
-        serializer = self.get_serializer(page, many=True)
-        return self.get_paginated_response(serializer.data)
+#     def list(self, request):
+#         template_id = request.GET.get('ti', None)
+#         search = request.GET.get('q', None)
+#         filter_conditions = Q()
+#         if template_id:
+#             filter_conditions.add(Q(template_id=template_id), Q.AND)
+#         page = self.paginate_queryset(self.queryset.filter(filter_conditions).order_by('-updated_at'))
+#         serializer = self.get_serializer(page, many=True)
+#         return self.get_paginated_response(serializer.data)
 
 
 
 # class TestViewSet(viewsets.ModelViewSet):
-#     queryset = TemplateData.objects.all()
-#     serializer_class = TemplateDataSerializer
-#     pagination_class = TemplateDataListPagination
+#     queryset = PayrollData.objects.all()
+#     serializer_class = PayrollDataSerializer
+#     pagination_class = PayrollDataListPagination
 
 #     def list(self, request):
-#         td = TemplateData.objects.all()
+#         td = PayrollData.objects.all()
 #         st = Station.objects.all()
 #         for data_td in td:
 #             try:

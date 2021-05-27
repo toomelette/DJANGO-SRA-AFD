@@ -1,7 +1,7 @@
 import { debounce } from 'lodash'
 import { makeAutoObservable, runInAction } from "mobx"
 
-class PayrollDeductionStore{
+class DeductionStore{
 
     //  list vars
     list = [];
@@ -147,5 +147,5 @@ class PayrollDeductionStore{
 
 }
 
-const payrollDeductionStore = new PayrollDeductionStore()
-export default payrollDeductionStore
+const deductionStore = new DeductionStore()
+export default deductionStore

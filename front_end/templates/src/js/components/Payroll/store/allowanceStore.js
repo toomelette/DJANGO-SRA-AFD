@@ -1,7 +1,7 @@
 import { debounce } from 'lodash'
 import { makeAutoObservable, runInAction } from "mobx"
 
-class PayrollAllowanceStore{
+class AllowanceStore{
 
     //  list vars
     list = [];
@@ -21,7 +21,6 @@ class PayrollAllowanceStore{
     code = "";
     name = "";
     description="";
-    amount = "";
     error_fields={};
 
 
@@ -57,7 +56,6 @@ class PayrollAllowanceStore{
                 this.code = response.data.code;
                 this.name = response.data.name;
                 this.description = response.data.description;
-                this.amount = response.data.amount;
                 this.elig_error_fields = {};
             })
         });
@@ -122,7 +120,6 @@ class PayrollAllowanceStore{
         this.code = "";
         this.name = "";
         this.description= "";
-        this.amount= "";
         this.error_fields= {};
     }
 
@@ -142,10 +139,6 @@ class PayrollAllowanceStore{
         this.description = description;
     }
 
-    setAmount(amount){
-        this.amount = amount;
-    }
-
 
     setErrorFields(ef){
         this.error_fields = ef;
@@ -155,5 +148,5 @@ class PayrollAllowanceStore{
 
 }
 
-const payrollAllowanceStore = new PayrollAllowanceStore()
-export default payrollAllowanceStore
+const allowanceStore = new AllowanceStore()
+export default allowanceStore

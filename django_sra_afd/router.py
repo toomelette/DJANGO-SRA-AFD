@@ -10,8 +10,7 @@ from employee.api.viewsets import (
 from payroll.api.viewsets import (
     DeductionViewSet, 
     AllowanceViewSet, 
-    TemplateViewSet, 
-    TemplateDataViewSet, 
+    PayrollRegularViewSet
     #TestViewSet
 )
 
@@ -32,8 +31,7 @@ router.register('employee_elig', EmployeeEligibilityViewSet, basename='employee_
 #payroll
 router.register('deduction', DeductionViewSet, basename='deduction')
 router.register('allowance', AllowanceViewSet, basename='allowance')
-router.register('template', TemplateViewSet, basename='template')
-router.register('template_data', TemplateDataViewSet, basename='template_data')
+router.register('payroll_regular', PayrollRegularViewSet, basename='payroll_regular')
 
 #router.register('test', TestViewSet, basename='test')
 

@@ -6,13 +6,14 @@ import { observer } from 'mobx-react'
 import { Link } from "react-router-dom"
 import { TableHeaderDefault } from '../Utils/Table/TableHeaders'
 import { TableFooterDefault } from '../Utils/Table/TableFooters'
+import { defaultValueSetter } from '../Utils/DataFilters'
 import eventBus from '../Utils/EventBus'
 import DivLoader from '../Utils/DivLoaderComp'
 
-import PayrollDeductionForm from './PayrollDeductionFormComp'
+import PayrollRegularAllowanceForm from './AllowanceFormComp'
 
 
-const PayrollDeductionList = observer(({ payrollDeductionStore, dashboardMainStore }) => {
+const PayrollRegularAllowanceList = observer(({ allowanceStore, dashboardMainStore }) => {
 
     const [page_loader, SetPageLoader] = useState(false);
 
@@ -20,7 +21,7 @@ const PayrollDeductionList = observer(({ payrollDeductionStore, dashboardMainSto
     useEffect(()=>{
         let is_mounted = true;
         if(is_mounted = true){
-            payrollDeductionStore.fetch()
+            allowanceStore.fetch()
         }
         return () => { is_mounted = false; } 
     }, [])
@@ -28,33 +29,33 @@ const PayrollDeductionList = observer(({ payrollDeductionStore, dashboardMainSto
 
     const handleCreateButtonClick = (e) => {
         e.preventDefault();
-        if(payrollDeductionStore.is_opened_form === 1){
-            payrollDeductionStore.resetForm()
+        if(allowanceStore.is_opened_form === 1){
+            allowanceStore.resetForm()
         }
-        payrollDeductionStore.setIsOpenedForm(0)
-        $("#deduction-create-modal").modal('toggle')
+        allowanceStore.setIsOpenedForm(0)
+        $("#allowance-create-modal").modal('toggle')
     }
 
 
     const handleCreateSubmit = (e) => {
         e.preventDefault();
         SetPageLoader(true);
-        axios.post('api/deduction/', {
-            code: payrollDeductionStore.code, 
-            name: payrollDeductionStore.name, 
-            description: payrollDeductionStore.description, 
+        axios.post('api/allowance/', {
+            code: allowanceStore.code, 
+            name: allowanceStore.name, 
+            description: allowanceStore.description, 
         }).then((response) => {
             eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
-                message: "Deduction Successfully Created!", type: "inverse" 
+                message: "Allowance Successfully Created!", type: "inverse" 
             });
-            payrollDeductionStore.fetch()
-            payrollDeductionStore.setSelectedDeduction(response.data.id)
-            payrollDeductionStore.resetForm()
+            allowanceStore.fetch()
+            allowanceStore.setSelectedAllowance(response.data.id)
+            allowanceStore.resetForm()
             SetPageLoader(false);
         }).catch((error) => {
             if(error.response.status == 400){
                 let field_errors = error.response.data;
-                payrollDeductionStore.setErrorFields({
+                allowanceStore.setErrorFields({
                     code: field_errors.code?.toString(), 
                     name: field_errors.name?.toString(), 
                     description: field_errors.description?.toString(),
@@ -73,32 +74,32 @@ const PayrollDeductionList = observer(({ payrollDeductionStore, dashboardMainSto
 
     const handleOpenEditModal = (e, id) => {
         e.preventDefault();
-        payrollDeductionStore.resetForm()
-        payrollDeductionStore.setIsOpenedForm(1)
-        payrollDeductionStore.retrieve(id)
-        $("#deduction-edit-modal").modal('toggle')
+        allowanceStore.resetForm()
+        allowanceStore.setIsOpenedForm(1)
+        allowanceStore.retrieve(id)
+        $("#allowance-edit-modal").modal('toggle')
     }
 
 
     const handleUpdateSubmit = (e) => {
         e.preventDefault();
         SetPageLoader(true);
-        axios.put('api/deduction/'+ payrollDeductionStore.deduction_id +'/', {
-            code: payrollDeductionStore.code, 
-            name: payrollDeductionStore.name, 
-            description: payrollDeductionStore.description, 
+        axios.put('api/allowance/'+ allowanceStore.allowance_id +'/', {
+            code: allowanceStore.code, 
+            name: allowanceStore.name, 
+            description: allowanceStore.description, 
         }).then((response) => {
             eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
-                message: "Deduction Successfully Updated!", type: "inverse" 
+                message: "Allowance Successfully Updated!", type: "inverse" 
             });
-            payrollDeductionStore.fetch()
-            payrollDeductionStore.setSelectedDeduction(response.data.id)
+            allowanceStore.fetch()
+            allowanceStore.setSelectedAllowance(response.data.id)
             SetPageLoader(false);
-            $("#deduction-edit-modal").modal('hide');
+            $("#allowance-edit-modal").modal('hide');
         }).catch((error) => {
             if(error.response.status == 400){
                 let field_errors = error.response.data;
-                payrollDeductionStore.setErrorFields({
+                allowanceStore.setErrorFields({
                     code: field_errors.code?.toString(), 
                     name: field_errors.name?.toString(), 
                     description: field_errors.description?.toString(),
@@ -117,22 +118,22 @@ const PayrollDeductionList = observer(({ payrollDeductionStore, dashboardMainSto
 
     const handleOpenDeleteModal = (e, id) => {
         e.preventDefault();
-        payrollDeductionStore.setDeductionId(id)
-        $("#deduction-delete-modal").modal('toggle')
+        allowanceStore.setAllowanceId(id)
+        $("#allowance-delete-modal").modal('toggle')
     }
 
 
     const handleDeleteSubmit = (e) => {
         e.preventDefault();
         SetPageLoader(true);
-        axios.delete('api/deduction/'+ payrollDeductionStore.deduction_id +'/')
+        axios.delete('api/allowance/'+ allowanceStore.allowance_id +'/')
         .then((response) => {
             eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
-                message: "Deduction Successfully Removed!", type: "inverse" 
+                message: "Allowance Successfully Removed!", type: "inverse" 
             });
-            payrollDeductionStore.fetch()
+            allowanceStore.fetch()
             SetPageLoader(false);
-            $("#deduction-delete-modal").modal('hide');
+            $("#allowance-delete-modal").modal('hide');
         }).catch((err) => {
             if(error.response.status == 404 || error.response.status == 500){
                 eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
@@ -153,8 +154,8 @@ const PayrollDeductionList = observer(({ payrollDeductionStore, dashboardMainSto
                     <div className="page-header-title">
                         <i className="feather icon-user bg-c-blue"></i>
                         <div className="d-inline">
-                            <h5>Deductions</h5>
-                            <span>Manage Deduction Parameters which are related in generating payroll.</span>
+                            <h5>Allowances</h5>
+                            <span>Manage Allowance Parameters which are related in generating payroll.</span>
                         </div>
                     </div>
                 </div>
@@ -165,7 +166,7 @@ const PayrollDeductionList = observer(({ payrollDeductionStore, dashboardMainSto
                                 <Link to="/"><i className="feather icon-home"></i></Link>
                             </li>
                             <li className="breadcrumb-item">
-                                Deductions
+                                Allowances
                             </li>
                         </ul>
                     </div>
@@ -185,22 +186,22 @@ const PayrollDeductionList = observer(({ payrollDeductionStore, dashboardMainSto
                                     {/* Table Header */}
                                     <div className="card-header"> 
                                         <TableHeaderDefault
-                                            searchInputValue={ payrollDeductionStore.query }
-                                            searchInputHandler={ e => payrollDeductionStore.handleSearch(e ) }
-                                            refreshButtonClickHandler={ (e) => payrollDeductionStore.handleRefreshClick(e) }
+                                            searchInputValue={ allowanceStore.query }
+                                            searchInputHandler={ e => allowanceStore.handleSearch(e ) }
+                                            refreshButtonClickHandler={ (e) => allowanceStore.handleRefreshClick(e) }
                                             filterButton={false}
                                             sortButton={false}
                                             deleteButton={false}
-                                            createButton={ dashboardMainStore.checkIfSubrouteExist('payroll-deductions-create') }
+                                            createButton={ dashboardMainStore.checkIfSubrouteExist('payroll-allowance-create') }
                                             createButtonClickHandler={ handleCreateButtonClick }
                                             entriesSelect={true}
-                                            entriesSelectPageSize={ payrollDeductionStore.page_size }
-                                            entriesSelectChangeHandler={ (e) => payrollDeductionStore.handlePageSizeClick(e) }
-                                            paginationPagePrev={ payrollDeductionStore.page_prev }
-                                            paginationPageNext={ payrollDeductionStore.page_next }
-                                            paginationPageLimit={ payrollDeductionStore.page_limit }
-                                            paginationPrevClickHandler={ (e) => payrollDeductionStore.handlePaginationClick(e, payrollDeductionStore.page_prev) }
-                                            paginationNextClickHandler={ (e) => payrollDeductionStore.handlePaginationClick(e, payrollDeductionStore.page_next) }
+                                            entriesSelectPageSize={ allowanceStore.page_size }
+                                            entriesSelectChangeHandler={ (e) => allowanceStore.handlePageSizeClick(e) }
+                                            paginationPagePrev={ allowanceStore.page_prev }
+                                            paginationPageNext={ allowanceStore.page_next }
+                                            paginationPageLimit={ allowanceStore.page_limit }
+                                            paginationPrevClickHandler={ (e) => allowanceStore.handlePaginationClick(e, allowanceStore.page_prev) }
+                                            paginationNextClickHandler={ (e) => allowanceStore.handlePaginationClick(e, allowanceStore.page_next) }
                                         /> 
                                     </div>
 
@@ -217,27 +218,27 @@ const PayrollDeductionList = observer(({ payrollDeductionStore, dashboardMainSto
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                { payrollDeductionStore.list.map((val, key) => {
+                                                { allowanceStore.list.map((val, key) => {
                                                 return (
-                                                    <tr key={key} className={ val.id == payrollDeductionStore.selected_deduction ? "table-info" : "" }>
+                                                    <tr key={key} className={ val.id == allowanceStore.selected_allowance ? "table-info" : "" }>
                                                         <td className="align-middle">{ val.code }</td>
                                                         <td className="align-middle">{ val.name }</td>
                                                         <td className="align-middle">{ val.description }</td>
                                                         <td className="align-middle">
-                                                            { dashboardMainStore.checkIfSubrouteExist('payroll-deductions-edit') ? 
-                                                                (
-                                                                    <a href="" onClick={ e => handleOpenEditModal(e, val.id) }>
-                                                                        <i className="feather icon-edit f-w-1000 f-18 m-r-15 text-c-blue"></i>
-                                                                    </a>
-                                                                ) : <></>
-                                                            }
-                                                            { dashboardMainStore.checkIfSubrouteExist('payroll-deductions-delete') ? 
-                                                                (
-                                                                    <a href="" onClick={ e => handleOpenDeleteModal(e, val.id) }>
-                                                                        <i className="feather icon-trash-2 f-w-1000 f-18 text-c-red"></i>
-                                                                    </a>
-                                                                ) : <></>
-                                                            }
+                                                        { dashboardMainStore.checkIfSubrouteExist('payroll-allowance-edit') ? 
+                                                            (
+                                                                <a href="" onClick={ e => handleOpenEditModal(e, val.id) }>
+                                                                    <i className="feather icon-edit f-w-1000 f-18 m-r-15 text-c-blue"></i>
+                                                                </a>
+                                                            ) : <></>
+                                                        }
+                                                        { dashboardMainStore.checkIfSubrouteExist('payroll-allowance-delete') ? 
+                                                            (
+                                                                <a href="" onClick={ e => handleOpenDeleteModal(e, val.id) }>
+                                                                    <i className="feather icon-trash-2 f-w-1000 f-18 text-c-red"></i>
+                                                                </a>
+                                                            ) : <></>
+                                                        }   
                                                         </td>
                                                     </tr>
                                                 )
@@ -250,15 +251,15 @@ const PayrollDeductionList = observer(({ payrollDeductionStore, dashboardMainSto
                                     {/* Table Footer */}
                                     <div className="card-footer">
                                         <TableFooterDefault
-                                            counterPageSize={ payrollDeductionStore.page_size }
-                                            counterPageCurrent={ payrollDeductionStore.page_current }
-                                            counterPageLimit={ payrollDeductionStore.page_limit }
-                                            counterTotalRecords={ payrollDeductionStore.total_records }
-                                            paginationPagePrev={ payrollDeductionStore.page_prev }
-                                            paginationPageNext={ payrollDeductionStore.page_next }
-                                            paginationPageLimit={ payrollDeductionStore.page_limit }
-                                            paginationPrevClickHandler={ (e) => payrollDeductionStore.handlePaginationClick(e, payrollDeductionStore.page_prev) }
-                                            paginationNextClickHandler={ (e) => payrollDeductionStore.handlePaginationClick(e, payrollDeductionStore.page_next) }  
+                                            counterPageSize={ allowanceStore.page_size }
+                                            counterPageCurrent={ allowanceStore.page_current }
+                                            counterPageLimit={ allowanceStore.page_limit }
+                                            counterTotalRecords={ allowanceStore.total_records }
+                                            paginationPagePrev={ allowanceStore.page_prev }
+                                            paginationPageNext={ allowanceStore.page_next }
+                                            paginationPageLimit={ allowanceStore.page_limit }
+                                            paginationPrevClickHandler={ (e) => allowanceStore.handlePaginationClick(e, allowanceStore.page_prev) }
+                                            paginationNextClickHandler={ (e) => allowanceStore.handlePaginationClick(e, allowanceStore.page_next) }  
                                         />
                                     </div>
 
@@ -271,18 +272,18 @@ const PayrollDeductionList = observer(({ payrollDeductionStore, dashboardMainSto
         </div>
 
         {/* CREATE MODAL */}
-        <div className="modal" id="deduction-create-modal" role="dialog">
+        <div className="modal" id="allowance-create-modal" role="dialog">
             <div className="modal-dialog modal-lg" role="document">
                 <div className="modal-content">
                     <DivLoader type="Circles" loading={page_loader}/>
                     <div className="modal-header">
-                        <h4 className="modal-title">Add Deduction</h4>
+                        <h4 className="modal-title">Add Allowance</h4>
                         <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div className="modal-body">
-                        <PayrollDeductionForm payrollDeductionStore={ payrollDeductionStore }/>
+                        <PayrollRegularAllowanceForm allowanceStore={ allowanceStore }/>
                     </div>
                     <div className="modal-footer">
                         <button type="button" className="btn btn-default waves-effect" data-dismiss="modal">
@@ -297,18 +298,18 @@ const PayrollDeductionList = observer(({ payrollDeductionStore, dashboardMainSto
         </div>
 
         {/* EDIT MODAL */}
-        <div className="modal" id="deduction-edit-modal" role="dialog">
+        <div className="modal" id="allowance-edit-modal" role="dialog">
             <div className="modal-dialog modal-lg" role="document">
                 <div className="modal-content">
                     <DivLoader type="Circles" loading={page_loader}/>
                     <div className="modal-header">
-                        <h4 className="modal-title">Edit Deduction</h4>
+                        <h4 className="modal-title">Edit Allowance</h4>
                         <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div className="modal-body">
-                        <PayrollDeductionForm payrollDeductionStore={ payrollDeductionStore }/>
+                        <PayrollRegularAllowanceForm allowanceStore={ allowanceStore }/>
                     </div>
                     <div className="modal-footer">
                         <button type="button" className="btn btn-default waves-effect" data-dismiss="modal">
@@ -323,11 +324,11 @@ const PayrollDeductionList = observer(({ payrollDeductionStore, dashboardMainSto
         </div>
                                                                     
         {/* DELETE MODAL */}
-        <div className="modal" id="deduction-delete-modal" role="dialog">
+        <div className="modal" id="allowance-delete-modal" role="dialog">
             <div className="modal-dialog modal-lg" role="document">
                 <div className="modal-content">
                     <div className="modal-header">
-                        <h4 className="modal-title">Delete Deduction</h4>
+                        <h4 className="modal-title">Delete Allowance</h4>
                         <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -352,4 +353,4 @@ const PayrollDeductionList = observer(({ payrollDeductionStore, dashboardMainSto
 });
 
 
-export default PayrollDeductionList
+export default PayrollRegularAllowanceList

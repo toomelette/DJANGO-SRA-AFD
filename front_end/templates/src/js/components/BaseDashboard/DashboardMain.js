@@ -21,7 +21,6 @@ import dashboardMainStore from './store/DashboardMainStore'
 import userStore from '../User/store/UserStore'
 import menuStore from '../Menu/store/MenuStore'
 import employeeStore from '../Employee/store/EmployeeStore'
-import payrollStore from '../Payroll/store/payrollStore'
 
 const DashboardMain = observer(({ dashboardMainStore }) => {
 
@@ -178,7 +177,7 @@ const DashboardMain = observer(({ dashboardMainStore }) => {
                             {/* Payroll */}
                             <Route path="/payroll">
                                 { dashboardMainStore.checkIfRouteExist('payroll-module') ?
-                                    <PayrollMain payrollStore={payrollStore} employeeStore={employeeStore} dashboardMainStore={dashboardMainStore}/>: <NotFoundPage/>
+                                    <PayrollMain employeeStore={employeeStore} dashboardMainStore={dashboardMainStore}/>: <NotFoundPage/>
                                 }
                             </Route>
     
