@@ -36,7 +36,7 @@ class PayrollRegular(models.Model):
 class PayrollRegularData(models.Model):
     PAYGROUP_TYPES = ( (0,'N/A'), (1,'Pay with ATM'), (2,'Pay with Check'), (3,'COS') )
     STATUS_TYPES = ( (0,'N/A'), (1,'REGULAR'), (2,'COS') )
-    payroll_regular = models.ForeignKey(PayrollRegular, db_column="payroll_regular_id", related_name='payrollRegularData_payroll', on_delete=models.CASCADE)
+    payroll_regular = models.ForeignKey(PayrollRegular, db_column="payroll_regular_id", related_name='payrollRegularData_payrollRegular', on_delete=models.CASCADE)
     employee = models.ForeignKey(Employee, db_column="employee_id", related_name='payrollRegularData_employee', on_delete=models.PROTECT)
     station = models.ForeignKey(Station, db_column="station_id", related_name='payrollRegularData_station', on_delete=models.PROTECT)
     employee_no = models.CharField(max_length=20, default="")

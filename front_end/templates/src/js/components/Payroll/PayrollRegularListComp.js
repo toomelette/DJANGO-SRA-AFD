@@ -6,12 +6,15 @@ import { observer } from 'mobx-react'
 import { Link, useHistory } from "react-router-dom"
 import { TableHeaderDefault } from '../Utils/Table/TableHeaders'
 import { TableFooterDefault } from '../Utils/Table/TableFooters'
+import DivLoader from '../Utils/DivLoaderComp'
+import eventBus from '../Utils/EventBus'
 
 
 const PayrollRegularList = observer(({ payrollRegularStore, dashboardMainStore }) => {
 
     const history = useHistory();
     const [page_loader, SetPageLoader] = useState(false);
+    const [is_create_generate, SetIsCreateGenerate] = useState(true);
 
 
     useEffect(()=>{
@@ -30,13 +33,49 @@ const PayrollRegularList = observer(({ payrollRegularStore, dashboardMainStore }
 
     const handleCreateButtonClick = (e) => {
         e.preventDefault();
-        if(payrollRegularStore.is_opened_form === 1){
-            payrollRegularStore.resetForm()
-        }
-        payrollRegularStore.setIsOpenedForm(0)
-        redirectToTemplateCreate()
+        $('#create-select-method').modal('toggle')
+        // if(payrollRegularStore.is_opened_form === 1){
+        //     payrollRegularStore.resetForm()
+        // }
+        // payrollRegularStore.setIsOpenedForm(0)
+        // redirectToTemplateCreate()
     }
 
+
+    const handleCreateSelectMethodSubmit = (e) => {
+        e.preventDefault()
+        $('#create-select-method').modal('hide')
+        eventBus.dispatch("SHOW_FULLPAGE_LOADER", {
+             is_loading: true, is_dashboard: true 
+        })
+        if(is_create_generate === true){
+            axios.post('api/payroll_regular/create_generate_from_last/')
+            .then((response) => {
+                console.log(response)
+                eventBus.dispatch("SHOW_FULLPAGE_LOADER", { 
+                    is_loading: false, is_dashboard: true 
+                })
+            }).catch((error) => {
+                if(error.response.status == 404 || error.response.status == 500){
+                    eventBus.dispatch("SHOW_TOAST_NOTIFICATION", { 
+                        message: "Error Occured!", type: "danger" 
+                    })
+                    eventBus.dispatch("SHOW_FULLPAGE_LOADER", { 
+                        is_loading: false, is_dashboard: true 
+                    })
+                }
+            });
+        }else{
+            eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
+                message: "Invalid Method!", type: "danger" 
+            })
+            eventBus.dispatch("SHOW_FULLPAGE_LOADER", { 
+                is_loading: false, is_dashboard: true 
+            })
+        }
+    }
+
+    
     return (
 
     <div className="pcoded-content">
@@ -113,9 +152,9 @@ const PayrollRegularList = observer(({ payrollRegularStore, dashboardMainStore }
                                                 { payrollRegularStore.list.map((val, key) => {
                                                     return (
                                                         <tr key={key} className={ val.id == payrollRegularStore.selected_data ? "table-info" : "" }>
-                                                            <td className="align-middle">{ val.name }</td>
-                                                            <td className="align-middle">{ val.description }</td>
                                                             <td className="align-middle">{ moment(val.process_date).format("MMM D, YYYY") }</td>
+                                                            <td className="align-middle">{ val.description }</td>
+                                                            <td className="align-middle">{ val.remarks }</td>
                                                         </tr>
                                                     )
                                                 }) }
@@ -151,6 +190,60 @@ const PayrollRegularList = observer(({ payrollRegularStore, dashboardMainStore }
                 </div>
             </div>
         </div>
+
+        
+        {/* SELECT CREATE METHOD MODAL */}
+        <div className="modal" id="create-select-method" role="dialog">
+            <div className="modal-dialog modal-lg" role="document">
+                <div className="modal-content">
+                    <DivLoader type="Circles" loading={page_loader}/>
+                    <div className="modal-header">
+                        <h4 className="modal-title">Select method</h4>
+                        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div className="modal-body">
+                        <div className="row">
+                            <div className="col-md-12">
+                                <div className="form-group row">
+                                    <label className="col-sm-12 col-form-label">Method:</label>
+                                    <div className="col-sm-12 form-radio">
+                                        <div className="radio">
+                                            <label>
+                                                <input type="radio" 
+                                                    value={ true } 
+                                                    name="is_create_generate" 
+                                                    onChange={ e => SetIsCreateGenerate(e.target.value) }
+                                                    defaultChecked={ is_create_generate === true }/>
+                                                <i className="helper"></i> Generate from Latest Payroll
+                                            </label>
+                                            <label>
+                                                <input type="radio" 
+                                                    value={ false } 
+                                                    name="is_create_generate" 
+                                                    onChange={ e => SetIsCreateGenerate(e.target.value) }
+                                                    defaultChecked={ is_create_generate === false }/>
+                                                <i className="helper"></i> Create Custom Payroll
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="modal-footer">
+                        <button type="button" className="btn btn-default waves-effect" data-dismiss="modal">
+                            Close
+                        </button>
+                        <button type="button" className="btn btn-primary waves-effect waves-light" onClick={ handleCreateSelectMethodSubmit }>
+                            Submit
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
     </div>
 

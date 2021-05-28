@@ -62,5 +62,5 @@ class PayrollRegularDataSerializer(serializers.ModelSerializer):
 class PayrollRegularSerializer(serializers.ModelSerializer): 
      class Meta:
           model = PayrollRegular
-          fields = ('id', 'name', 'description', 'process_date', 'updated_at')
+          fields = ('id', 'description', 'remarks', 'process_date', 'updated_at')
           read_only_fields = ('id',)

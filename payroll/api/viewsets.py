@@ -162,11 +162,21 @@ class PayrollRegularViewSet(viewsets.ModelViewSet):
         filter_conditions = Q()
         if search:
             filter_conditions.add(
-                Q(name__icontains=search) | Q(description__icontains=search) | Q(process_date__icontains=search), Q.AND
+                Q(description__icontains=search) | Q(remarks__icontains=search) | Q(process_date__icontains=search), Q.AND
             )
         page = self.paginate_queryset(self.queryset.filter(filter_conditions).order_by('-updated_at'))
         serializer = self.get_serializer(page, many=True)
         return self.get_paginated_response(serializer.data)
+
+
+    @action(methods=['post'], detail=False)
+    def create_generate_from_last(self, request):
+        payroll_regular_latest = self.queryset.latest('created_by')
+        if payroll_regular_latest.payrollRegularData_payrollRegular:
+            for data in payroll_regular_latest.payrollRegularData_payrollRegular.all():
+                print(data.fullname)
+
+        return Response({"status":"success!!!"}, 200)
 
 
 
