@@ -10,8 +10,8 @@ from employee.api.viewsets import (
 from payroll.api.viewsets import (
     DeductionViewSet, 
     AllowanceViewSet, 
-    PayrollRegularViewSet
-    #TestViewSet
+    PayrollRegularViewSet,
+    # TestViewSet
 )
 
 router = DefaultRouter()
@@ -33,6 +33,6 @@ router.register('deduction', DeductionViewSet, basename='deduction')
 router.register('allowance', AllowanceViewSet, basename='allowance')
 router.register('payroll_regular', PayrollRegularViewSet, basename='payroll_regular')
 
-#router.register('test', TestViewSet, basename='test')
+# router.register('test', TestViewSet, basename='test')
 
 urlpatterns = router.urls

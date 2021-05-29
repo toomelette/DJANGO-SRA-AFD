@@ -51,10 +51,10 @@ const PayrollRegularList = observer(({ payrollRegularStore, dashboardMainStore }
         if(is_create_generate === true){
             axios.post('api/payroll_regular/create_generate_from_last/')
             .then((response) => {
-                console.log(response)
                 eventBus.dispatch("SHOW_FULLPAGE_LOADER", { 
                     is_loading: false, is_dashboard: true 
                 })
+                
             }).catch((error) => {
                 if(error.response.status == 404 || error.response.status == 500){
                     eventBus.dispatch("SHOW_TOAST_NOTIFICATION", { 

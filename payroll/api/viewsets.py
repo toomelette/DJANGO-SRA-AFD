@@ -1,4 +1,5 @@
 import json
+import datetime
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets
@@ -11,6 +12,7 @@ from payroll.models import (
     Allowances, 
     PayrollRegular, 
     PayrollRegularData, 
+    PayrollRegularDataDeductions,
     Mock
 )
 from .pagination import (
@@ -171,10 +173,56 @@ class PayrollRegularViewSet(viewsets.ModelViewSet):
 
     @action(methods=['post'], detail=False)
     def create_generate_from_last(self, request):
+        
+        # Store Payroll Regular
         payroll_regular_latest = self.queryset.latest('created_by')
+        payroll_regular_obj = PayrollRegular()
+        payroll_regular_obj.process_date = datetime.date.today()
+        payroll_regular_obj.description = payroll_regular_latest.description
+        payroll_regular_obj.remarks = payroll_regular_latest.remarks
+        payroll_regular_obj.created_by_id = request.user.id
+        payroll_regular_obj.updated_by_id = request.user.id
+        payroll_regular_obj.save()
+
+        # Store Payroll Regular Data
         if payroll_regular_latest.payrollRegularData_payrollRegular:
             for data in payroll_regular_latest.payrollRegularData_payrollRegular.all():
-                print(data.fullname)
+                payroll_regular_data_obj = PayrollRegularData()
+                payroll_regular_data_obj.payroll_regular = payroll_regular_obj
+                payroll_regular_data_obj.employee = data.employee
+                payroll_regular_data_obj.station = data.station
+                payroll_regular_data_obj.employee_no = data.employee_no
+                payroll_regular_data_obj.station_no = data.station_no
+                payroll_regular_data_obj.paygroup = data.paygroup
+                payroll_regular_data_obj.fullname = data.fullname
+                payroll_regular_data_obj.position = data.position
+                payroll_regular_data_obj.salary_grade = data.salary_grade
+                payroll_regular_data_obj.step_increment = data.step_increment
+                payroll_regular_data_obj.monthly_salary = data.monthly_salary
+                payroll_regular_data_obj.plantilla_item = data.plantilla_item
+                payroll_regular_data_obj.status = data.status
+                payroll_regular_data_obj.is_atm = data.is_atm
+                payroll_regular_data_obj.atm_account_no = data.atm_account_no
+                payroll_regular_data_obj.tin = data.tin
+                payroll_regular_data_obj.gsis = data.gsis
+                payroll_regular_data_obj.philhealth = data.philhealth
+                payroll_regular_data_obj.pagibig = data.pagibig
+                payroll_regular_data_obj.sss = data.sss
+                payroll_regular_data_obj.created_by_id = request.user.id
+                payroll_regular_data_obj.updated_by_id = request.user.id
+                payroll_regular_data_obj.save()
+
+                # Store Payroll Regular Data Deductions
+                if data.payrollRegularDataDeduc_payrollRegularData: 
+                    for data_deduc in data.payrollRegularDataDeduc_payrollRegularData.all():
+                        payroll_regular_data_deduc_obj = PayrollRegularDataDeductions()
+                        payroll_regular_data_deduc_obj.payroll_regular_data = payroll_regular_data_obj
+                        payroll_regular_data_deduc_obj.deduction = data_deduc.deduction
+                        payroll_regular_data_deduc_obj.code = data_deduc.code
+                        payroll_regular_data_deduc_obj.name = data_deduc.name
+                        payroll_regular_data_deduc_obj.description = data_deduc.description
+                        payroll_regular_data_deduc_obj.amount = data_deduc.amount
+                        payroll_regular_data_deduc_obj.save()
 
         return Response({"status":"success!!!"}, 200)
 
@@ -186,11 +234,11 @@ class PayrollRegularViewSet(viewsets.ModelViewSet):
 #     pagination_class = PayrollRegularDataListPagination
 
 #     def list(self, request):
-#         template_id = request.GET.get('ti', None)
+#         payroll_id = request.GET.get('ti', None)
 #         search = request.GET.get('q', None)
 #         filter_conditions = Q()
-#         if template_id:
-#             filter_conditions.add(Q(template_id=template_id), Q.AND)
+#         if payroll_id:
+#             filter_conditions.add(Q(payroll_id=payroll_id), Q.AND)
 #         page = self.paginate_queryset(self.queryset.filter(filter_conditions).order_by('-updated_at'))
 #         serializer = self.get_serializer(page, many=True)
 #         return self.get_paginated_response(serializer.data)
@@ -198,21 +246,17 @@ class PayrollRegularViewSet(viewsets.ModelViewSet):
 
 
 # class TestViewSet(viewsets.ModelViewSet):
-#     queryset = PayrollData.objects.all()
-#     serializer_class = PayrollDataSerializer
-#     pagination_class = PayrollDataListPagination
+    
+#     prd = PayrollRegularData.objects.all()
+#     emp = Employee.objects.all()
 
-#     def list(self, request):
-#         td = PayrollData.objects.all()
-#         st = Station.objects.all()
-#         for data_td in td:
-#             try:
-#                 st_obj = st.get(station_id=data_td.station_no)
-#                 td_obj = td.get(id=data_td.id)
-#                 td_obj.station = st_obj
-#                 td_obj.save()
-#                 print(td_obj.fullname)
-#                 print(st_obj.name)
-#             except:
-#                 print('Error!!')
-#         return Response({'status':'Success!!'}, 200)
+#     for data_prd in prd:
+#         try:
+#             emp_obj = emp.get(employee_id=data_prd.employee_no)
+#             prd_obj = prd.get(id=data_prd.id)
+#             prd_obj.employee = emp_obj
+#             prd_obj.save()
+#             print(prd_obj.fullname)
+#             print(st_obj.name)
+#         except:
+#             print('Error!!')
