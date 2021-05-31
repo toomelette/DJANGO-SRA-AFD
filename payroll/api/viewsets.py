@@ -5,15 +5,18 @@ from django.shortcuts import get_object_or_404
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from django.core.cache import cache
 
 from employee.models import Employee, Station
 from payroll.models import (
     Deductions, 
-    Allowances, 
+    Allowances,
+    MockAllowance, 
     PayrollRegular, 
-    PayrollRegularData, 
+    PayrollRegularData,
+    PayrollRegularDataAllowances, 
     PayrollRegularDataDeductions,
-    Mock
+    MockDeductions,
 )
 from .pagination import (
     DeductionListPagination, 
@@ -173,58 +176,96 @@ class PayrollRegularViewSet(viewsets.ModelViewSet):
 
     @action(methods=['post'], detail=False)
     def create_generate_from_last(self, request):
-        
-        # Store Payroll Regular
-        payroll_regular_latest = self.queryset.latest('created_by')
-        payroll_regular_obj = PayrollRegular()
-        payroll_regular_obj.process_date = datetime.date.today()
-        payroll_regular_obj.description = payroll_regular_latest.description
-        payroll_regular_obj.remarks = payroll_regular_latest.remarks
-        payroll_regular_obj.created_by_id = request.user.id
-        payroll_regular_obj.updated_by_id = request.user.id
-        payroll_regular_obj.save()
+        payroll_regular_latest_cache = cache.keys('payroll_regular:latest')
 
-        # Store Payroll Regular Data
-        if payroll_regular_latest.payrollRegularData_payrollRegular:
-            for data in payroll_regular_latest.payrollRegularData_payrollRegular.all():
-                payroll_regular_data_obj = PayrollRegularData()
-                payroll_regular_data_obj.payroll_regular = payroll_regular_obj
-                payroll_regular_data_obj.employee = data.employee
-                payroll_regular_data_obj.station = data.station
-                payroll_regular_data_obj.employee_no = data.employee_no
-                payroll_regular_data_obj.station_no = data.station_no
-                payroll_regular_data_obj.paygroup = data.paygroup
-                payroll_regular_data_obj.fullname = data.fullname
-                payroll_regular_data_obj.position = data.position
-                payroll_regular_data_obj.salary_grade = data.salary_grade
-                payroll_regular_data_obj.step_increment = data.step_increment
-                payroll_regular_data_obj.monthly_salary = data.monthly_salary
-                payroll_regular_data_obj.plantilla_item = data.plantilla_item
-                payroll_regular_data_obj.status = data.status
-                payroll_regular_data_obj.is_atm = data.is_atm
-                payroll_regular_data_obj.atm_account_no = data.atm_account_no
-                payroll_regular_data_obj.tin = data.tin
-                payroll_regular_data_obj.gsis = data.gsis
-                payroll_regular_data_obj.philhealth = data.philhealth
-                payroll_regular_data_obj.pagibig = data.pagibig
-                payroll_regular_data_obj.sss = data.sss
-                payroll_regular_data_obj.created_by_id = request.user.id
-                payroll_regular_data_obj.updated_by_id = request.user.id
-                payroll_regular_data_obj.save()
-
-                # Store Payroll Regular Data Deductions
-                if data.payrollRegularDataDeduc_payrollRegularData: 
-                    for data_deduc in data.payrollRegularDataDeduc_payrollRegularData.all():
-                        payroll_regular_data_deduc_obj = PayrollRegularDataDeductions()
-                        payroll_regular_data_deduc_obj.payroll_regular_data = payroll_regular_data_obj
-                        payroll_regular_data_deduc_obj.deduction = data_deduc.deduction
-                        payroll_regular_data_deduc_obj.code = data_deduc.code
-                        payroll_regular_data_deduc_obj.name = data_deduc.name
-                        payroll_regular_data_deduc_obj.description = data_deduc.description
-                        payroll_regular_data_deduc_obj.amount = data_deduc.amount
-                        payroll_regular_data_deduc_obj.save()
-
-        return Response({"status":"success!!!"}, 200)
+        if payroll_regular_latest_cache:
+            return Response({}, 200)
+        else:
+            # Store Payroll Regular
+            payroll_regular_latest = self.queryset.prefetch_related(
+                'payrollRegularData_payrollRegular',
+                'payrollRegularData_payrollRegular__payrollRegularDataDeduc_payrollRegularData', 
+                'payrollRegularData_payrollRegular__payrollRegularDataAllow_payrollRegularData'
+            ).latest('created_by')
+            # Store Payroll Regular
+            payroll_regular_obj = PayrollRegular()
+            payroll_regular_obj.process_date = datetime.date.today()
+            payroll_regular_obj.description = payroll_regular_latest.description
+            payroll_regular_obj.remarks = payroll_regular_latest.remarks
+            payroll_regular_obj.created_by_id = request.user.id
+            payroll_regular_obj.updated_by_id = request.user.id
+            payroll_regular_obj.save()
+            cache.set(
+                'payroll_regular:latest', 
+                payroll_regular_obj, 
+                timeout=None
+            )
+            # Store Payroll Regular Data
+            if payroll_regular_latest.payrollRegularData_payrollRegular:
+                for data in payroll_regular_latest.payrollRegularData_payrollRegular.all():
+                    payroll_regular_data_obj = PayrollRegularData()
+                    payroll_regular_data_obj.payroll_regular = payroll_regular_obj
+                    payroll_regular_data_obj.employee = data.employee
+                    payroll_regular_data_obj.station = data.station
+                    payroll_regular_data_obj.employee_no = data.employee_no
+                    payroll_regular_data_obj.station_no = data.station_no
+                    payroll_regular_data_obj.paygroup = data.paygroup
+                    payroll_regular_data_obj.fullname = data.fullname
+                    payroll_regular_data_obj.position = data.position
+                    payroll_regular_data_obj.salary_grade = data.salary_grade
+                    payroll_regular_data_obj.step_increment = data.step_increment
+                    payroll_regular_data_obj.monthly_salary = data.monthly_salary
+                    payroll_regular_data_obj.plantilla_item = data.plantilla_item
+                    payroll_regular_data_obj.status = data.status
+                    payroll_regular_data_obj.is_atm = data.is_atm
+                    payroll_regular_data_obj.atm_account_no = data.atm_account_no
+                    payroll_regular_data_obj.tin = data.tin
+                    payroll_regular_data_obj.gsis = data.gsis
+                    payroll_regular_data_obj.philhealth = data.philhealth
+                    payroll_regular_data_obj.pagibig = data.pagibig
+                    payroll_regular_data_obj.sss = data.sss
+                    payroll_regular_data_obj.created_by_id = request.user.id
+                    payroll_regular_data_obj.updated_by_id = request.user.id
+                    payroll_regular_data_obj.save()
+                    print(payroll_regular_data_obj.fullname)
+                    cache.set(
+                        'payroll_regular:latest:data:'+str(payroll_regular_data_obj.id), 
+                        payroll_regular_data_obj, 
+                        timeout=None
+                    )
+                    # Store Payroll Regular Data Deductions
+                    if data.payrollRegularDataDeduc_payrollRegularData: 
+                        for data_deduc in data.payrollRegularDataDeduc_payrollRegularData.all():
+                            payroll_regular_data_deduc_obj = PayrollRegularDataDeductions()
+                            payroll_regular_data_deduc_obj.payroll_regular_data = payroll_regular_data_obj
+                            payroll_regular_data_deduc_obj.deduction = data_deduc.deduction
+                            payroll_regular_data_deduc_obj.code = data_deduc.code
+                            payroll_regular_data_deduc_obj.name = data_deduc.name
+                            payroll_regular_data_deduc_obj.description = data_deduc.description
+                            payroll_regular_data_deduc_obj.amount = data_deduc.amount
+                            payroll_regular_data_deduc_obj.save()
+                            cache.set(
+                                'payroll_regular:latest:data:'+str(payroll_regular_data_obj.id)+':deductions:'+str(payroll_regular_data_deduc_obj.id), 
+                                payroll_regular_data_deduc_obj, 
+                                timeout=None
+                            )
+                    # Store Payroll Regular Data Allowance
+                    if data.payrollRegularDataAllow_payrollRegularData: 
+                        for data_deduc in data.payrollRegularDataAllow_payrollRegularData.all():
+                            payroll_regular_data_allow_obj = PayrollRegularDataAllowances()
+                            payroll_regular_data_allow_obj.payroll_regular_data = payroll_regular_data_obj
+                            payroll_regular_data_allow_obj.allowance = data_deduc.allowance
+                            payroll_regular_data_allow_obj.code = data_deduc.code
+                            payroll_regular_data_allow_obj.name = data_deduc.name
+                            payroll_regular_data_allow_obj.description = data_deduc.description
+                            payroll_regular_data_allow_obj.amount = data_deduc.amount
+                            payroll_regular_data_allow_obj.save()
+                            cache.set(
+                                'payroll_regular:latest:data:'+str(payroll_regular_data_obj.id)+':allowances:'+str(payroll_regular_data_allow_obj.id), 
+                                payroll_regular_data_allow_obj, 
+                                timeout=None
+                            )
+            return Response({}, 200)
 
 
 
@@ -245,18 +286,46 @@ class PayrollRegularViewSet(viewsets.ModelViewSet):
 
 
 
-# class TestViewSet(viewsets.ModelViewSet):
+class TestViewSet(viewsets.ModelViewSet):
+    queryset = MockAllowance.objects.all()
     
-#     prd = PayrollRegularData.objects.all()
-#     emp = Employee.objects.all()
+    def list(self, request):
+    
+        # payroll_regular_latest_cache = cache.keys('payroll_regular:latest:*')
+        # if payroll_regular_latest_cache:
+        #     print('Has values!!')
+        # else:
+        #     print('Has no values!!')
+        pr_queryset = PayrollRegular.objects.all()
+        pr = pr_queryset.get(id=9)
+        pr.delete()
+        # m_queryset = MockAllowance.objects.all()
 
-#     for data_prd in prd:
-#         try:
-#             emp_obj = emp.get(employee_id=data_prd.employee_no)
-#             prd_obj = prd.get(id=data_prd.id)
-#             prd_obj.employee = emp_obj
-#             prd_obj.save()
-#             print(prd_obj.fullname)
-#             print(st_obj.name)
-#         except:
-#             print('Error!!')
+        # for data_m in m_queryset:
+        #     allow_list = dict()
+        #     allow_list[1] = { 'code': 'allow1', 'payroll_id': data_m.payroll_id, 'amount': data_m.allow1, 'allow_id': 1 }
+        #     allow_list[2] = { 'code': 'allow2', 'payroll_id': data_m.payroll_id, 'amount': data_m.allow2, 'allow_id': 2 }
+        #     allow_list[3] = { 'code': 'allow3', 'payroll_id': data_m.payroll_id, 'amount': data_m.allow3, 'allow_id': 3 }
+        #     allow_list[4] = { 'code': 'allow4', 'payroll_id': data_m.payroll_id, 'amount': data_m.allow4, 'allow_id': 4 }
+        #     allow_list[5] = { 'code': 'allow5', 'payroll_id': data_m.payroll_id, 'amount': data_m.allow5, 'allow_id': 5 }
+        #     allow_list[6] = { 'code': 'allow6', 'payroll_id': data_m.payroll_id, 'amount': data_m.allow6, 'allow_id': 6 }
+        #     allow_list[7] = { 'code': 'allow7', 'payroll_id': data_m.payroll_id, 'amount': data_m.allow7, 'allow_id': 7 }
+        #     allow_list[8] = { 'code': 'allow8', 'payroll_id': data_m.payroll_id, 'amount': data_m.allow8, 'allow_id': 8 }
+        #     allow_list[9] = { 'code': 'allow9', 'payroll_id': data_m.payroll_id, 'amount': data_m.allow9, 'allow_id': 9 }
+        #     allow_list[10] = { 'code': 'allow10', 'payroll_id': data_m.payroll_id, 'amount': data_m.allow10, 'allow_id': 10 }
+
+        #     for i in range(1, 11):
+        #         if allow_list[i]['amount'] > 0:
+        #             try:
+        #                 rda = PayrollRegularDataAllowances()
+        #                 rda.payroll_regular_data_id = allow_list[i]['payroll_id']
+        #                 rda.allowance_id = allow_list[i]['allow_id']
+        #                 rda.code = allow_list[i]['code']
+        #                 rda.amount = allow_list[i]['amount']
+        #                 rda.save()
+        #                 print(allow_list[i]['code'])
+        #                 print('Success!')
+        #             except:
+        #                 print('Error!')
+    
+        return Response({'status': 'success!!'}, 200)

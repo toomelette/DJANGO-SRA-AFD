@@ -80,7 +80,7 @@ class PayrollRegularDataAllowances(models.Model):
     amount = models.DecimalField(max_digits=13, decimal_places=2, default=0, blank=True)
 
 
-class Mock(models.Model):
+class MockDeductions(models.Model):
     payroll_id = models.CharField(max_length=50)
     d1 = models.DecimalField(max_digits=13, decimal_places=2, default=0, blank=True)
     d2 = models.DecimalField(max_digits=13, decimal_places=2, default=0, blank=True)
@@ -139,5 +139,19 @@ class Mock(models.Model):
     d54 = models.DecimalField(max_digits=13, decimal_places=2, default=0, blank=True)
     d55 = models.DecimalField(max_digits=13, decimal_places=2, default=0, blank=True)
     d56 = models.DecimalField(max_digits=13, decimal_places=2, default=0, blank=True)
+
+
+class MockAllowance(models.Model):
+    payroll_id = models.CharField(max_length=50)
+    allow1 = models.DecimalField(max_digits=13, decimal_places=2, default=0, blank=True)
+    allow2 = models.DecimalField(max_digits=13, decimal_places=2, default=0, blank=True)
+    allow3 = models.DecimalField(max_digits=13, decimal_places=2, default=0, blank=True)
+    allow4 = models.DecimalField(max_digits=13, decimal_places=2, default=0, blank=True)
+    allow5 = models.DecimalField(max_digits=13, decimal_places=2, default=0, blank=True)
+    allow6 = models.DecimalField(max_digits=13, decimal_places=2, default=0, blank=True)
+    allow7 = models.DecimalField(max_digits=13, decimal_places=2, default=0, blank=True)
+    allow8 = models.DecimalField(max_digits=13, decimal_places=2, default=0, blank=True)
+    allow9 = models.DecimalField(max_digits=13, decimal_places=2, default=0, blank=True)
+    allow10 = models.DecimalField(max_digits=13, decimal_places=2, default=0, blank=True)
 
 
