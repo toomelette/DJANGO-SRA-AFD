@@ -6,6 +6,7 @@ import { observer } from 'mobx-react'
 
 import PayrollRegular from './PayrollRegularListComp.js'
 import PayrollRegularCreate from './PayrollRegularCreateComp.js'
+import PayrollRegularDetails from './PayrollRegularDetailsComp.js'
 import Deductions from './DeductionListComp.js'
 import Allowances from './AllowanceListComp.js'
 import NotFoundPage from '../ErrorPages/NotFoundPageComp'
@@ -13,6 +14,7 @@ import NotFoundPage from '../ErrorPages/NotFoundPageComp'
 import deductionStore from './store/deductionStore'
 import allowanceStore from './store/allowanceStore'
 import payrollRegularStore from './store/payrollRegularStore'
+import payrollRegularDataStore from './store/payrollRegularDataStore'
 
 const PayrollRegularMain = observer(({ employeeStore, dashboardMainStore }) => {
 
@@ -36,7 +38,7 @@ const PayrollRegularMain = observer(({ employeeStore, dashboardMainStore }) => {
                     }
                 </Route>
 
-                {/* PAYROLL LIST */}
+                {/* PAYROLL Regular LIST */}
                 <Route exact path="/payroll/payroll_regular">
                     { dashboardMainStore.checkIfSubrouteExist('payroll-payroll_regular-manage-page') ? 
                         <PayrollRegular payrollRegularStore={payrollRegularStore} dashboardMainStore={dashboardMainStore}/> 
@@ -44,7 +46,7 @@ const PayrollRegularMain = observer(({ employeeStore, dashboardMainStore }) => {
                     }
                 </Route>
 
-                {/* PAYROLL CREATE */}
+                {/* PAYROLL Regular CREATE */}
                 <Route exact path="/payroll/payroll_regular/create">
                     { dashboardMainStore.checkIfSubrouteExist('payroll-payroll_regular-create') ? 
                         <PayrollRegularCreate payrollRegularStore={payrollRegularStore} employeeStore={employeeStore} dashboardMainStore={dashboardMainStore}/> 
@@ -52,11 +54,15 @@ const PayrollRegularMain = observer(({ employeeStore, dashboardMainStore }) => {
                     }
                 </Route>
 
-                {/* DETAILS */}
-                {/* <Route exact path="/payroll/:payroll_id">
-                    { dashboardMainStore.checkIfSubrouteExist('payroll-details-page') ? 
-                        <PayrollRegularDetails payrollRegularStore={payrollRegularStore} dashboardMainStore={dashboardMainStore}/> : <NotFoundPage/> }
-                </Route> */}
+                {/* PAYROLL Regular DETAILS */}
+                <Route exact path="/payroll/payroll_regular/:payroll_regular_id">
+                    { dashboardMainStore.checkIfSubrouteExist('payroll-payroll_regular-details-page') ? 
+                        <PayrollRegularDetails 
+                            payrollRegularStore={payrollRegularStore} 
+                            payrollRegularDataStore={payrollRegularDataStore}
+                            dashboardMainStore={dashboardMainStore}
+                        /> : <NotFoundPage/> }
+                </Route>
     
                 {/* Page not found */}
                 <Route exact path="/payroll/*">

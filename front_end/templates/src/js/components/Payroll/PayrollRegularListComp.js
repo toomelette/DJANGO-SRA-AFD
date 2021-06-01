@@ -13,7 +13,6 @@ import eventBus from '../Utils/EventBus'
 const PayrollRegularList = observer(({ payrollRegularStore, dashboardMainStore }) => {
 
     const history = useHistory();
-    const [page_loader, SetPageLoader] = useState(false);
     const [is_create_generate, SetIsCreateGenerate] = useState(true);
 
 
@@ -26,8 +25,13 @@ const PayrollRegularList = observer(({ payrollRegularStore, dashboardMainStore }
     }, [])
 
 
-    const redirectToTemplateCreate = useCallback(() => {
+    const redirectToPayrollRegularCreate = useCallback(() => {
         history.push('/payroll/payroll_regular/create'), [history]
+    });
+
+    const redirectToPayrollRegularDetails = useCallback((id) => {
+        payrollRegularStore.setIsOpenedForm(1)
+        history.push('/payroll/payroll_regular/' + id), [history]
     });
 
 
@@ -46,7 +50,9 @@ const PayrollRegularList = observer(({ payrollRegularStore, dashboardMainStore }
         e.preventDefault()
         $('#create-select-method').modal('hide')
         eventBus.dispatch("SHOW_FULLPAGE_LOADER", {
-             is_loading: true, is_dashboard: true 
+             is_loading: true, 
+             is_dashboard: true,
+             content: <p style={{ marginLeft:-15 }}>Generating Payroll ... </p>
         })
         if(is_create_generate === true){
             axios.post('api/payroll_regular/create_generate_from_last/')
@@ -54,7 +60,10 @@ const PayrollRegularList = observer(({ payrollRegularStore, dashboardMainStore }
                 eventBus.dispatch("SHOW_FULLPAGE_LOADER", { 
                     is_loading: false, is_dashboard: true 
                 })
-                
+                eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
+                    message: "Payroll Successfully Generated!!", type: "inverse" 
+                })
+                redirectToPayrollRegularDetails(response.data.id)
             }).catch((error) => {
                 if(error.response.status == 404 || error.response.status == 500){
                     eventBus.dispatch("SHOW_TOAST_NOTIFICATION", { 
@@ -196,7 +205,6 @@ const PayrollRegularList = observer(({ payrollRegularStore, dashboardMainStore }
         <div className="modal" id="create-select-method" role="dialog">
             <div className="modal-dialog modal-lg" role="document">
                 <div className="modal-content">
-                    <DivLoader type="Circles" loading={page_loader}/>
                     <div className="modal-header">
                         <h4 className="modal-title">Select method</h4>
                         <button type="button" className="close" data-dismiss="modal" aria-label="Close">

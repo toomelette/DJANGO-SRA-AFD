@@ -186,7 +186,7 @@ const DeductionList = observer(({ deductionStore, dashboardMainStore }) => {
                                     <div className="card-header"> 
                                         <TableHeaderDefault
                                             searchInputValue={ deductionStore.query }
-                                            searchInputHandler={ e => deductionStore.handleSearch(e ) }
+                                            searchInputHandler={ e => deductionStore.handleSearch(e) }
                                             refreshButtonClickHandler={ (e) => deductionStore.handleRefreshClick(e) }
                                             filterButton={false}
                                             sortButton={false}

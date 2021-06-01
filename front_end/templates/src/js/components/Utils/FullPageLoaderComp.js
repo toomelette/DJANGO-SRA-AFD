@@ -10,6 +10,7 @@ function FullPageLoader(props){
 
     const [is_loading, setIsLoading] = useState(false)
     const [is_dashboard, setIsDashboard] = useState(false)
+    const [content, setContent] = useState("")
     
     const parent_style = {
         display: is_loading == true ? "" : "none",
@@ -40,6 +41,7 @@ function FullPageLoader(props){
         eventBus.on("SHOW_FULLPAGE_LOADER", (data) => {
             setIsLoading(data.is_loading)
             setIsDashboard(data.is_dashboard)
+            setContent(data.content)
         });
 
         return () => {
@@ -51,6 +53,7 @@ function FullPageLoader(props){
     return (
         <div style={parent_style}>
             <div style={is_dashboard == true ? spinner_style_db : spinner_style_wp}>
+                { content }
                 <Loader type="Circles" color="#00BFFF" height={100} width={100}/>
             </div>
         </div>

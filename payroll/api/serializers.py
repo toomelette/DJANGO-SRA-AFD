@@ -1,6 +1,13 @@
 
 from rest_framework import serializers
-from payroll.models import Deductions, Allowances, PayrollRegular, PayrollRegularData, PayrollRegularDataDeductions, PayrollRegularDataAllowances
+from payroll.models import (
+     Deductions, 
+     Allowances, 
+     PayrollRegular, 
+     PayrollRegularData, 
+     PayrollRegularDataDeductions, 
+     PayrollRegularDataAllowances
+)
 from employee.api.serializers import EmployeeDetailsSerializer, StationSerializer
 
 
@@ -19,22 +26,25 @@ class AllowanceSerializer(serializers.ModelSerializer):
 
 
 class PayrollRegularDataDeductionsSerializer(serializers.ModelSerializer):
-     deduction = DeductionSerializer(many=False)
      class Meta:
           model = PayrollRegularDataDeductions
-          fields = ('id', 'deduction', 'code', 'name', 'description', 'amount')
+          fields = ('id', 'code', 'name', 'description', 'amount')
+          read_only_fields = ('id',)
+
+
+class PayrollRegularDataAllowancesSerializer(serializers.ModelSerializer):
+     class Meta:
+          model = PayrollRegularDataAllowances
+          fields = ('id', 'code', 'name', 'description', 'amount')
           read_only_fields = ('id',)
 
 
 class PayrollRegularDataSerializer(serializers.ModelSerializer):
-     employee = EmployeeDetailsSerializer(many=False)
-     station = StationSerializer(many=False)
      payrollRegularDataDeduc_payrollRegularData = PayrollRegularDataDeductionsSerializer(many=True)
+     payrollRegularDataAllow_payrollRegularData = PayrollRegularDataAllowancesSerializer(many=True)
      class Meta:
           model = PayrollRegularData
           fields = (
-               'employee',
-               'station',
                'id', 
                'payroll_regular_id',
                'employee_no',
@@ -54,9 +64,10 @@ class PayrollRegularDataSerializer(serializers.ModelSerializer):
                'philhealth',
                'pagibig',
                'sss',
-               'payrollRegularDataDeduc_payrollRegularData'
+               'payrollRegularDataDeduc_payrollRegularData',
+               'payrollRegularDataAllow_payrollRegularData'
           )
-          read_only_fields = ('id', 'employee', 'station')
+          read_only_fields = ('id',)
 
 
 class PayrollRegularSerializer(serializers.ModelSerializer): 

@@ -1,7 +1,7 @@
 import { debounce } from 'lodash'
 import { makeAutoObservable, runInAction } from "mobx"
 
-class PayrollRegularStore{
+class PayrollRegularDataStore{
     
     //  list vars
     list = [];
@@ -14,14 +14,11 @@ class PayrollRegularStore{
     page_limit = 0;
 	delaySearch = debounce(() => this.fetch(), 500);
     selected_data = "";
+    selected_data_details = {};
     is_opened_form = 0;
 
     // form vars
     payroll_regular_id = "";
-    process_date = "";
-    description = "";
-    remarks = "";
-    payroll_regular_data = [];
     error_fields = {};
 
 
@@ -32,11 +29,12 @@ class PayrollRegularStore{
 
     // Actions
     fetch(){
-        axios.get('api/payroll_regular', { 
+        axios.get('api/payroll_regular_data', { 
             params: { 
-                q: this.query, 
-                page_size: this.page_size, 
-                page: this.page_current, 
+                q: this.query,
+                page_size: this.page_size,
+                page: this.page_current,
+                pr_id: this.payroll_regular_id
             }
         }).then((response) => {
             runInAction(() => {
@@ -48,14 +46,10 @@ class PayrollRegularStore{
     }
 
     retrieve(id){
-        axios.get('api/payroll_regular/' + id)
+        axios.get('api/payroll_regular_data/' + id)
         .then((response) => {
             runInAction(() => {
-                this.payroll_id = response.data.id;
-                this.process_date = response.data.process_date;
-                this.description = response.data.description;
-                this.remarks = response.data.remarks;
-                this.error_fields = {};
+                this.selected_data_details = response.data
             })
         });
     }   
@@ -115,26 +109,11 @@ class PayrollRegularStore{
     // Form Setters
     resetForm(){
         this.payroll_regular_id = "";
-        this.description = "";
-        this.remarks = "";
-        this.process_date = "";
         this.error_fields = {};
     }
 
     setPayrollRegularId(payroll_regular_id){
         this.payroll_regular_id = payroll_regular_id;
-    }
-
-    setDescription(description){
-        this.description = description;
-    }
-
-    setRemarks(remarks){
-        this.remarks = remarks;
-    }
-
-    setProcessDate(process_date){
-        this.process_date = process_date;
     }
 
     setErrorFields(ef){
@@ -144,5 +123,5 @@ class PayrollRegularStore{
 
 }
 
-const payrollRegularStore = new PayrollRegularStore()
-export default payrollRegularStore
+const payrollRegularDataStore = new PayrollRegularDataStore()
+export default payrollRegularDataStore
