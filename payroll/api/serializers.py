@@ -8,7 +8,10 @@ from payroll.models import (
      PayrollRegularDataDeductions, 
      PayrollRegularDataAllowances
 )
-from employee.api.serializers import EmployeeDetailsSerializer, StationSerializer
+from employee.api.serializers import (
+     EmployeeDetailsSerializer, 
+     StationSerializer
+)
 
 
 class DeductionSerializer(serializers.ModelSerializer): 
@@ -26,16 +29,18 @@ class AllowanceSerializer(serializers.ModelSerializer):
 
 
 class PayrollRegularDataDeductionsSerializer(serializers.ModelSerializer):
+     deduction = DeductionSerializer(many=False)
      class Meta:
           model = PayrollRegularDataDeductions
-          fields = ('id', 'code', 'name', 'description', 'amount')
+          fields = ('id', 'code', 'name', 'description', 'amount', 'deduction')
           read_only_fields = ('id',)
 
 
 class PayrollRegularDataAllowancesSerializer(serializers.ModelSerializer):
+     allowance = AllowanceSerializer(many=False)
      class Meta:
           model = PayrollRegularDataAllowances
-          fields = ('id', 'code', 'name', 'description', 'amount')
+          fields = ('id', 'code', 'name', 'description', 'amount', 'allowance')
           read_only_fields = ('id',)
 
 
@@ -74,4 +79,22 @@ class PayrollRegularSerializer(serializers.ModelSerializer):
      class Meta:
           model = PayrollRegular
           fields = ('id', 'description', 'remarks', 'process_date', 'updated_at')
+          read_only_fields = ('id',)
+
+
+class PayrollRegularMaintenanceSerializer(serializers.ModelSerializer):
+     payroll_regular = PayrollRegularSerializer(many=False)
+     payroll_regular_data = PayrollRegularDataSerializer(many=False)
+     class Meta:
+          model = PayrollRegularData
+          fields = (
+               'id', 
+               'employee_no',
+               'category',
+               'field',
+               'amount',
+               'remarks',
+               'payroll_regular',
+               'payroll_regular_data',
+          )
           read_only_fields = ('id',)

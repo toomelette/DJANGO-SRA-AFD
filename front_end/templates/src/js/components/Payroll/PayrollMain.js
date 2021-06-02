@@ -15,6 +15,7 @@ import deductionStore from './store/deductionStore'
 import allowanceStore from './store/allowanceStore'
 import payrollRegularStore from './store/payrollRegularStore'
 import payrollRegularDataStore from './store/payrollRegularDataStore'
+import payrollRegularMntStore from './store/payrollRegularMntStore'
 
 const PayrollRegularMain = observer(({ employeeStore, dashboardMainStore }) => {
 
@@ -60,6 +61,7 @@ const PayrollRegularMain = observer(({ employeeStore, dashboardMainStore }) => {
                         <PayrollRegularDetails 
                             payrollRegularStore={payrollRegularStore} 
                             payrollRegularDataStore={payrollRegularDataStore}
+                            payrollRegularMntStore={payrollRegularMntStore}
                             dashboardMainStore={dashboardMainStore}
                         /> : <NotFoundPage/> }
                 </Route>

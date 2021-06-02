@@ -1,17 +1,11 @@
 import { debounce } from 'lodash'
 import { makeAutoObservable, runInAction } from "mobx"
 
-class PayrollRegularDataStore{
+class PayrollRegularMntStore{
     
     //  list vars
     list = [];
-    total_records = 0;
     query = "";
-    page_prev = 0;
-    page_current = 1;
-    page_next = 2;
-    page_size = 20;
-    page_limit = 0;
 	delaySearch = debounce(() => this.fetch(), 500);
     selected_data = "";
     selected_data_details = {};
@@ -29,25 +23,21 @@ class PayrollRegularDataStore{
 
     // Actions
     fetch(){
-        axios.get('api/payroll_regular_data', { 
+        axios.get('api/payroll_regular_mnt', { 
             params: { 
                 q: this.query,
-                page_size: this.page_size,
-                page: this.page_current,
                 pr_id: this.payroll_regular_id
             }
         }).then((response) => {
             runInAction(() => {
-                this.list = response.data.results
-                this.total_records = response.data.count
-                this.page_limit = Math.ceil(response.data.count / this.page_size);
+                this.list = response.data
             })
         });
     }
 
     retrieve(id){
         this.selected_data_details = {};
-        axios.get('api/payroll_regular_data/' + id)
+        axios.get('api/payroll_regular_mnt/' + id)
         .then((response) => {
             runInAction(() => {
                 this.selected_data_details = response.data
@@ -57,21 +47,8 @@ class PayrollRegularDataStore{
 
     handleSearch(e){
         e.preventDefault()
-        this.page_prev = 0;
-        this.page_current = 1;
-        this.page_next = 2;
         this.query = e.target.value;
         this.delaySearch();
-    }
-
-    handlePaginationClick(e, page_current){
-        e.preventDefault()
-        if(page_current > 0 && page_current <= this.page_limit){
-            this.page_prev = page_current - 1;
-            this.page_current = page_current;
-            this.page_next = page_current + 1;
-            this.fetch();
-        }
     }
 
 
@@ -103,5 +80,5 @@ class PayrollRegularDataStore{
 
 }
 
-const payrollRegularDataStore = new PayrollRegularDataStore()
-export default payrollRegularDataStore
+const payrollRegularMntStore = new PayrollRegularMntStore()
+export default payrollRegularMntStore

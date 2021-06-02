@@ -62,6 +62,19 @@ class PayrollRegularData(models.Model):
     updated_at = models.DateTimeField(auto_now=True, null=True)
 
 
+class PayrollRegularMaintenance(models.Model):
+    CATEGORY = ((0,'Modify Parameter'), (1,'Create Content'), (2,'Removed Content'))
+    payroll_regular = models.ForeignKey(PayrollRegular, db_column="payroll_regular_id", related_name='payrollMnt_payrollRegular', on_delete=models.CASCADE)
+    payroll_regular_data = models.ForeignKey(PayrollRegularData, db_column="payroll_regular_data_id", related_name='payrollMnt_payrollRegularData', on_delete=models.CASCADE)
+    employee_no = models.CharField(max_length=20, default="")
+    category = models.IntegerField(choices=CATEGORY, default=0)
+    field = models.CharField(max_length=50, default="")
+    amount = models.DecimalField(max_digits=13, decimal_places=2, default=0)
+    remarks = models.CharField(max_length=200, default="")
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True)
+
+
 class PayrollRegularDataDeductions(models.Model):
     payroll_regular_data = models.ForeignKey(PayrollRegularData, db_column="payroll_regular_data_id", related_name='payrollRegularDataDeduc_payrollRegularData', on_delete=models.CASCADE)
     deduction = models.ForeignKey(Deductions, db_column="deduction_id", related_name='payrollRegularDataDeduc_deduction', on_delete=models.PROTECT)
@@ -80,6 +93,11 @@ class PayrollRegularDataAllowances(models.Model):
     amount = models.DecimalField(max_digits=13, decimal_places=2, default=0, blank=True)
 
 
+
+
+
+
+# Mock Tables
 class MockDeductions(models.Model):
     payroll_id = models.CharField(max_length=50)
     d1 = models.DecimalField(max_digits=13, decimal_places=2, default=0, blank=True)

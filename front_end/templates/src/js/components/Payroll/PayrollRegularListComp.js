@@ -48,13 +48,14 @@ const PayrollRegularList = observer(({ payrollRegularStore, dashboardMainStore }
 
     const handleCreateSelectMethodSubmit = (e) => {
         e.preventDefault()
+        console.log(is_create_generate)
         $('#create-select-method').modal('hide')
         eventBus.dispatch("SHOW_FULLPAGE_LOADER", {
              is_loading: true, 
              is_dashboard: true,
              content: <p style={{ marginLeft:-15 }}>Generating Payroll ... </p>
         })
-        if(is_create_generate === true){
+        if(is_create_generate == true){
             axios.post('api/payroll_regular/create_generate_from_last/')
             .then((response) => {
                 eventBus.dispatch("SHOW_FULLPAGE_LOADER", { 

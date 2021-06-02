@@ -8,9 +8,10 @@ import moment from 'moment';
 import eventBus from '../Utils/EventBus'
 import DivLoader from '../Utils/DivLoaderComp'
 import PayrollRegularContentDetails from './PayrollRegularDetailsContentComp'
+import PayrollRegularMntDetails from './PayrollRegularDetailsMntComp'
 
 
-const PayrollRegularDetails = observer(({ payrollRegularStore, payrollRegularDataStore, dashboardMainStore }) => {
+const PayrollRegularDetails = observer(({ payrollRegularStore, payrollRegularDataStore, payrollRegularMntStore, dashboardMainStore }) => {
 
     const history = useHistory();
     const { payroll_regular_id } = useParams();
@@ -23,7 +24,7 @@ const PayrollRegularDetails = observer(({ payrollRegularStore, payrollRegularDat
             payrollRegularStore.retrieve(payroll_regular_id)
             payrollRegularStore.setIsOpenedForm(1)
             payrollRegularDataStore.setPayrollRegularId(payroll_regular_id)
-            payrollRegularDataStore.fetch()
+            payrollRegularMntStore.setPayrollRegularId(payroll_regular_id)
         }
         return () => { is_mounted = false; } 
     },[])
@@ -120,55 +121,11 @@ const PayrollRegularDetails = observer(({ payrollRegularStore, payrollRegularDat
                                 </div> 
                             </div>
 
-
                             {/* Payroll Regular Maintenance */}
-                            <div className="col-md-5">
-                                <div className="card z-depth-0">
-                                    <div className="card-header">
-                                        <h5>Maintenance</h5>
-                                    </div>
-                                    <div className="card-block">
-                                        <div className="table-responsive">
-                                            <table className="table table-hover">
-                                                <tbody>
-                                                    {/* { employeeStore.elig_list.map((val, key) => { 
-                                                        return (
-                                                            <tr key={key} className={ val.id == employeeStore.elig_id ? "table-info" : "" }>
-                                                                <td className="align-middle">
-                                                                    <h4>{ val.eligibility }</h4>
-                                                                    <h6>{ val.level }</h6>
-                                                                    <h6>{ defaultValueSetter(numberFormat(val.rating), "0.00", "") }</h6>
-                                                                </td>
-                                                                { dashboardMainStore.checkIfSubrouteExist('employee-edit-eligibility') ?
-                                                                    <td className="align-middle">
-                                                                        <a href="" onClick={ e => handleOpenEditEligibilityModal(e, val.id) }>
-                                                                            <i className="feather icon-edit f-w-1000 f-18 m-r-15 text-c-blue"></i>
-                                                                        </a>
-                                                                        <a href="" onClick={ e => handleOpenDeleteEligibilityModal(e, val.id) }>
-                                                                            <i className="feather icon-trash-2 f-w-1000 f-18 text-c-red"></i>
-                                                                        </a>
-                                                                    </td>: <td></td> 
-                                                                }
-                                                            </tr>
-                                                        ) 
-                                                    }) }
-                                                    { employeeStore.elig_list.length == 0 ?
-                                                        <tr>
-                                                            <td>
-                                                                <h4>No Data Encoded!</h4>
-                                                            </td>
-                                                        </tr> : <></> } */}
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
+                            <PayrollRegularMntDetails payrollRegularMntStore={payrollRegularMntStore}/>
 
                             {/* Payroll Regular Data Details */}
                             <PayrollRegularContentDetails payrollRegularDataStore={payrollRegularDataStore}/>
-
                                                                     
                             {/* DELETE MODAL */}
                             {/* <div className="modal" id="employee-delete-modal" role="dialog">
@@ -190,7 +147,6 @@ const PayrollRegularDetails = observer(({ payrollRegularStore, payrollRegularDat
                                     </div>
                                 </div>
                             </div> */}
-
 
                         </div>
                     </div>

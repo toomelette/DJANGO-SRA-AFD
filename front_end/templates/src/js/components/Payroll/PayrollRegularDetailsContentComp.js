@@ -1,8 +1,7 @@
 
 
-import React, { useState } from 'react'
+import React, { useEffect } from 'react'
 import { observer } from 'mobx-react'
-import moment from 'moment'
 
 import { numberFormat } from '../Utils/DataFilters'
 import { TableFooterDefault } from '../Utils/Table/TableFooters'
@@ -10,13 +9,24 @@ import { TableFooterDefault } from '../Utils/Table/TableFooters'
 
 const PayrollRegularContentDetails = observer(({ payrollRegularDataStore }) => {
 
+    var total_deduc = 0;
+    var total_allow = 0;
+
+    
+    useEffect (() => {
+        let is_mounted = true;
+        if(is_mounted = true){
+            payrollRegularDataStore.fetch()
+        }
+        return () => { is_mounted = false; } 
+    },[])
+
 
     const handleClickContentDetails = (e, id) => {
         e.preventDefault()
         payrollRegularDataStore.setSelectedData(id)
         payrollRegularDataStore.retrieve(id)
         $("#payroll-regular-content-details").modal('toggle')
-        console.log(payrollRegularDataStore.selected_data_details.payrollRegularDataDeduc_payrollRegularData)
     }
 
 
@@ -28,20 +38,22 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore }) => {
                 <div className="card-header">
                     <h5>Content</h5>
                     <div className="float-right">
+                    </div>
+                </div>
+                <div className="card-block pb-0">
+                    <div className="table-responsive">
                         <input 
                             type="text" 
                             className="form-control" 
                             placeholder="Search .." 
                             value={ payrollRegularDataStore.query } 
-                            onChange={ e => payrollRegularDataStore.handleSearch(e) } />
-                    </div>
-                </div>
-                <div className="card-block pb-0">
-                    <div className="table-responsive">
-                        <table className="table table-sm table-hover">
+                            onChange={ e => payrollRegularDataStore.handleSearch(e) } 
+                            style={{ maxWidth:'40%' }}    
+                        />
+                        <table className="table table-sm table-hover mt-3">
                             <thead>
                                 <tr>
-                                    <th className="align-middle">Fullname</th>
+                                    <th className="align-middle">Employee</th>
                                     <th className="align-middle">Position</th>
                                     <th className="align-middle"></th>
                                 </tr>
@@ -50,7 +62,7 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore }) => {
                                 { payrollRegularDataStore.list.map((val, key) => { 
                                     return (
                                         <tr key={key} className={ val.id == payrollRegularDataStore.selected_data ? "table-info" : "" }>
-                                            <td className="align-middle">{ val.fullname }</td>
+                                            <td className="align-middle">{ val.employee_no } - { val.fullname }</td>
                                             <td className="align-middle">{ val.position }</td>
                                             <td className="align-middle">
                                                 <a href="#" onClick={ e => handleClickContentDetails(e, val.id) }>
@@ -60,12 +72,6 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore }) => {
                                         </tr>
                                     ) 
                                 }) }
-                                { payrollRegularDataStore.list.length == 0 ?
-                                    <tr>
-                                        <td>
-                                            <h4>No Data Encoded!</h4>
-                                        </td>
-                                    </tr> : <></> }
                             </tbody>
                         </table>
                     </div>
@@ -139,7 +145,7 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore }) => {
 
                             <div className="col-md-3">
                                 <span> Monthly Salary: {'\n'} </span>
-                                <h5>{ payrollRegularDataStore.selected_data_details.monthly_salary }</h5>
+                                <h5>{ numberFormat(payrollRegularDataStore.selected_data_details.monthly_salary, 2) }</h5>
                             </div>
 
                             <div className="col-md-3">
@@ -186,29 +192,82 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore }) => {
                                 <h5>{ payrollRegularDataStore.selected_data_details.sss }</h5>
                             </div>
 
-                            <div className="col-md-12 mt-4">
+                            <div className="col-md-12 mt-4">{' '}</div>
 
+                            <div className="col-md-6 mt-4">
                                 <div className="table-responsive">
-                                    <table className="table table-sm table-hover">
+                                    <h5>Deductions</h5>
+                                    <table className="table table-sm table-bordered table-hover mt-2">
                                         <thead>
                                             <tr>
-                                                <th className="align-middle">Code</th>
-                                                <th className="align-middle">Ammount</th>
+                                                <th className="align-middle">Deduction Code</th>
+                                                <th className="align-middle">Amount</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            { payrollRegularDataStore.selected_data_details.payrollRegularDataDeduc_payrollRegularData.map((data) => {
-                                                return (
-                                                    <tr key={data.id}>
-                                                        <td className="align-middle">{ data.code }</td>
-                                                        <td className="align-middle">{ numberFormat(data.ammount, 2) }</td>
-                                                    </tr>
-                                                )
-                                            }) }
+                                            { payrollRegularDataStore.selected_data_details.payrollRegularDataDeduc_payrollRegularData ? 
+                                                payrollRegularDataStore.selected_data_details.payrollRegularDataDeduc_payrollRegularData.map((data) => {
+                                                    total_deduc+=Number(data.amount)
+                                                    return (
+                                                        <tr key={data.id}>
+                                                            <td className="align-middle">
+                                                                <span style={{ fontWeight:'bold' }}>({ data.code })</span> - { data.deduction?.name }
+                                                            </td>
+                                                            <td className="align-middle">{ numberFormat(data.amount, 2) }</td>
+                                                        </tr>
+                                                    )
+                                                }) : 
+                                                <tr>
+                                                    <td className="align-middle">No Data!</td>
+                                                </tr> 
+                                            }
                                         </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td className="align-middle" style={{ fontWeight:'bold' }}>Total</td>
+                                                <td className="align-middle" style={{ fontWeight:'bold' }}>{ numberFormat(total_deduc, 2) }</td>
+                                            </tr>
+                                        </tfoot>
                                     </table>
                                 </div>
+                            </div>
 
+                            <div className="col-md-6 mt-4">
+                                <div className="table-responsive">
+                                    <h5>Allowances</h5>
+                                    <table className="table table-sm table-bordered table-hover mt-2">
+                                        <thead>
+                                            <tr>
+                                                <th className="align-middle">Allowance Code</th>
+                                                <th className="align-middle">Amount</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            { payrollRegularDataStore.selected_data_details.payrollRegularDataAllow_payrollRegularData ? 
+                                                payrollRegularDataStore.selected_data_details.payrollRegularDataAllow_payrollRegularData.map((data) => {
+                                                    total_allow+=Number(data.amount)
+                                                    return (
+                                                        <tr key={data.id}>
+                                                            <td className="align-middle">
+                                                                <span style={{ fontWeight:'bold' }}>({ data.code })</span> - { data.allowance?.name }
+                                                            </td>
+                                                            <td className="align-middle">{ numberFormat(data.amount, 2) }</td>
+                                                        </tr>
+                                                    )
+                                                }) : 
+                                                <tr>
+                                                    <td className="align-middle">No Data!</td>
+                                                </tr> 
+                                            }
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td className="align-middle" style={{ fontWeight:'bold' }}>Total</td>
+                                                <td className="align-middle" style={{ fontWeight:'bold' }}>{ numberFormat(total_allow, 2) }</td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
                             </div>
 
                         </div>
