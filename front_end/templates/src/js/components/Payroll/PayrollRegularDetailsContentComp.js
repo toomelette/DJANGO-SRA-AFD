@@ -12,15 +12,6 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore }) => {
     var total_deduc = 0;
     var total_allow = 0;
 
-    
-    useEffect (() => {
-        let is_mounted = true;
-        if(is_mounted = true){
-            payrollRegularDataStore.fetch()
-        }
-        return () => { is_mounted = false; } 
-    },[])
-
 
     const handleClickContentDetails = (e, id) => {
         e.preventDefault()

@@ -1,5 +1,3 @@
-
-
 import React, { useState } from 'react'
 import { observer } from 'mobx-react'
 import { useParams } from 'react-router-dom';
@@ -9,7 +7,7 @@ import DivLoader from '../Utils/DivLoaderComp'
 import { SelectInput } from '../Utils/Forms/DefaultInputs'
 
 
-const PayrollRegularTemplateFormContent = observer(({ payrollRegularStore, employeeStore}) => {
+const PayrollRegularFormContentComp = observer(({ payrollRegularStore, employeeStore}) => {
 
 
     const [page_loader, SetPageLoader] = useState(false);
@@ -174,4 +172,4 @@ const PayrollRegularTemplateFormContent = observer(({ payrollRegularStore, emplo
 });
 
 
-export default PayrollRegularTemplateFormContent
+export default PayrollRegularFormContentComp

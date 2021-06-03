@@ -16,6 +16,7 @@ class PayrollRegularDataStore{
     selected_data = "";
     selected_data_details = {};
     is_opened_form = 0;
+    options = [];
 
     // form vars
     payroll_regular_id = "";
@@ -41,6 +42,23 @@ class PayrollRegularDataStore{
                 this.list = response.data.results
                 this.total_records = response.data.count
                 this.page_limit = Math.ceil(response.data.count / this.page_size);
+            })
+        });
+    }
+
+    getByPrId(){
+        axios.get('api/payroll_regular_data/get_by_payroll_regular_id', { 
+            params: { 
+                pr_id: this.payroll_regular_id
+            }
+        }).then((response) => {
+            runInAction(() => {
+                var prd_options = []; 
+                response.data.map(data => {
+                    prd_options.push({ value:data.id, label:data.employee_no+" - "+data.fullname },)
+                })
+                console
+                this.options = prd_options;
             })
         });
     }

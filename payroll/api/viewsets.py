@@ -29,7 +29,8 @@ from .serializers import (
     AllowanceSerializer, 
     PayrollRegularSerializer,
     PayrollRegularDataSerializer,
-    PayrollRegularMaintenanceSerializer
+    PayrollRegularMaintenanceSerializer,
+    PayrollRegularMaintenanceFormCreateSerializer
 )
 
 
@@ -95,6 +96,12 @@ class DeductionViewSet(viewsets.ModelViewSet):
             return Response({}, 500)
 
 
+    @action(methods=['get'], detail=False)
+    def get_all(self, request):
+        serializer = self.get_serializer(self.queryset, many=True)
+        return Response(serializer.data, 200)
+
+
 
 class AllowanceViewSet(viewsets.ModelViewSet):
     queryset = Allowances.objects.all()
@@ -155,6 +162,12 @@ class AllowanceViewSet(viewsets.ModelViewSet):
             return Response({}, 200)
         except:
             return Response({}, 500)
+
+
+    @action(methods=['get'], detail=False)
+    def get_all(self, request):
+        serializer = self.get_serializer(self.queryset, many=True)
+        return Response(serializer.data, 200)
 
 
 
@@ -293,6 +306,14 @@ class PayrollRegularDataViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, 200)
 
 
+    @action(methods=['get'], detail=False)
+    def get_by_payroll_regular_id(self, request):
+        payroll_regular_id = request.GET.get('pr_id', None)
+        prd_queryset = self.queryset.filter(payroll_regular_id=payroll_regular_id)
+        serializer = self.get_serializer(prd_queryset, many=True)
+        return Response(serializer.data, 200)
+
+
 
 class PayrollRegularMaintenanceViewSet(viewsets.ModelViewSet):
     queryset = PayrollRegularMaintenance.objects.all()
@@ -312,6 +333,12 @@ class PayrollRegularMaintenanceViewSet(viewsets.ModelViewSet):
             )
         serializer = self.get_serializer(self.queryset.filter(filter_conditions).order_by('id'), many=True)
         return Response(serializer.data, 200)
+
+
+    def create(self, request):
+        serializer = PayrollRegularMaintenanceFormCreateSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return Response({}, 200)
 
 
 

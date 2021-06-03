@@ -22,9 +22,10 @@ const PayrollRegularDetails = observer(({ payrollRegularStore, payrollRegularDat
         let is_mounted = true;
         if(is_mounted = true){
             payrollRegularStore.retrieve(payroll_regular_id)
-            payrollRegularStore.setIsOpenedForm(1)
             payrollRegularDataStore.setPayrollRegularId(payroll_regular_id)
+            payrollRegularDataStore.fetch()
             payrollRegularMntStore.setPayrollRegularId(payroll_regular_id)
+            payrollRegularMntStore.fetch()
         }
         return () => { is_mounted = false; } 
     },[])
@@ -122,7 +123,10 @@ const PayrollRegularDetails = observer(({ payrollRegularStore, payrollRegularDat
                             </div>
 
                             {/* Payroll Regular Maintenance */}
-                            <PayrollRegularMntDetails payrollRegularMntStore={payrollRegularMntStore}/>
+                            <PayrollRegularMntDetails 
+                                payrollRegularDataStore={payrollRegularDataStore} 
+                                payrollRegularMntStore={payrollRegularMntStore}
+                            />
 
                             {/* Payroll Regular Data Details */}
                             <PayrollRegularContentDetails payrollRegularDataStore={payrollRegularDataStore}/>

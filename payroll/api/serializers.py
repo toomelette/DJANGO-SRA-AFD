@@ -6,7 +6,8 @@ from payroll.models import (
      PayrollRegular, 
      PayrollRegularData, 
      PayrollRegularDataDeductions, 
-     PayrollRegularDataAllowances
+     PayrollRegularDataAllowances,
+     PayrollRegularMaintenance
 )
 from employee.api.serializers import (
      EmployeeDetailsSerializer, 
@@ -86,15 +87,29 @@ class PayrollRegularMaintenanceSerializer(serializers.ModelSerializer):
      payroll_regular = PayrollRegularSerializer(many=False)
      payroll_regular_data = PayrollRegularDataSerializer(many=False)
      class Meta:
-          model = PayrollRegularData
+          model = PayrollRegularMaintenance
           fields = (
                'id', 
-               'employee_no',
                'category',
                'field',
-               'amount',
+               'mod_value',
                'remarks',
                'payroll_regular',
                'payroll_regular_data',
+          )
+          read_only_fields = ('id',)
+
+
+class PayrollRegularMaintenanceFormCreateSerializer(serializers.ModelSerializer):
+     prd_id = serializers.CharField(required=True, max_length=20)
+     type = serializers.CharField(required=True, max_length=50)
+     class Meta:
+          model = PayrollRegularMaintenance
+          fields = (
+               'prd_id',
+               'type',
+               'field',
+               'mod_value',
+               'remarks',
           )
           read_only_fields = ('id',)
