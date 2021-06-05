@@ -21,6 +21,23 @@ class PayrollRegularMntStore{
         { type:1, value:"sss", label:"SSS" },
     ];
 
+    SELECT_FORM_FIELDS = ["station","paygroup","status"]
+    CHAR_FORM_FIELDS = ["fullname","position","atm_account_no","tin","gsis","philhealth","pagibig","sss"]
+    NUMERIC_FORM_FIELDS = ["salary_grade","step_increment","plantilla_item"]
+    MONEYFORMAT_FORM_FIELDS = ["monthly_salary"]
+
+    PAYGROUP_OPTIONS = [
+        { value:1, label:"Regular" },
+        { value:2, label:"Pay with Check" },
+        { value:3, label:"Actual" },
+        { value:4, label:"COS" },
+    ]
+
+    STATUS_OPTIONS = [
+        { value:1, label:"Regular" },
+        { value:2, label:"cos" },
+    ]
+
     //  list vars
     list = [];
     query = "";
@@ -29,6 +46,7 @@ class PayrollRegularMntStore{
     selected_data_details = {};
     is_opened_form = 0;
     param_options = [];
+    station_options = [];
 
     // form vars
     payroll_regular_id = "";
@@ -102,6 +120,20 @@ class PayrollRegularMntStore{
                 }) 
             });
         })
+    }
+
+    setStationOptions(){
+        axios.get('api/station/get_all')
+             .then((response) => {
+                runInAction(() => {
+                    let stations = response.data;
+                    if(stations.length > 0){
+                        stations.forEach(data => {
+                            this.station_options.push({ value:data.station_id, label:data.name });
+                        });
+                    }
+                })
+        });
     }
 
 

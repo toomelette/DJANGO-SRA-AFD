@@ -1,12 +1,11 @@
 
 
-import React from 'react'
+import React, { useState } from 'react'
 import { observer } from 'mobx-react'
 import { InputText, SelectInput } from '../Utils/Forms/DefaultInputs'
 
 
 const PayrollRegularFormMntComp = observer(({ payrollRegularDataStore, payrollRegularMntStore }) => {
-
 
     return (
             
@@ -34,15 +33,19 @@ const PayrollRegularFormMntComp = observer(({ payrollRegularDataStore, payrollRe
                 errorField={ payrollRegularMntStore.error_fields.field }
             />
 
-            <InputText 
-                col="col-sm-6"
-                type="text"
-                label="Value:"
-                placeholder="Value"
-                errorField={ payrollRegularMntStore.error_fields.mod_value }
-                value={ payrollRegularMntStore.mod_value }
-                setter={ e => payrollRegularMntStore.setModValue(e.target.value) }
-            />
+            <div className="col-sm-6 no-padding">
+
+                <InputText 
+                    col="col-sm-12 p-0 m-0"
+                    type="text"
+                    label="Value:"
+                    placeholder="Value"
+                    errorField={ payrollRegularMntStore.error_fields.mod_value }
+                    value={ payrollRegularMntStore.mod_value }
+                    setter={ e => payrollRegularMntStore.setModValue(e.target.value) }
+                />
+
+            </div>
 
             <InputText 
                 col="col-sm-6"

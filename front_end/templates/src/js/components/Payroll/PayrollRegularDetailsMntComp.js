@@ -1,6 +1,6 @@
 
 
-import React, { useState } from 'react'
+import React from 'react'
 import { observer } from 'mobx-react'
 import PayrollRegularFormMntComp from './PayrollRegularFormMntComp'
 
@@ -10,8 +10,6 @@ const PayrollRegularMntDetails = observer(({ payrollRegularDataStore, payrollReg
 
     const handleOpenCreatePayrollRegularMntModal = (e) => {
         e.preventDefault()
-        payrollRegularDataStore.getByPrId()
-        payrollRegularMntStore.setParamOptions()
         $("#payroll-regular-mnt-create-modal").modal("toggle")
     }
 
