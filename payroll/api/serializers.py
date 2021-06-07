@@ -101,13 +101,14 @@ class PayrollRegularMaintenanceSerializer(serializers.ModelSerializer):
 
 
 class PayrollRegularMaintenanceFormCreateSerializer(serializers.ModelSerializer):
+     pr_id = serializers.CharField(required=True, max_length=20)
      prd_id = serializers.CharField(required=True, max_length=20)
-     type = serializers.CharField(required=True, max_length=50)
      class Meta:
           model = PayrollRegularMaintenance
           fields = (
+               'pr_id',
                'prd_id',
-               'type',
+               'category',
                'field',
                'mod_value',
                'remarks',

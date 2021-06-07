@@ -1,12 +1,17 @@
 
 
-import React from 'react'
+import React, { useState } from 'react'
 import { observer } from 'mobx-react'
+import { useParams } from 'react-router-dom';
+import eventBus from '../Utils/EventBus'
+import DivLoader from '../Utils/DivLoaderComp'
 import PayrollRegularFormMntComp from './PayrollRegularFormMntComp'
 
 
 const PayrollRegularMntDetails = observer(({ payrollRegularDataStore, payrollRegularMntStore }) => {
 
+    const { payroll_regular_id } = useParams();
+    const[page_loader, SetPageLoader] = useState(false);
 
     const handleOpenCreatePayrollRegularMntModal = (e) => {
         e.preventDefault()
@@ -16,26 +21,34 @@ const PayrollRegularMntDetails = observer(({ payrollRegularDataStore, payrollReg
 
     const handleCreatePayrollRegularMnt = (e) => {
         e.preventDefault()
-
+        SetPageLoader(true)
+        var mod_value = "";
         axios.post('api/payroll_regular_mnt/', {
+            pr_id : payroll_regular_id,
             prd_id : payrollRegularMntStore.payroll_regular_data?.value,
-            type : payrollRegularMntStore.field?.type,
+            category : payrollRegularMntStore.field?.category,
             field : payrollRegularMntStore.field?.value,
-            mod_value : payrollRegularMntStore.mod_value,
+            mod_value : payrollRegularMntStore.mod_value.toString(),
             remarks : payrollRegularMntStore.remarks
         }).then((response) => {
-            console.log(response)
+            eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
+                message: "Maintenance / Changes Successfully Created!", type: "inverse" 
+            });
+            payrollRegularMntStore.fetch()
+            payrollRegularMntStore.resetForm()
+            SetPageLoader(false);
         }).catch((error) => {
             if(error.response.status == 400){
                 let field_errors = error.response.data;
                 payrollRegularMntStore.setErrorFields({
-                    payroll_regular_data: field_errors.prd_id?.toString(), 
-                    type: field_errors.type?.toString(), 
+                    prd_id: field_errors.prd_id?.toString(),
+                    category: field_errors.category?.toString(), 
                     field: field_errors.field?.toString(), 
                     mod_value: field_errors.mod_value?.toString(), 
                     remarks: field_errors.remarks?.toString(),
                     non_field_errors: field_errors.non_field_errors?.toString(),
                 });
+                SetPageLoader(false);
             }
         })
 
@@ -70,21 +83,20 @@ const PayrollRegularMntDetails = observer(({ payrollRegularDataStore, payrollReg
                             <thead>
                                 <tr>
                                     <th className="align-middle">Employee</th>
-                                    <th className="align-middle"></th>
-                                    <th className="align-middle"></th>
+                                    <th className="align-middle">Changes</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 { payrollRegularMntStore.list.map((val, key) => { 
                                     return (
                                         <tr key={key} className={ val.id == payrollRegularMntStore.selected_data ? "table-info" : "" }>
-                                            <td className="align-middle">{ val.fullname }</td>
-                                            <td className="align-middle">{ val.position }</td>
-                                            <td className="align-middle">
+                                            <td className="align-middle">{ val.payroll_regular_data?.employee_no }</td>
+                                            <td className="align-middle">{ val.field } - { val.mod_value }</td>
+                                            {/* <td className="align-middle">
                                                 <a href="#">
                                                     <ins className="text-info">View Details</ins>
                                                 </a>
-                                            </td>
+                                            </td> */}
                                         </tr>
                                     ) 
                                 }) }
@@ -99,6 +111,7 @@ const PayrollRegularMntDetails = observer(({ payrollRegularDataStore, payrollReg
         <div className="modal" id="payroll-regular-mnt-create-modal" role="dialog">
             <div className="modal-dialog modal-lg" role="document">
                 <div className="modal-content">
+                    <DivLoader type="Circles" loading={page_loader}/>
                     <div className="modal-header">
                         <h4 className="modal-title">Add Maintenance</h4>
                         <button type="button" className="close" data-dismiss="modal" aria-label="Close">

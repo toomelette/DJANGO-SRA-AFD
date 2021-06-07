@@ -4,27 +4,27 @@ import { makeAutoObservable, runInAction } from "mobx"
 class PayrollRegularMntStore{
 
     FIELD_OPTIONS = [
-        { type:1, value:"station", label:"Station" },
-        { type:1, value:"paygroup", label:"Paygroup" },
-        { type:1, value:"fullname", label:"Fullname" },
-        { type:1, value:"position", label:"Position" },
-        { type:1, value:"salary_grade", label:"Salary Grade" },
-        { type:1, value:"step_increment", label:"Step Increment" },
-        { type:1, value:"monthly_salary", label:"Monthly Salary" },
-        { type:1, value:"plantilla_item", label:"Plantilla Item" },
-        { type:1, value:"status", label:"Status" },
-        { type:1, value:"atm_account_no", label:"ATM Account No." },
-        { type:1, value:"tin", label:"TIN" },
-        { type:1, value:"gsis", label:"GSIS" },
-        { type:1, value:"philhealth", label:"Philhealth" },
-        { type:1, value:"pagibig", label:"Pagibig" },
-        { type:1, value:"sss", label:"SSS" },
+        { category:1, value:"station", label:"Station" },
+        { category:1, value:"paygroup", label:"Paygroup" },
+        { category:1, value:"fullname", label:"Fullname" },
+        { category:1, value:"position", label:"Position" },
+        { category:1, value:"salary_grade", label:"Salary Grade" },
+        { category:1, value:"step_increment", label:"Step Increment" },
+        { category:1, value:"monthly_salary", label:"Monthly Salary" },
+        { category:1, value:"plantilla_item", label:"Plantilla Item" },
+        { category:1, value:"status", label:"Status" },
+        { category:1, value:"atm_account_no", label:"ATM Account No." },
+        { category:1, value:"tin", label:"TIN" },
+        { category:1, value:"gsis", label:"GSIS" },
+        { category:1, value:"philhealth", label:"Philhealth" },
+        { category:1, value:"pagibig", label:"Pagibig" },
+        { category:1, value:"sss", label:"SSS" },
     ];
 
-    SELECT_FORM_FIELDS = ["station","paygroup","status"]
     CHAR_FORM_FIELDS = ["fullname","position","atm_account_no","tin","gsis","philhealth","pagibig","sss"]
     NUMERIC_FORM_FIELDS = ["salary_grade","step_increment","plantilla_item"]
-    MONEYFORMAT_FORM_FIELDS = ["monthly_salary"]
+    MONEYFORMAT_FORM_FIELDS = ["monthly_salary",]
+    SELECT_FORM_FIELDS = ["station","paygroup","status"]
 
     PAYGROUP_OPTIONS = [
         { value:1, label:"Regular" },
@@ -38,6 +38,8 @@ class PayrollRegularMntStore{
         { value:2, label:"cos" },
     ]
 
+    station_options = [];
+
     //  list vars
     list = [];
     query = "";
@@ -46,12 +48,11 @@ class PayrollRegularMntStore{
     selected_data_details = {};
     is_opened_form = 0;
     param_options = [];
-    station_options = [];
 
     // form vars
     payroll_regular_id = "";
     payroll_regular_data = { value:"", label:"Select" };
-    field = { type:null, value:"", label:"Select" };
+    field = { category:null, value:"", label:"Select" };
     mod_value = "";
     remarks = "";
     error_fields = {};
@@ -110,13 +111,13 @@ class PayrollRegularMntStore{
             axios.get('api/deduction/get_all')
             .then((response) => {
                 response.data.map(data => {
-                    this.param_options.push({type:2, value:data.code, label:data.code+" - "+data.name})
+                    this.param_options.push({category:2, value:data.code, label:data.code+" - "+data.name})
                 }) 
             });
             axios.get('api/allowance/get_all')
             .then((response) => {
                 response.data.map(data => {
-                    this.param_options.push({type:3, value:data.code, label:data.code+" - "+data.name})
+                    this.param_options.push({category:3, value:data.code, label:data.code+" - "+data.name})
                 }) 
             });
         })
@@ -141,7 +142,7 @@ class PayrollRegularMntStore{
     resetForm(){
         this.payroll_regular_id = "";
         this.payroll_regular_data = { value:"", label:"Select" };
-        this.field = { type:null, value:"", label:"Select" };
+        this.field = { category:null, value:"", label:"Select" };
         this.mod_value = "";
         this.remarks = "";
         this.error_fields = {};
@@ -156,6 +157,7 @@ class PayrollRegularMntStore{
     }
 
     setField(field){
+        this.mod_value = "";
         this.field = field;
     }
 

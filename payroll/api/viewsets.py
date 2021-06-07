@@ -338,6 +338,16 @@ class PayrollRegularMaintenanceViewSet(viewsets.ModelViewSet):
     def create(self, request):
         serializer = PayrollRegularMaintenanceFormCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+        payroll_regular_mnt = PayrollRegularMaintenance()
+        payroll_regular_mnt.payroll_regular_id = serializer.data['pr_id']
+        payroll_regular_mnt.payroll_regular_data_id = serializer.data['prd_id']
+        payroll_regular_mnt.category = serializer.data['category']
+        payroll_regular_mnt.field = serializer.data['field']
+        payroll_regular_mnt.mod_value = serializer.data['mod_value']
+        payroll_regular_mnt.remarks = serializer.data['remarks']
+        payroll_regular_mnt.created_by_id = request.user.id
+        payroll_regular_mnt.updated_by_id = request.user.id
+        payroll_regular_mnt.save()
         return Response({}, 200)
 
 
