@@ -64,14 +64,14 @@ class PayrollRegularData(models.Model):
 
 class PayrollRegularMaintenance(models.Model):
     CATEGORY = ((1,'Modify Field'), (2,'Modify Deductions'), (3,'Modify Allowance'), (4,'Create Content'), (4,'Remove Content'))
-    payroll_regular = models.ForeignKey(PayrollRegular, db_column="payroll_regular_id", related_name='payrollMnt_payrollRegular', on_delete=models.CASCADE)
-    payroll_regular_data = models.ForeignKey(PayrollRegularData, db_column="payroll_regular_data_id", related_name='payrollMnt_payrollRegularData', on_delete=models.CASCADE)
+    payroll_regular = models.ForeignKey(PayrollRegular, db_column="payroll_regular_id", related_name='payrollRegularMnt_payrollRegular', on_delete=models.CASCADE)
+    payroll_regular_data = models.ForeignKey(PayrollRegularData, db_column="payroll_regular_data_id", related_name='payrollRegularMnt_payrollRegularData', on_delete=models.CASCADE)
     category = models.IntegerField(choices=CATEGORY, default=0)
     field = models.CharField(max_length=50, default="")
     mod_value = models.CharField(max_length=50, default="")
     remarks = models.CharField(max_length=200, default="", blank=True)
-    created_by = models.ForeignKey(User, related_name='payrollMnt_created_by_user', on_delete=models.PROTECT)
-    updated_by = models.ForeignKey(User, related_name='payrollMnt_updated_by_user', on_delete=models.PROTECT)
+    created_by = models.ForeignKey(User, related_name='payrollRegularMnt_created_by_user', on_delete=models.PROTECT)
+    updated_by = models.ForeignKey(User, related_name='payrollRegularMnt_updated_by_user', on_delete=models.PROTECT)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
 

@@ -5,6 +5,7 @@ import { observer } from 'mobx-react'
 import { useParams } from 'react-router-dom';
 import eventBus from '../Utils/EventBus'
 import DivLoader from '../Utils/DivLoaderComp'
+import { numberFormat } from '../Utils/DataFilters'
 import PayrollRegularFormMntComp from './PayrollRegularFormMntComp'
 
 
@@ -15,6 +16,10 @@ const PayrollRegularMntDetails = observer(({ payrollRegularDataStore, payrollReg
 
     const handleOpenCreatePayrollRegularMntModal = (e) => {
         e.preventDefault()
+        if(payrollRegularMntStore.is_opened_form === 1){
+            payrollRegularMntStore.resetForm()
+        }
+        payrollRegularMntStore.setIsOpenedForm(0)
         $("#payroll-regular-mnt-create-modal").modal("toggle")
     }
 
@@ -23,19 +28,25 @@ const PayrollRegularMntDetails = observer(({ payrollRegularDataStore, payrollReg
         e.preventDefault()
         SetPageLoader(true)
         var mod_value = "";
+        if(payrollRegularMntStore.SELECT_FORM_FIELDS.includes(payrollRegularMntStore.field?.value)){
+            mod_value = payrollRegularMntStore.mod_value.value;
+        }else{
+            mod_value = payrollRegularMntStore.mod_value;
+        }
         axios.post('api/payroll_regular_mnt/', {
             pr_id : payroll_regular_id,
             prd_id : payrollRegularMntStore.payroll_regular_data?.value,
             category : payrollRegularMntStore.field?.category,
             field : payrollRegularMntStore.field?.value,
-            mod_value : payrollRegularMntStore.mod_value.toString(),
+            mod_value : mod_value.toString(),
             remarks : payrollRegularMntStore.remarks
         }).then((response) => {
             eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
-                message: "Maintenance / Changes Successfully Created!", type: "inverse" 
+                message: "Maintenance Successfully Created!", type: "inverse" 
             });
             payrollRegularMntStore.fetch()
             payrollRegularMntStore.resetForm()
+            payrollRegularMntStore.setPayrollRegularMntId(response.data.id)
             SetPageLoader(false);
         }).catch((error) => {
             if(error.response.status == 400){
@@ -48,10 +59,159 @@ const PayrollRegularMntDetails = observer(({ payrollRegularDataStore, payrollReg
                     remarks: field_errors.remarks?.toString(),
                     non_field_errors: field_errors.non_field_errors?.toString(),
                 });
-                SetPageLoader(false);
             }
+            if(error.response.status == 500){
+                eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
+                    message: "Error occurred!", type: "danger" 
+                });
+            }
+            SetPageLoader(false);
         })
+    }
 
+
+    const handleOpenEditPayrollRegularMntModal = (e, id) =>{
+        e.preventDefault()
+        payrollRegularMntStore.retrieve(id)
+        payrollRegularMntStore.setIsOpenedForm(1)
+        $("#payroll-regular-mnt-edit-modal").modal("toggle")
+    }
+
+    
+    const handleUpdatePayrollRegularMnt = (e) =>{
+        e.preventDefault()
+        SetPageLoader(true)
+        var mod_value = "";
+        if(payrollRegularMntStore.SELECT_FORM_FIELDS.includes(payrollRegularMntStore.field?.value)){
+            mod_value = payrollRegularMntStore.mod_value.value;
+        }else{
+            mod_value = payrollRegularMntStore.mod_value;
+        }
+        axios.put('api/payroll_regular_mnt/'+payrollRegularMntStore.payroll_regular_mnt_id+'/', {
+            pr_id : payroll_regular_id,
+            prd_id : payrollRegularMntStore.payroll_regular_data?.value,
+            category : payrollRegularMntStore.field?.category,
+            field : payrollRegularMntStore.field?.value,
+            mod_value : mod_value.toString(),
+            remarks : payrollRegularMntStore.remarks
+        }).then((response) => {
+            eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
+                message: "Maintenance Successfully Updated!", type: "inverse" 
+            });
+            payrollRegularMntStore.fetch()
+            payrollRegularMntStore.resetForm()
+            payrollRegularMntStore.setPayrollRegularMntId(response.data.id)
+            SetPageLoader(false);
+            $("#payroll-regular-mnt-edit-modal").modal("hide")
+        }).catch((error) => {
+            if(error.response.status == 400){
+                let field_errors = error.response.data;
+                payrollRegularMntStore.setErrorFields({
+                    prd_id: field_errors.prd_id?.toString(),
+                    category: field_errors.category?.toString(), 
+                    field: field_errors.field?.toString(), 
+                    mod_value: field_errors.mod_value?.toString(), 
+                    remarks: field_errors.remarks?.toString(),
+                    non_field_errors: field_errors.non_field_errors?.toString(),
+                });
+            }
+            if(error.response.status == 500){
+                eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
+                    message: "Error occurred!", type: "danger" 
+                });
+            }
+            SetPageLoader(false);
+        })
+    }
+
+
+    const handleOpenDeletePayrollRegularMntModal = (e, id) =>{
+        e.preventDefault()
+        payrollRegularMntStore.setPayrollRegularMntId(id)
+        $("#payroll-regular-mnt-delete-modal").modal("toggle")
+    } 
+
+
+    const handleDeletePayrollRegularMnt = (e) => {
+        e.preventDefault()
+        axios.delete('api/payroll_regular_mnt/'+payrollRegularMntStore.payroll_regular_mnt_id+'/')
+        .then((response) => {
+            payrollRegularMntStore.fetch()
+            eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
+                message: "Maintenance Successfully Deleted!", type: "inverse" 
+            });
+            $("#payroll-regular-mnt-delete-modal").modal("hide")
+        }).catch((error) => {
+            if(error.response.status == 404 || error.response.status == 500){
+                eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
+                    message: "Error Occured!", type: "danger" 
+                });
+            }
+        });
+    }  
+
+
+    const tableRowChanges = (category, field, mod_value) =>{
+        var data = "";
+        if(category === 1){
+            switch (field) {
+                case "paygroup":
+                    data =  (
+                        <> { payrollRegularMntStore.getParamOptionsLabel(field) }:
+                            <span style={{ fontWeight:'bold', }}>
+                                { ' ' + payrollRegularMntStore.getPaygroupOptionsLabel(mod_value) }
+                            </span> 
+                        </>
+                    )
+                    break;
+                case "station":
+                    data = (
+                        <> { payrollRegularMntStore.getParamOptionsLabel(field) }:
+                            <span style={{ fontWeight:'bold', }}>
+                                { ' ' + payrollRegularMntStore.getStationOptionsLabel(mod_value) }
+                            </span> 
+                        </>
+                    )
+                    break;
+                case "status":
+                    data = (
+                        <> { payrollRegularMntStore.getParamOptionsLabel(field) }:
+                            <span style={{ fontWeight:'bold', }}>
+                                { ' ' + payrollRegularMntStore.getStatusOptionsLabel(mod_value) }
+                            </span> 
+                        </>
+                    )
+                    break;
+                case "monthly_salary":
+                    data = (
+                        <> { payrollRegularMntStore.getParamOptionsLabel(field) }:
+                            <span style={{ fontWeight:'bold', }}>
+                                { ' ' +  numberFormat(Number(mod_value), 2) }
+                            </span> 
+                        </>
+                    )
+                    break;
+                default:
+                    data = (
+                        <> { payrollRegularMntStore.getParamOptionsLabel(field) }:
+                            <span style={{ fontWeight:'bold', }}>
+                                { ' ' + mod_value }
+                            </span> 
+                        </>
+                    )
+                    break;
+            }
+        }
+        if(category === 2 || category === 3){
+            data = (
+                <> { payrollRegularMntStore.getParamOptionsLabel(field) }:
+                    <span style={{ fontWeight:'bold', }}>
+                        { ' ' + numberFormat(Number(mod_value), 2) }
+                    </span> 
+                </>
+            )
+        }
+        return data;
     }
 
 
@@ -82,24 +242,36 @@ const PayrollRegularMntDetails = observer(({ payrollRegularDataStore, payrollReg
                         <table className="table table-sm table-hover mt-3">
                             <thead>
                                 <tr>
-                                    <th className="align-middle">Employee</th>
                                     <th className="align-middle">Changes</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 { payrollRegularMntStore.list.map((val, key) => { 
                                     return (
-                                        <tr key={key} className={ val.id == payrollRegularMntStore.selected_data ? "table-info" : "" }>
-                                            <td className="align-middle">{ val.payroll_regular_data?.employee_no }</td>
-                                            <td className="align-middle">{ val.field } - { val.mod_value }</td>
-                                            {/* <td className="align-middle">
-                                                <a href="#">
-                                                    <ins className="text-info">View Details</ins>
+                                        <tr key={key} className={ val.id == payrollRegularMntStore.payroll_regular_mnt_id ? "table-info" : "" }>
+                                            <td className="align-middle">
+                                                { val.payroll_regular_data?.employee_no +" - "+ val.payroll_regular_data?.fullname}
+                                                <p className="m-0 p-0">{ tableRowChanges(val.category, val.field, val.mod_value) }</p>
+                                            </td>
+                                            <td className="align-middle">
+                                                <a href="" onClick={ e => handleOpenEditPayrollRegularMntModal(e, val.id) }>
+                                                    <i className="feather icon-edit f-w-1000 f-18 m-r-15 text-c-blue"></i>
                                                 </a>
-                                            </td> */}
+                                                <a href="" onClick={ e => handleOpenDeletePayrollRegularMntModal(e, val.id) }>
+                                                    <i className="feather icon-trash-2 f-w-1000 f-18 text-c-red"></i>
+                                                </a>
+                                            </td>
                                         </tr>
                                     ) 
                                 }) }
+                                { payrollRegularMntStore.list.length == 0 ?
+                                    (
+                                        <tr>
+                                            <td className="align-middle">No Data Encoded!</td>
+                                        </tr>
+                                    ) : <></>
+                                }
                             </tbody>
                         </table>
                     </div>
@@ -131,6 +303,56 @@ const PayrollRegularMntDetails = observer(({ payrollRegularDataStore, payrollReg
                         <button type="button" className="btn btn-primary waves-effect waves-light" onClick={ handleCreatePayrollRegularMnt }>
                             Save
                         </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {/* Edit Maintenance */}
+        <div className="modal" id="payroll-regular-mnt-edit-modal" role="dialog">
+            <div className="modal-dialog modal-lg" role="document">
+                <div className="modal-content">
+                    <DivLoader type="Circles" loading={page_loader}/>
+                    <div className="modal-header">
+                        <h4 className="modal-title">Edit Maintenance</h4>
+                        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div className="modal-body">
+                        <PayrollRegularFormMntComp 
+                            payrollRegularDataStore={payrollRegularDataStore}
+                            payrollRegularMntStore={payrollRegularMntStore}
+                        />
+                    </div>
+                    <div className="modal-footer">
+                        <button type="button" className="btn btn-default waves-effect" data-dismiss="modal">
+                            Close
+                        </button>
+                        <button type="button" className="btn btn-primary waves-effect waves-light" onClick={ handleUpdatePayrollRegularMnt }>
+                            Save
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+                                                                    
+        {/* Delete Maintenance */}
+        <div className="modal" id="payroll-regular-mnt-delete-modal" role="dialog">
+            <div className="modal-dialog modal-lg" role="document">
+                <div className="modal-content">
+                    <div className="modal-header">
+                        <h4 className="modal-title">Delete Maintenance</h4>
+                        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div className="modal-body">
+                        <h4>Are you sure you want to permanently delete this record?</h4>
+                    </div>
+                    <div className="modal-footer">
+                        <button type="button" className="btn btn-default waves-effect" data-dismiss="modal">Close</button>
+                        <button type="button" className="btn btn-danger waves-effect waves-light" onClick={ handleDeletePayrollRegularMnt }>Delete</button>
                     </div>
                 </div>
             </div>

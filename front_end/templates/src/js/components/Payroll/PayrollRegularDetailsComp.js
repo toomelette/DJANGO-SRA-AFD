@@ -132,7 +132,10 @@ const PayrollRegularDetails = observer(({ payrollRegularStore, payrollRegularDat
                             />
 
                             {/* Payroll Regular Data Details */}
-                            <PayrollRegularContentDetails payrollRegularDataStore={payrollRegularDataStore}/>
+                            <PayrollRegularContentDetails 
+                                payrollRegularDataStore={payrollRegularDataStore} 
+                                payrollRegularMntStore={payrollRegularMntStore}    
+                            />
                                                                     
                             {/* DELETE MODAL */}
                             {/* <div className="modal" id="employee-delete-modal" role="dialog">

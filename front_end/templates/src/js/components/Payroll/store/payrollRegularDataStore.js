@@ -57,7 +57,6 @@ class PayrollRegularDataStore{
                 response.data.map(data => {
                     prd_options.push({ value:data.id, label:data.employee_no+" - "+data.fullname },)
                 })
-                console
                 this.options = prd_options;
             })
         });
@@ -101,6 +100,17 @@ class PayrollRegularDataStore{
 
     setSelectedData(id){
         this.selected_data = id;
+    }
+
+
+    getSelectedDataDetailsField(field){
+        if(this.selected_data_details.payrollRegularMnt_payrollRegularData){
+            const mnt = [...this.selected_data_details.payrollRegularMnt_payrollRegularData] 
+            return mnt.find(data => data.field === field)
+        }else{
+            return null;
+        }
+        
     }
 
 

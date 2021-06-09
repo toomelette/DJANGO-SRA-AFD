@@ -1,18 +1,18 @@
 
 
-import React, { useEffect } from 'react'
+import React from 'react'
 import { observer } from 'mobx-react'
 
 import { numberFormat } from '../Utils/DataFilters'
 import { TableFooterDefault } from '../Utils/Table/TableFooters'
 
 
-const PayrollRegularContentDetails = observer(({ payrollRegularDataStore }) => {
+const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrollRegularMntStore }) => {
 
     var total_deduc = 0;
     var total_allow = 0;
 
-
+    
     const handleClickContentDetails = (e, id) => {
         e.preventDefault()
         payrollRegularDataStore.setSelectedData(id)
@@ -105,82 +105,146 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore }) => {
 
                             <div className="col-md-3">
                                 <span> Fullname: {'\n'} </span>
-                                <h5>{ payrollRegularDataStore.selected_data_details.fullname }</h5>
+                                { payrollRegularDataStore.getSelectedDataDetailsField('fullname') ? 
+                                    <h5 style={{ color:'#4099ff' }}>{ payrollRegularDataStore.getSelectedDataDetailsField('fullname').mod_value }</h5>: 
+                                    <h5>{ payrollRegularDataStore.selected_data_details.fullname }</h5>
+                                }
+                            </div>
+
+                            <div className="col-md-3">
+                                <span> Station: {'\n'} </span>
+                                { payrollRegularDataStore.getSelectedDataDetailsField('station') ? 
+                                    <h5 style={{ color:'#4099ff' }}>
+                                        { payrollRegularMntStore.getStationOptionsLabel(payrollRegularDataStore.getSelectedDataDetailsField('station').mod_value) }
+                                    </h5> :
+                                    <h5>
+                                        { payrollRegularMntStore.getStationOptionsLabel(payrollRegularDataStore.selected_data_details.station_no) }
+                                    </h5>
+                                }
                             </div>
 
                             <div className="col-md-3">
                                 <span> Position: {'\n'} </span>
-                                <h5>{ payrollRegularDataStore.selected_data_details.position }</h5>
+                                { payrollRegularDataStore.getSelectedDataDetailsField('position') ? 
+                                    <h5 style={{ color:'#4099ff' }}>{ payrollRegularDataStore.getSelectedDataDetailsField('position').mod_value }</h5>: 
+                                    <h5>{ payrollRegularDataStore.selected_data_details.position }</h5>
+                                }
                             </div>
 
-                            <div className="col-md-3">
-                                <span> Paygroup: {'\n'} </span>
-                                <h5>
-                                    { payrollRegularDataStore.selected_data_details.paygroup == 1 ? 
-                                        "Pay with ATM" : "Pay with check"
-                                    }
-                                </h5>
-                            </div>
-                            
                             <div className="col-md-12 mt-4">{' '}</div>
 
                             <div className="col-md-3">
+                                <span> Paygroup: {'\n'} </span>
+                                { payrollRegularDataStore.getSelectedDataDetailsField('paygroup') ? 
+                                    <h5 style={{ color:'#4099ff' }}>
+                                        { payrollRegularMntStore.getPaygroupOptionsLabel(payrollRegularDataStore.getSelectedDataDetailsField('paygroup').mod_value) }
+                                    </h5> :
+                                    <h5>
+                                        { payrollRegularMntStore.getPaygroupOptionsLabel(payrollRegularDataStore.selected_data_details.paygroup) }
+                                    </h5>
+                                }
+                            </div>
+
+                            <div className="col-md-3">
                                 <span> Salary Grade: {'\n'} </span>
-                                <h5>{ payrollRegularDataStore.selected_data_details.salary_grade }</h5>
+                                { payrollRegularDataStore.getSelectedDataDetailsField('salary_grade') ? 
+                                    <h5 style={{ color:'#4099ff' }}>{ payrollRegularDataStore.getSelectedDataDetailsField('salary_grade').mod_value }</h5>: 
+                                    <h5>{ payrollRegularDataStore.selected_data_details.salary_grade }</h5>
+                                }
                             </div>
 
                             <div className="col-md-3">
                                 <span> Step Increment: {'\n'} </span>
-                                <h5>{ payrollRegularDataStore.selected_data_details.step_increment }</h5>
+                                { payrollRegularDataStore.getSelectedDataDetailsField('step_increment') ? 
+                                    <h5 style={{ color:'#4099ff' }}>{ payrollRegularDataStore.getSelectedDataDetailsField('step_increment').mod_value }</h5>: 
+                                    <h5>{ payrollRegularDataStore.selected_data_details.step_increment }</h5>
+                                }
                             </div>
 
                             <div className="col-md-3">
                                 <span> Monthly Salary: {'\n'} </span>
-                                <h5>{ numberFormat(payrollRegularDataStore.selected_data_details.monthly_salary, 2) }</h5>
-                            </div>
-
-                            <div className="col-md-3">
-                                <span> Plantilla Item: {'\n'} </span>
-                                <h5>{ payrollRegularDataStore.selected_data_details.plantilla_item }</h5>
+                                { payrollRegularDataStore.getSelectedDataDetailsField('monthly_salary') ? 
+                                    <h5 style={{ color:'#4099ff' }}>
+                                        { numberFormat(payrollRegularDataStore.getSelectedDataDetailsField('monthly_salary').mod_value, 2) }
+                                    </h5> : 
+                                    <h5>
+                                        { numberFormat(payrollRegularDataStore.selected_data_details.monthly_salary, 2) }
+                                    </h5>
+                                }
                             </div>
 
                             <div className="col-md-12 mt-4">{' '}</div>
 
                             <div className="col-md-3">
+                                <span> Plantilla Item: {'\n'} </span>
+                                { payrollRegularDataStore.getSelectedDataDetailsField('plantilla_item') ? 
+                                    <h5 style={{ color:'#4099ff' }}>{ payrollRegularDataStore.getSelectedDataDetailsField('plantilla_item').mod_value }</h5>: 
+                                    <h5>{ payrollRegularDataStore.selected_data_details.plantilla_item }</h5>
+                                }
+                            </div>
+
+                            <div className="col-md-3">
                                 <span> Status: {'\n'} </span>
-                                <h5>{ payrollRegularDataStore.selected_data_details.status == 1 ? "Regular" : "COS" }</h5>
+                                { payrollRegularDataStore.getSelectedDataDetailsField('status') ? 
+                                    <h5 style={{ color:'#4099ff' }}>
+                                        { payrollRegularMntStore.getStatusOptionsLabel(payrollRegularDataStore.getSelectedDataDetailsField('status').mod_value) }
+                                    </h5> :
+                                    <h5>
+                                        { payrollRegularMntStore.getStatusOptionsLabel(payrollRegularDataStore.selected_data_details.status) }
+                                    </h5>
+                                }
                             </div>
 
                             <div className="col-md-3">
                                 <span> ATM Account No.: {'\n'} </span>
-                                <h5>{ payrollRegularDataStore.selected_data_details.atm_account_no }</h5>
+                                { payrollRegularDataStore.getSelectedDataDetailsField('atm_account_no') ? 
+                                    <h5 style={{ color:'#4099ff' }}>{ payrollRegularDataStore.getSelectedDataDetailsField('atm_account_no').mod_value }</h5>: 
+                                    <h5>{ payrollRegularDataStore.selected_data_details.atm_account_no }</h5>
+                                }
                             </div>
 
                             <div className="col-md-3">
                                 <span> TIN: {'\n'} </span>
-                                <h5>{ payrollRegularDataStore.selected_data_details.tin }</h5>
-                            </div>
-
-                            <div className="col-md-3">
-                                <span> GSIS: {'\n'} </span>
-                                <h5>{ payrollRegularDataStore.selected_data_details.gsis }</h5>
+                                { payrollRegularDataStore.getSelectedDataDetailsField('tin') ? 
+                                    <h5 style={{ color:'#4099ff' }}>{ payrollRegularDataStore.getSelectedDataDetailsField('tin').mod_value }</h5>: 
+                                    <h5>{ payrollRegularDataStore.selected_data_details.tin }</h5>
+                                }
                             </div>
 
                             <div className="col-md-12 mt-4">{' '}</div>
+
+                            <div className="col-md-3">
+                                <span> GSIS: {'\n'} </span>
+                                { payrollRegularDataStore.getSelectedDataDetailsField('gsis') ? 
+                                    <h5 style={{ color:'#4099ff' }}>{ payrollRegularDataStore.getSelectedDataDetailsField('gsis').mod_value }</h5>: 
+                                    <h5>{ payrollRegularDataStore.selected_data_details.gsis }</h5>
+                                }
+                            </div>
                         
                             <div className="col-md-3">
                                 <span> Philhealth: {'\n'} </span>
-                                <h5>{ payrollRegularDataStore.selected_data_details.philhealth }</h5>
+                                { payrollRegularDataStore.getSelectedDataDetailsField('philhealth') ? 
+                                    <h5 style={{ color:'#4099ff' }}>{ payrollRegularDataStore.getSelectedDataDetailsField('philhealth').mod_value }</h5>: 
+                                    <h5>{ payrollRegularDataStore.selected_data_details.philhealth }</h5>
+                                }
                             </div>
 
                             <div className="col-md-3">
                                 <span> Pagibig: {'\n'} </span>
-                                <h5>{ payrollRegularDataStore.selected_data_details.pagibig }</h5>
+                                { payrollRegularDataStore.getSelectedDataDetailsField('pagibig') ? 
+                                    <h5 style={{ color:'#4099ff' }}>{ payrollRegularDataStore.getSelectedDataDetailsField('pagibig').mod_value }</h5>: 
+                                    <h5>{ payrollRegularDataStore.selected_data_details.pagibig }</h5>
+                                }
                             </div>
+
+                            <div className="col-md-12 mt-4">{' '}</div>
 
                             <div className="col-md-3">
                                 <span> SSS: {'\n'} </span>
-                                <h5>{ payrollRegularDataStore.selected_data_details.sss }</h5>
+                                { payrollRegularDataStore.getSelectedDataDetailsField('sss') ? 
+                                    <h5 style={{ color:'#4099ff' }}>{ payrollRegularDataStore.getSelectedDataDetailsField('sss').mod_value }</h5>: 
+                                    <h5>{ payrollRegularDataStore.selected_data_details.sss }</h5>
+                                }
                             </div>
 
                             <div className="col-md-12 mt-4">{' '}</div>
@@ -209,7 +273,7 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore }) => {
                                                     )
                                                 }) : 
                                                 <tr>
-                                                    <td className="align-middle">No Data!</td>
+                                                    <td className="align-middle">No Data Encoded!</td>
                                                 </tr> 
                                             }
                                         </tbody>

@@ -30,7 +30,7 @@ from .serializers import (
     PayrollRegularSerializer,
     PayrollRegularDataSerializer,
     PayrollRegularMaintenanceSerializer,
-    PayrollRegularMaintenanceFormCreateSerializer
+    PayrollRegularMaintenanceFormSerializer
 )
 
 
@@ -328,27 +328,58 @@ class PayrollRegularMaintenanceViewSet(viewsets.ModelViewSet):
         if search:
             filter_conditions.add(
                 Q(field__icontains=search) | 
-                Q(employee_no__icontains=search) | 
-                Q(remarks__icontains=search), Q.AND
+                Q(remarks__icontains=search) | 
+                Q(payroll_regular_data__employee_no__icontains=search) | 
+                Q(payroll_regular_data__fullname__icontains=search), Q.AND
             )
         serializer = self.get_serializer(self.queryset.filter(filter_conditions).order_by('id'), many=True)
         return Response(serializer.data, 200)
 
 
     def create(self, request):
-        serializer = PayrollRegularMaintenanceFormCreateSerializer(data=request.data)
+        serializer = PayrollRegularMaintenanceFormSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        payroll_regular_mnt = PayrollRegularMaintenance()
-        payroll_regular_mnt.payroll_regular_id = serializer.data['pr_id']
-        payroll_regular_mnt.payroll_regular_data_id = serializer.data['prd_id']
-        payroll_regular_mnt.category = serializer.data['category']
-        payroll_regular_mnt.field = serializer.data['field']
-        payroll_regular_mnt.mod_value = serializer.data['mod_value']
-        payroll_regular_mnt.remarks = serializer.data['remarks']
-        payroll_regular_mnt.created_by_id = request.user.id
-        payroll_regular_mnt.updated_by_id = request.user.id
-        payroll_regular_mnt.save()
-        return Response({}, 200)
+        try:
+            payroll_regular_mnt = PayrollRegularMaintenance()
+            payroll_regular_mnt.payroll_regular_id = serializer.data['pr_id']
+            payroll_regular_mnt.payroll_regular_data_id = serializer.data['prd_id']
+            payroll_regular_mnt.category = serializer.data['category']
+            payroll_regular_mnt.field = serializer.data['field']
+            payroll_regular_mnt.mod_value = serializer.data['mod_value']
+            payroll_regular_mnt.remarks = serializer.data['remarks']
+            payroll_regular_mnt.created_by_id = request.user.id
+            payroll_regular_mnt.updated_by_id = request.user.id
+            payroll_regular_mnt.save()
+            return Response({'id': payroll_regular_mnt.id}, 200)
+        except:
+            return Response(500)
+        
+
+    def update(self, request, pk=None):
+        serializer = PayrollRegularMaintenanceFormSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        try:
+            payroll_regular_mnt = get_object_or_404(self.queryset, id=pk)
+            payroll_regular_mnt.payroll_regular_id = serializer.data['pr_id']
+            payroll_regular_mnt.payroll_regular_data_id = serializer.data['prd_id']
+            payroll_regular_mnt.category = serializer.data['category']
+            payroll_regular_mnt.field = serializer.data['field']
+            payroll_regular_mnt.mod_value = serializer.data['mod_value']
+            payroll_regular_mnt.remarks = serializer.data['remarks']
+            payroll_regular_mnt.updated_by_id = request.user.id
+            payroll_regular_mnt.save()
+            return Response({'id':payroll_regular_mnt.id}, 200)
+        except:
+            return Response({}, 500)
+
+
+    def destroy(self, request, pk=None):
+        try:
+            payroll_regular_mnt = get_object_or_404(self.queryset, id=pk)
+            payroll_regular_mnt.delete()
+            return Response({}, 200)
+        except:
+            return Response({}, 500)
 
 
 

@@ -49,7 +49,7 @@ const PayrollRegularFormMntComp = observer(({ payrollRegularDataStore, payrollRe
                         placeholder="Value"
                         errorField={ payrollRegularMntStore.error_fields.mod_value }
                         value={ payrollRegularMntStore.mod_value }
-                        setter={ e => payrollRegularMntStore.setModValue(e.target.value) }
+                        setter={ values => payrollRegularMntStore.setModValue(values.value) }
                     />
                 )
             }
@@ -78,7 +78,7 @@ const PayrollRegularFormMntComp = observer(({ payrollRegularDataStore, payrollRe
                         value={ payrollRegularMntStore.mod_value }
                         isDisabled={ false }
                         options={ options }
-                        onChange={ (value) => payrollRegularMntStore.setModValue(value.value) }
+                        onChange={ (value) => payrollRegularMntStore.setModValue(value) }
                         errorField={ payrollRegularMntStore.error_fields.mod_value }
                     />
                 )
