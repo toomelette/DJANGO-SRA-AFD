@@ -1,4 +1,4 @@
-import { debounce } from 'lodash'
+import { debounce, stubString } from 'lodash'
 import { makeAutoObservable, runInAction } from "mobx"
 
 class PayrollRegularDataStore{
@@ -68,6 +68,27 @@ class PayrollRegularDataStore{
         .then((response) => {
             runInAction(() => {
                 this.selected_data_details = response.data
+                this.selected_data_details.payrollRegularMnt_payrollRegularData.map(data_mnt => {
+                    let deduc = this.selected_data_details.payrollRegularDataDeduc_payrollRegularData.find(data_deduc=>{
+                        return data_deduc.code == data_mnt.field
+                    })
+                    if(!deduc){
+                        this.selected_data_details.payrollRegularDataDeduc_payrollRegularData.push(
+                            { code: data_mnt.field, amount: data_mnt.mod_value }
+                        )
+                    }
+                    this.selected_data_details.payrollRegularDataDeduc_payrollRegularData = this.selected_data_details.payrollRegularDataDeduc_payrollRegularData.sort(
+                        function(a, b){
+                            if ( Number(a.code.substring(1)) < Number(b.code.substring(1)) ){
+                                return -1;
+                            }
+                            if ( Number(a.code.substring(1)) > Number(b.code.substring(1)) ){
+                                return 1;
+                            }
+                            return 0;
+                        }
+                    )
+                })
             })
         });
     }   
@@ -103,9 +124,9 @@ class PayrollRegularDataStore{
     }
 
 
-    getSelectedDataDetailsField(field){
+    getSelectedDataMaintenanceDetails(field){
         if(this.selected_data_details.payrollRegularMnt_payrollRegularData){
-            const mnt = [...this.selected_data_details.payrollRegularMnt_payrollRegularData] 
+            const mnt = [...this.selected_data_details.payrollRegularMnt_payrollRegularData]
             return mnt.find(data => data.field === field)
         }else{
             return null;
