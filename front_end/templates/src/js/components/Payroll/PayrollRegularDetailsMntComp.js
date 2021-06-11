@@ -38,6 +38,7 @@ const PayrollRegularMntDetails = observer(({ payrollRegularDataStore, payrollReg
             prd_id : payrollRegularMntStore.payroll_regular_data?.value,
             category : payrollRegularMntStore.field?.category,
             field : payrollRegularMntStore.field?.value,
+            field_description : payrollRegularMntStore.field?.description,
             mod_value : mod_value.toString(),
             remarks : payrollRegularMntStore.remarks
         }).then((response) => {
@@ -92,6 +93,7 @@ const PayrollRegularMntDetails = observer(({ payrollRegularDataStore, payrollReg
             prd_id : payrollRegularMntStore.payroll_regular_data?.value,
             category : payrollRegularMntStore.field?.category,
             field : payrollRegularMntStore.field?.value,
+            field_description : payrollRegularMntStore.field?.description,
             mod_value : mod_value.toString(),
             remarks : payrollRegularMntStore.remarks
         }).then((response) => {

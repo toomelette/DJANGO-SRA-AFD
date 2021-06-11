@@ -23,16 +23,15 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
 
     const getDeductionRecords = () => {
         let rows = [];
-        let added_deductions = [];
         if(payrollRegularDataStore.selected_data_details.payrollRegularDataDeduc_payrollRegularData){
             payrollRegularDataStore.selected_data_details.payrollRegularDataDeduc_payrollRegularData.map((data) => {
                 total_deduc+=Number(data.amount)
                 if(Number(data.amount) > 0){
                     if(payrollRegularDataStore.getSelectedDataMaintenanceDetails(data.code)){
                         rows.push(
-                            <tr key={data.id} style={{color:'#4099ff'}}>
+                            <tr key={data.code} style={{color:'#4099ff'}}>
                                 <td className="align-middle">
-                                    <span style={{ fontWeight:'bold' }}>({ data.code })</span> - { data.deduction?.name }
+                                    <span style={{ fontWeight:'bold' }}>({ data.code })</span> - { data.name }
                                 </td>
                                 <td className="align-middle">
                                     { numberFormat(payrollRegularDataStore.getSelectedDataMaintenanceDetails(data.code).mod_value, 2) }
@@ -41,9 +40,50 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
                         )
                     }else{
                         rows.push(
-                            <tr key={data.id}>
+                            <tr key={data.code}>
                                 <td className="align-middle">
-                                    <span style={{ fontWeight:'bold' }}>({ data.code })</span> - { data.deduction?.name }
+                                    <span style={{ fontWeight:'bold' }}>({ data.code })</span> - { data.name }
+                                </td>
+                                <td className="align-middle">
+                                    { numberFormat(data.amount, 2) }
+                                </td>
+                            </tr>
+                        )
+                    }
+                }
+            })
+
+        }else{
+            rows.push(
+                <tr key={0}><td className="align-middle">No Data Encoded!</td></tr>
+            )
+        }
+        return rows;
+    }
+
+
+    const getAllowanceRecords = () => {
+        let rows = [];
+        if(payrollRegularDataStore.selected_data_details.payrollRegularDataAllow_payrollRegularData){
+            payrollRegularDataStore.selected_data_details.payrollRegularDataAllow_payrollRegularData.map((data) => {
+                total_allow+=Number(data.amount)
+                if(Number(data.amount) > 0){
+                    if(payrollRegularDataStore.getSelectedDataMaintenanceDetails(data.code)){
+                        rows.push(
+                            <tr key={data.code} style={{color:'#4099ff'}}>
+                                <td className="align-middle">
+                                    <span style={{ fontWeight:'bold' }}>({ data.code })</span> - { data.name }
+                                </td>
+                                <td className="align-middle">
+                                    { numberFormat(payrollRegularDataStore.getSelectedDataMaintenanceDetails(data.code).mod_value, 2) }
+                                </td>
+                            </tr>   
+                        )
+                    }else{
+                        rows.push(
+                            <tr key={data.code}>
+                                <td className="align-middle">
+                                    <span style={{ fontWeight:'bold' }}>({ data.code })</span> - { data.name }
                                 </td>
                                 <td className="align-middle">
                                     { numberFormat(data.amount, 2) }
@@ -126,7 +166,7 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
         </div>
 
                                                                     
-        {/* CONTENT DETAILS */}
+        {/* CONTENT DETAILS MODAL */}
         <div className="modal" id="payroll-regular-content-details" role="dialog">
             <div className="modal-dialog modal-lg" role="document" style={{ maxWidth:'1200px' }}>
                 <div className="modal-content">
@@ -325,20 +365,7 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            { payrollRegularDataStore.selected_data_details.payrollRegularDataAllow_payrollRegularData ? 
-                                                payrollRegularDataStore.selected_data_details.payrollRegularDataAllow_payrollRegularData.map((data) => {
-                                                    total_allow+=Number(data.amount)
-                                                    if(Number(data.amount)){    
-                                                        return (
-                                                            <tr key={data.id}>
-                                                                <td className="align-middle">
-                                                                    <span style={{ fontWeight:'bold' }}>({ data.code })</span> - { data.allowance?.name }
-                                                                </td>
-                                                                <td className="align-middle">{ numberFormat(data.amount, 2) }</td>
-                                                            </tr>
-                                                        )
-                                                    }
-                                                }) : <tr><td className="align-middle">No Data!</td></tr> }
+                                            { getAllowanceRecords() }
                                         </tbody>
                                         <tfoot>
                                             <tr>

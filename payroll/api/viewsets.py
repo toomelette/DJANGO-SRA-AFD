@@ -345,6 +345,7 @@ class PayrollRegularMaintenanceViewSet(viewsets.ModelViewSet):
             payroll_regular_mnt.payroll_regular_data_id = serializer.data['prd_id']
             payroll_regular_mnt.category = serializer.data['category']
             payroll_regular_mnt.field = serializer.data['field']
+            payroll_regular_mnt.field_description = serializer.data['field_description']
             payroll_regular_mnt.mod_value = serializer.data['mod_value']
             payroll_regular_mnt.remarks = serializer.data['remarks']
             payroll_regular_mnt.created_by_id = request.user.id
@@ -364,6 +365,7 @@ class PayrollRegularMaintenanceViewSet(viewsets.ModelViewSet):
             payroll_regular_mnt.payroll_regular_data_id = serializer.data['prd_id']
             payroll_regular_mnt.category = serializer.data['category']
             payroll_regular_mnt.field = serializer.data['field']
+            payroll_regular_mnt.field_description = serializer.data['field_description']
             payroll_regular_mnt.mod_value = serializer.data['mod_value']
             payroll_regular_mnt.remarks = serializer.data['remarks']
             payroll_regular_mnt.updated_by_id = request.user.id
@@ -387,7 +389,18 @@ class TestViewSet(viewsets.ModelViewSet):
     queryset = MockAllowance.objects.all()
     
     def list(self, request):
-    
+        # deduc_qs = Allowances.objects.all()
+        # prd_deduc_qs = PayrollRegularDataAllowances.objects.all()
+        # for deduc in deduc_qs:
+        #     prd_deduc_spec_list = prd_deduc_qs.filter(allowance_id=deduc.id)
+        #     for prd_deduc in prd_deduc_spec_list:
+        #         prd_deduc_obj = get_object_or_404(prd_deduc_qs, id=prd_deduc.id)
+        #         prd_deduc_obj.name = deduc.name
+        #         prd_deduc_obj.description = deduc.description
+        #         prd_deduc_obj.save()
+        #         print(prd_deduc_obj.name)
+
+
         # payroll_regular_latest_cache = cache.keys('payroll_regular:latest:*')
         # if payroll_regular_latest_cache:
         #     print('Has values!!')

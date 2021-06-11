@@ -68,6 +68,7 @@ class PayrollRegularMaintenance(models.Model):
     payroll_regular_data = models.ForeignKey(PayrollRegularData, db_column="payroll_regular_data_id", related_name='payrollRegularMnt_payrollRegularData', on_delete=models.CASCADE)
     category = models.IntegerField(choices=CATEGORY, default=0)
     field = models.CharField(max_length=50, default="")
+    field_description = models.CharField(max_length=200, default="", blank=True)
     mod_value = models.CharField(max_length=50, default="")
     remarks = models.CharField(max_length=200, default="", blank=True)
     created_by = models.ForeignKey(User, related_name='payrollRegularMnt_created_by_user', on_delete=models.PROTECT)

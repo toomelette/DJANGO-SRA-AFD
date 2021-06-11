@@ -4,21 +4,21 @@ import { makeAutoObservable, runInAction } from "mobx"
 class PayrollRegularMntStore{
 
     FIELD_OPTIONS = [
-        { category:1, value:"station", label:"Station" },
-        { category:1, value:"paygroup", label:"Paygroup" },
-        { category:1, value:"fullname", label:"Fullname" },
-        { category:1, value:"position", label:"Position" },
-        { category:1, value:"salary_grade", label:"Salary Grade" },
-        { category:1, value:"step_increment", label:"Step Increment" },
-        { category:1, value:"monthly_salary", label:"Monthly Salary" },
-        { category:1, value:"plantilla_item", label:"Plantilla Item" },
-        { category:1, value:"status", label:"Status" },
-        { category:1, value:"atm_account_no", label:"ATM Account No." },
-        { category:1, value:"tin", label:"TIN" },
-        { category:1, value:"gsis", label:"GSIS" },
-        { category:1, value:"philhealth", label:"Philhealth" },
-        { category:1, value:"pagibig", label:"Pagibig" },
-        { category:1, value:"sss", label:"SSS" },
+        { category:1, value:"station", description:"Station", label:"Station" },
+        { category:1, value:"paygroup", description:"Paygroup", label:"Paygroup" },
+        { category:1, value:"fullname", description:"Fullname", label:"Fullname" },
+        { category:1, value:"position", description:"Position", label:"Position" },
+        { category:1, value:"salary_grade", description:"Salary Grade", label:"Salary Grade" },
+        { category:1, value:"step_increment", description:"Step Increment", label:"Step Increment" },
+        { category:1, value:"monthly_salary", description:"Monthly Salary", label:"Monthly Salary" },
+        { category:1, value:"plantilla_item", description:"Plantilla Item", label:"Plantilla Item" },
+        { category:1, value:"status", description:"Status", label:"Status" },
+        { category:1, value:"atm_account_no", description:"ATM Account No.", label:"ATM Account No." },
+        { category:1, value:"tin", description:"TIN", label:"TIN" },
+        { category:1, value:"gsis", description:"GSIS", label:"GSIS" },
+        { category:1, value:"philhealth", description:"Philhealth", label:"Philhealth" },
+        { category:1, value:"pagibig", description:"Pagibig", label:"Pagibig" },
+        { category:1, value:"sss", description:"SSS", label:"SSS" },
     ];
 
     CHAR_FORM_FIELDS = ["fullname","position","atm_account_no","tin","gsis","philhealth","pagibig","sss"]
@@ -145,13 +145,13 @@ class PayrollRegularMntStore{
             axios.get('api/deduction/get_all')
             .then((response) => {
                 response.data.map(data => {
-                    this.param_options.push({category:2, value:data.code, label:data.code+" - "+data.name})
+                    this.param_options.push({category:2, value:data.code, description:data.name, label:data.code+" - "+data.name})
                 }) 
             });
             axios.get('api/allowance/get_all')
             .then((response) => {
                 response.data.map(data => {
-                    this.param_options.push({category:3, value:data.code, label:data.code+" - "+data.name})
+                    this.param_options.push({category:3, value:data.code, description:data.name, label:data.code+" - "+data.name})
                 }) 
             });
         })

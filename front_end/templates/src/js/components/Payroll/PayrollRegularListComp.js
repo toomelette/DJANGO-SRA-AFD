@@ -25,24 +25,20 @@ const PayrollRegularList = observer(({ payrollRegularStore, dashboardMainStore }
     }, [])
 
 
-    const redirectToPayrollRegularCreate = useCallback(() => {
-        history.push('/payroll/payroll_regular/create'), [history]
-    });
-
     const redirectToPayrollRegularDetails = useCallback((id) => {
         payrollRegularStore.setIsOpenedForm(1)
         history.push('/payroll/payroll_regular/' + id), [history]
     });
 
+    const handleOpenPayrollRegularDetails = (e, id) => {
+        e.preventDefault()
+        redirectToPayrollRegularDetails(id)
+    }
+
 
     const handleCreateButtonClick = (e) => {
         e.preventDefault();
         $('#create-select-method').modal('toggle')
-        // if(payrollRegularStore.is_opened_form === 1){
-        //     payrollRegularStore.resetForm()
-        // }
-        // payrollRegularStore.setIsOpenedForm(0)
-        // redirectToTemplateCreate()
     }
 
 
@@ -162,7 +158,11 @@ const PayrollRegularList = observer(({ payrollRegularStore, dashboardMainStore }
                                                 { payrollRegularStore.list.map((val, key) => {
                                                     return (
                                                         <tr key={key} className={ val.id == payrollRegularStore.selected_data ? "table-info" : "" }>
-                                                            <td className="align-middle">{ moment(val.process_date).format("MMM D, YYYY") }</td>
+                                                            <td className="align-middle">
+                                                                <a href="#" onClick={ (e) => handleOpenPayrollRegularDetails(e, val.id) }>
+                                                                    <ins className="text-info">{ moment(val.process_date).format("MMM D, YYYY") }</ins>
+                                                                </a>
+                                                            </td>
                                                             <td className="align-middle">{ val.description }</td>
                                                             <td className="align-middle">{ val.remarks }</td>
                                                         </tr>

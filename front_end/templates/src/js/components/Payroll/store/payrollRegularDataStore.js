@@ -69,25 +69,51 @@ class PayrollRegularDataStore{
             runInAction(() => {
                 this.selected_data_details = response.data
                 this.selected_data_details.payrollRegularMnt_payrollRegularData.map(data_mnt => {
-                    let deduc = this.selected_data_details.payrollRegularDataDeduc_payrollRegularData.find(data_deduc=>{
-                        return data_deduc.code == data_mnt.field
-                    })
-                    if(!deduc){
-                        this.selected_data_details.payrollRegularDataDeduc_payrollRegularData.push(
-                            { code: data_mnt.field, amount: data_mnt.mod_value }
+
+                    if(data_mnt.category === 2){
+                        let deduc = this.selected_data_details.payrollRegularDataDeduc_payrollRegularData.find(data_deduc=>{
+                            return data_deduc.code === data_mnt.field
+                        })
+                        if(!deduc){
+                            this.selected_data_details.payrollRegularDataDeduc_payrollRegularData.push(
+                                { code: data_mnt.field, amount: data_mnt.mod_value, name: data_mnt.field_description }
+                            )
+                        }
+                        this.selected_data_details.payrollRegularDataDeduc_payrollRegularData = this.selected_data_details.payrollRegularDataDeduc_payrollRegularData.sort(
+                            function(a, b){
+                                if ( Number(a.code.substring(1)) < Number(b.code.substring(1)) ){
+                                    return -1;
+                                }
+                                if ( Number(a.code.substring(1)) > Number(b.code.substring(1)) ){
+                                    return 1;
+                                }
+                                return 0;
+                            }
                         )
                     }
-                    this.selected_data_details.payrollRegularDataDeduc_payrollRegularData = this.selected_data_details.payrollRegularDataDeduc_payrollRegularData.sort(
-                        function(a, b){
-                            if ( Number(a.code.substring(1)) < Number(b.code.substring(1)) ){
-                                return -1;
-                            }
-                            if ( Number(a.code.substring(1)) > Number(b.code.substring(1)) ){
-                                return 1;
-                            }
-                            return 0;
+
+                    if(data_mnt.category === 3){
+                        let allow = this.selected_data_details.payrollRegularDataAllow_payrollRegularData.find(data_allow=>{
+                            return data_allow.code === data_mnt.field
+                        })
+                        if(!allow){
+                            this.selected_data_details.payrollRegularDataAllow_payrollRegularData.push(
+                                { code: data_mnt.field, amount: data_mnt.mod_value, name: data_mnt.field_description }
+                            )
                         }
-                    )
+                        this.selected_data_details.payrollRegularDataAllow_payrollRegularData = this.selected_data_details.payrollRegularDataAllow_payrollRegularData.sort(
+                            function(a, b){
+                                if ( Number(a.code.substring(5)) < Number(b.code.substring(5)) ){
+                                    return -1;
+                                }
+                                if ( Number(a.code.substring(5)) > Number(b.code.substring(5)) ){
+                                    return 1;
+                                }
+                                return 0;
+                            }
+                        )
+                    }
+
                 })
             })
         });
