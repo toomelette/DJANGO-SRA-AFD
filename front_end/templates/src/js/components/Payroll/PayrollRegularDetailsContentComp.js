@@ -1,16 +1,29 @@
 
-
-import React from 'react'
+import React, { useCallback } from 'react'
 import { observer } from 'mobx-react'
 
+import { useHistory, useParams } from "react-router-dom"
 import { numberFormat } from '../Utils/DataFilters'
 import { TableFooterDefault } from '../Utils/Table/TableFooters'
 
 
 const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrollRegularMntStore }) => {
 
+    const history = useHistory();
+    const { payroll_regular_id } = useParams();
     let total_deduc = 0;
     let total_allow = 0;
+
+
+    const redirectToPayrollRegularCreate = useCallback(() => {
+        history.push('/payroll/payroll_regular/'+ payroll_regular_id +'/create'), [history]
+    });
+
+
+    const handleCreatePayrollRegularRedirect = (e) => {
+        e.preventDefault()
+        redirectToPayrollRegularCreate()
+    }
 
     
     const handleClickContentDetails = (e, id) => {
@@ -111,6 +124,10 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
                 <div className="card-header">
                     <h5>Content</h5>
                     <div className="float-right">
+                        <button onClick={ handleCreatePayrollRegularRedirect }
+                                className="btn btn-sm btn-success btn-outline-success icon-btn float-right">
+                            <i className="icofont icofont-plus"></i>
+                        </button>
                     </div>
                 </div>
                 <div className="card-block pb-0">

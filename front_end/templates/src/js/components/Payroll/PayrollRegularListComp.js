@@ -6,7 +6,6 @@ import { observer } from 'mobx-react'
 import { Link, useHistory } from "react-router-dom"
 import { TableHeaderDefault } from '../Utils/Table/TableHeaders'
 import { TableFooterDefault } from '../Utils/Table/TableFooters'
-import DivLoader from '../Utils/DivLoaderComp'
 import eventBus from '../Utils/EventBus'
 
 
@@ -38,14 +37,14 @@ const PayrollRegularList = observer(({ payrollRegularStore, dashboardMainStore }
 
     const handleCreateButtonClick = (e) => {
         e.preventDefault();
-        $('#create-select-method').modal('toggle')
+        $('#payroll-regular-create-select-method').modal('toggle')
     }
 
 
     const handleCreateSelectMethodSubmit = (e) => {
         e.preventDefault()
         console.log(is_create_generate)
-        $('#create-select-method').modal('hide')
+        $('#payroll-regular-create-select-method').modal('hide')
         eventBus.dispatch("SHOW_FULLPAGE_LOADER", {
              is_loading: true, 
              is_dashboard: true,
@@ -200,10 +199,9 @@ const PayrollRegularList = observer(({ payrollRegularStore, dashboardMainStore }
                 </div>
             </div>
         </div>
-
         
         {/* SELECT CREATE METHOD MODAL */}
-        <div className="modal" id="create-select-method" role="dialog">
+        <div className="modal" id="payroll-regular-create-select-method" role="dialog">
             <div className="modal-dialog modal-lg" role="document">
                 <div className="modal-content">
                     <div className="modal-header">

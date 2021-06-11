@@ -39,32 +39,33 @@ const PayrollRegularDetails = observer(({ payrollRegularStore, payrollRegularDat
     });
 
 
-    const handleDeleteRouteModal = (e) => {
-        // e.preventDefault()
-        // $("#employee-delete-modal").modal('toggle')
-    }
-
-
-    const handleDeletePayrollRegularDetailsSubmit = (e) => {
+    const handleOpenDeletePayrollRegular = (e) => {
         e.preventDefault()
-        // SetPageLoader(true)
-        // axios.delete('api/employee/'+payroll_regular_id+'/')
-        //      .then((response) => {
-        //         eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
-        //             message: "PayrollRegularDetails has been successfully Deleted!", type: "inverse"
-        //         });
-        //         SetPageLoader(false)
-        //         redirectBackToPayrollRegularDetailsList()
-        //      }).catch((error) => {
-        //         if(error.response.status == 404 || error.response.status == 500){
-        //             eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
-        //                 message: "Error Occured!", type: "danger" 
-        //             });
-        //         }
-        //         SetPageLoader(false)
-        //     });
-        // $("#employee-delete-modal").modal('hide');
+        $("#payroll-regular-delete-modal").modal('toggle')
     }
+
+
+    const handleDeletePayrollRegular = (e) => {
+        e.preventDefault()
+        SetPageLoader(true)
+        axios.delete('api/payroll_regular/'+payroll_regular_id+'/')
+             .then((response) => {
+                eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
+                    message: "Payroll has been successfully Deleted!", type: "inverse"
+                });
+                SetPageLoader(false)
+                redirectBackToPayrollRegularList()
+             }).catch((error) => {
+                if(error.response.status == 404 || error.response.status == 500){
+                    eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
+                        message: "Error Occured!", type: "danger" 
+                    });
+                }
+                SetPageLoader(false)
+            });
+        $("#payroll-regular-delete-modal").modal('hide');
+    }
+
 
     return (
         
@@ -104,7 +105,6 @@ const PayrollRegularDetails = observer(({ payrollRegularStore, payrollRegularDat
                         <div className="row">
 
                             <div className="col-sm-12">
-                                <DivLoader type="Circles" loading={page_loader}/>
                                 <div className="row mb-3 pl-2 pr-2">
                                     <div className="col-md-6 pt-1">
                                         <h3>{ payrollRegularStore.description }</h3>
@@ -117,7 +117,7 @@ const PayrollRegularDetails = observer(({ payrollRegularStore, payrollRegularDat
                                         </Link>
                                         { dashboardMainStore.checkIfSubrouteExist('payroll-payroll_regular-delete') ? 
                                             <button className="btn btn-md btn-danger btn-danger float-right ml-2" 
-                                                    onClick={ handleDeleteRouteModal }>
+                                                    onClick={ handleOpenDeletePayrollRegular }>
                                                 <i className="fa fa-trash"></i> Delete
                                             </button> : <></> 
                                         }
@@ -137,9 +137,10 @@ const PayrollRegularDetails = observer(({ payrollRegularStore, payrollRegularDat
                                 payrollRegularMntStore={payrollRegularMntStore}    
                             />
                                                                     
-                            {/* DELETE MODAL */}
-                            {/* <div className="modal" id="employee-delete-modal" role="dialog">
+                            {/* Payroll Regular Delete Modal */}
+                            <div className="modal" id="payroll-regular-delete-modal" role="dialog">
                                 <div className="modal-dialog modal-lg" role="document">
+                                    <DivLoader type="Circles" loading={page_loader}/>
                                     <div className="modal-content">
                                         <div className="modal-header">
                                             <h4 className="modal-title">Delete Menu</h4>
@@ -152,11 +153,11 @@ const PayrollRegularDetails = observer(({ payrollRegularStore, payrollRegularDat
                                         </div>
                                         <div className="modal-footer">
                                             <button type="button" className="btn btn-default waves-effect" data-dismiss="modal">Close</button>
-                                            <button type="button" className="btn btn-danger waves-effect waves-light" onClick={ handleDeletePayrollRegularDetailsSubmit }>Delete</button>
+                                            <button type="button" className="btn btn-danger waves-effect waves-light" onClick={ handleDeletePayrollRegular }>Delete</button>
                                         </div>
                                     </div>
                                 </div>
-                            </div> */}
+                            </div>
 
                         </div>
                     </div>

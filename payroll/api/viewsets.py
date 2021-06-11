@@ -277,6 +277,15 @@ class PayrollRegularViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, 200)
 
 
+    def destroy(self, request, pk=None):
+        try:
+            payroll_regular = get_object_or_404(self.queryset, id=pk)
+            payroll_regular.delete()
+            return Response({}, 200)
+        except:
+            return Response({}, 500)
+
+
 
 class PayrollRegularDataViewSet(viewsets.ModelViewSet):
     queryset = PayrollRegularData.objects.all()

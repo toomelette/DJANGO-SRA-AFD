@@ -4,11 +4,12 @@ import React from "react"
 import { HashRouter, Switch, Route } from "react-router-dom"
 import { observer } from 'mobx-react'
 
+import Deductions from './DeductionListComp.js'
+import Allowances from './AllowanceListComp.js'
 import PayrollRegular from './PayrollRegularListComp.js'
 import PayrollRegularCreate from './PayrollRegularCreateComp.js'
 import PayrollRegularDetails from './PayrollRegularDetailsComp.js'
-import Deductions from './DeductionListComp.js'
-import Allowances from './AllowanceListComp.js'
+import PayrollRegularDetailsContentCreate from './PayrollRegularDetailsContentCreateComp.js'
 import NotFoundPage from '../ErrorPages/NotFoundPageComp'
 
 import deductionStore from './store/deductionStore'
@@ -62,6 +63,16 @@ const PayrollRegularMain = observer(({ employeeStore, dashboardMainStore }) => {
                             payrollRegularStore={payrollRegularStore} 
                             payrollRegularDataStore={payrollRegularDataStore}
                             payrollRegularMntStore={payrollRegularMntStore}
+                            dashboardMainStore={dashboardMainStore}
+                        /> : <NotFoundPage/> }
+                </Route>
+
+                {/* PAYROLL Regular Details Create Content */}
+                <Route exact path="/payroll/payroll_regular/:payroll_regular_id/create">
+                    { dashboardMainStore.checkIfSubrouteExist('payroll-payroll_regular-details-page') ? 
+                        <PayrollRegularDetailsContentCreate 
+                            payrollRegularStore={payrollRegularStore} 
+                            payrollRegularDataStore={payrollRegularDataStore}
                             dashboardMainStore={dashboardMainStore}
                         /> : <NotFoundPage/> }
                 </Route>
