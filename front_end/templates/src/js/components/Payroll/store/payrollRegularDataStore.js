@@ -14,12 +14,15 @@ class PayrollRegularDataStore{
     page_limit = 0;
 	delaySearch = debounce(() => this.fetch(), 500);
     selected_data = "";
-    selected_data_details = {};
     is_opened_form = 0;
     options = [];
 
     // form vars
     payroll_regular_id = "";
+    form_data = {
+        employee_id: { value:'', label:'Select' },
+        fullname: '',
+    };
     error_fields = {};
 
 
@@ -169,6 +172,19 @@ class PayrollRegularDataStore{
 
     setPayrollRegularId(payroll_regular_id){
         this.payroll_regular_id = payroll_regular_id;
+    }
+
+    setFormData(value, field){
+        switch (field) {
+            case "employee_id":
+                this.form_data.employee_id = value
+                break;
+            case "fullname":
+                this.form_data.fullname = value
+                break;
+            default:
+                break;
+        }
     }
 
     setErrorFields(ef){

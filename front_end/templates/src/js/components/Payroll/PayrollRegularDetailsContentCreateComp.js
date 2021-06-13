@@ -5,7 +5,7 @@ import { Link, useHistory, useParams } from 'react-router-dom'
 
 import eventBus from '../Utils/EventBus'
 import DivLoader from '../Utils/DivLoaderComp'
-
+import PayrollRegularFormContent from './PayrollRegularFormContentComp'
 
 
 const PayrollRegularDetailsContentCreate = observer(({ payrollRegularStore, payrollRegularDataStore, dashboardMainStore }) => {
@@ -122,12 +122,8 @@ const PayrollRegularDetailsContentCreate = observer(({ payrollRegularStore, payr
                                     </div>
 
                                     <div className="card-block">
-                                        <div className="row">
                                             
-
-
-
-                                        </div>
+                                        <PayrollRegularFormContent payrollRegularDataStore={payrollRegularDataStore} />
 
                                         <div className="form-group row mt-2">
                                             <div className="col-sm-12">
