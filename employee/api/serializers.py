@@ -174,6 +174,7 @@ class EmployeeDetailsSerializer(serializers.ModelSerializer):
           model = Employee
           fields = (
                # Personal Details
+               "station",
                "fullname",
                "firstname",
                "middlename",
@@ -204,6 +205,7 @@ class EmployeeDetailsSerializer(serializers.ModelSerializer):
                "application_status",
                "tax_status",
                "monthly_salary",
+               "plantilla_item",
                "firstday_gov",
                "firstday_sra",
                "first_appointment",

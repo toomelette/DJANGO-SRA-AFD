@@ -39,6 +39,8 @@ class PayrollRegularMntStore{
     ]
 
     station_options = [];
+    deduction_options = [];
+    allowance_options = [];
     param_options = [];
 
     //  list vars
@@ -155,6 +157,24 @@ class PayrollRegularMntStore{
                 }) 
             });
         })
+    }
+
+    setDeductionOptions(){
+        axios.get('api/deduction/get_all')
+        .then((response) => {
+            response.data.map(data => {
+                this.deduction_options.push({value:data.id, description:data.name, label:data.code+" - "+data.name})
+            }) 
+        });
+    }
+
+    setAllowanceOptions(){
+        axios.get('api/allowance/get_all')
+        .then((response) => {
+            response.data.map(data => {
+                this.allowance_options.push({value:data.id, description:data.name, label:data.code+" - "+data.name})
+            }) 
+        });
     }
 
     setStationOptions(){

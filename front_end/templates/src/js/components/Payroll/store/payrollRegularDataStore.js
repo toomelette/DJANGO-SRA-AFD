@@ -22,6 +22,22 @@ class PayrollRegularDataStore{
     form_data = {
         employee_id: { value:'', label:'Select' },
         fullname: '',
+        station: { value:'', label:'Select' },
+        position: '',
+        paygroup: { value:'', label:'Select' },
+        salary_grade: '',
+        step_increment: '',
+        monthly_salary: '',
+        plantilla_item: '',
+        status: { value:'', label:'Select' },
+        atm_account_no: '',
+        tin: '',
+        gsis: '',
+        philhealth: '',
+        pagibig: '',
+        sss: '',
+        payrollRegularDataDeduc_payrollRegularData:[],
+        payrollRegularDataAllow_payrollRegularData:[],
     };
     error_fields = {};
 
@@ -66,23 +82,23 @@ class PayrollRegularDataStore{
     }
 
     retrieve(id){
-        this.selected_data_details = {};
+        this.form_data = {};
         axios.get('api/payroll_regular_data/' + id)
         .then((response) => {
             runInAction(() => {
-                this.selected_data_details = response.data
-                this.selected_data_details.payrollRegularMnt_payrollRegularData.map(data_mnt => {
+                this.form_data = response.data
+                this.form_data.payrollRegularMnt_payrollRegularData.map(data_mnt => {
 
                     if(data_mnt.category === 2){
-                        let deduc = this.selected_data_details.payrollRegularDataDeduc_payrollRegularData.find(data_deduc=>{
+                        let deduc = this.form_data.payrollRegularDataDeduc_payrollRegularData.find(data_deduc=>{
                             return data_deduc.code === data_mnt.field
                         })
                         if(!deduc){
-                            this.selected_data_details.payrollRegularDataDeduc_payrollRegularData.push(
+                            this.form_data.payrollRegularDataDeduc_payrollRegularData.push(
                                 { code: data_mnt.field, amount: data_mnt.mod_value, name: data_mnt.field_description }
                             )
                         }
-                        this.selected_data_details.payrollRegularDataDeduc_payrollRegularData = this.selected_data_details.payrollRegularDataDeduc_payrollRegularData.sort(
+                        this.form_data.payrollRegularDataDeduc_payrollRegularData = this.form_data.payrollRegularDataDeduc_payrollRegularData.sort(
                             function(a, b){
                                 if ( Number(a.code.substring(1)) < Number(b.code.substring(1)) ){
                                     return -1;
@@ -96,15 +112,15 @@ class PayrollRegularDataStore{
                     }
 
                     if(data_mnt.category === 3){
-                        let allow = this.selected_data_details.payrollRegularDataAllow_payrollRegularData.find(data_allow=>{
+                        let allow = this.form_data.payrollRegularDataAllow_payrollRegularData.find(data_allow=>{
                             return data_allow.code === data_mnt.field
                         })
                         if(!allow){
-                            this.selected_data_details.payrollRegularDataAllow_payrollRegularData.push(
+                            this.form_data.payrollRegularDataAllow_payrollRegularData.push(
                                 { code: data_mnt.field, amount: data_mnt.mod_value, name: data_mnt.field_description }
                             )
                         }
-                        this.selected_data_details.payrollRegularDataAllow_payrollRegularData = this.selected_data_details.payrollRegularDataAllow_payrollRegularData.sort(
+                        this.form_data.payrollRegularDataAllow_payrollRegularData = this.form_data.payrollRegularDataAllow_payrollRegularData.sort(
                             function(a, b){
                                 if ( Number(a.code.substring(5)) < Number(b.code.substring(5)) ){
                                     return -1;
@@ -154,8 +170,8 @@ class PayrollRegularDataStore{
 
 
     getSelectedDataMaintenanceDetails(field){
-        if(this.selected_data_details.payrollRegularMnt_payrollRegularData){
-            const mnt = [...this.selected_data_details.payrollRegularMnt_payrollRegularData]
+        if(this.form_data.payrollRegularMnt_payrollRegularData){
+            const mnt = [...this.form_data.payrollRegularMnt_payrollRegularData]
             return mnt.find(data => data.field === field)
         }else{
             return null;
@@ -166,7 +182,26 @@ class PayrollRegularDataStore{
 
     // Form Setters
     resetForm(){
-        this.payroll_regular_id = "";
+        this.form_data = {
+            employee_id: { value:'', label:'Select' },
+            fullname: '',
+            station: { value:'', label:'Select' },
+            position: '',
+            paygroup: { value:'', label:'Select' },
+            salary_grade: '',
+            step_increment: '',
+            monthly_salary: '',
+            plantilla_item: '',
+            status: { value:'', label:'Select' },
+            atm_account_no: '',
+            tin: '',
+            gsis: '',
+            philhealth: '',
+            pagibig: '',
+            sss: '',
+            payrollRegularDataDeduc_payrollRegularData:[],
+            payrollRegularDataAllow_payrollRegularData:[],
+        };
         this.error_fields = {};
     }
 
@@ -182,13 +217,91 @@ class PayrollRegularDataStore{
             case "fullname":
                 this.form_data.fullname = value
                 break;
-            default:
+            case "station":
+                this.form_data.station = value
+                break;
+            case "position":
+                this.form_data.position = value
+                break;
+            case "paygroup":
+                this.form_data.paygroup = value
+                break;
+            case "salary_grade":
+                this.form_data.salary_grade = value
+                break;
+            case "step_increment":
+                this.form_data.step_increment = value
+                break;
+            case "monthly_salary":
+                this.form_data.monthly_salary = value
+                break;
+            case "plantilla_item":
+                this.form_data.plantilla_item = value
+                break;
+            case "status":
+                this.form_data.status = value
+                break;
+            case "atm_account_no":
+                this.form_data.atm_account_no = value
+                break;
+            case "tin":
+                this.form_data.tin = value
+                break;
+            case "gsis":
+                this.form_data.gsis = value
+                break;
+            case "philhealth":
+                this.form_data.philhealth = value
+                break;
+            case "pagibig":
+                this.form_data.pagibig = value
+                break;
+            case "sss":
+                this.form_data.sss = value
+                break;
+        default:
                 break;
         }
     }
 
-    setErrorFields(ef){
-        this.error_fields = ef;
+    addDeduction(){
+        this.form_data.payrollRegularDataDeduc_payrollRegularData = [
+            ...this.form_data.payrollRegularDataDeduc_payrollRegularData, { deduction_id:"", amount:"" }
+        ]
+    }
+
+    modifyDeduction(index, name, value){
+        const list = [...this.form_data.payrollRegularDataDeduc_payrollRegularData];
+        list[index][name] = value;
+        this.form_data.payrollRegularDataDeduc_payrollRegularData = list;
+    }
+
+    deleteDeduction(index){
+        const list = [... this.form_data.payrollRegularDataDeduc_payrollRegularData];
+        list.splice(index, 1);
+        this.form_data.payrollRegularDataDeduc_payrollRegularData = list;
+    }
+
+    addAllowance(){
+        this.form_data.payrollRegularDataAllow_payrollRegularData = [
+            ...this.form_data.payrollRegularDataAllow_payrollRegularData, { allowance_id:"", amount:"" }
+        ]
+    }
+
+    modifyAllowance(index, name, value){
+        const list = [...this.form_data.payrollRegularDataAllow_payrollRegularData];
+        list[index][name] = value;
+        this.form_data.payrollRegularDataAllow_payrollRegularData = list;
+    }
+
+    deleteAllowance(index){
+        const list = [... this.form_data.payrollRegularDataAllow_payrollRegularData];
+        list.splice(index, 1);
+        this.form_data.payrollRegularDataAllow_payrollRegularData = list;
+    }
+
+    setErrorFields(error_fields){
+        this.error_fields = error_fields;
     }
 
 

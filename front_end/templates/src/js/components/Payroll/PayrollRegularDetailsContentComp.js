@@ -22,6 +22,7 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
 
     const handleCreatePayrollRegularRedirect = (e) => {
         e.preventDefault()
+        payrollRegularDataStore.resetForm()
         redirectToPayrollRegularCreate()
     }
 
@@ -36,8 +37,8 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
 
     const getDeductionRecords = () => {
         let rows = [];
-        if(payrollRegularDataStore.selected_data_details.payrollRegularDataDeduc_payrollRegularData){
-            payrollRegularDataStore.selected_data_details.payrollRegularDataDeduc_payrollRegularData.map((data) => {
+        if(payrollRegularDataStore.form_data.payrollRegularDataDeduc_payrollRegularData){
+            payrollRegularDataStore.form_data.payrollRegularDataDeduc_payrollRegularData.map((data) => {
                 total_deduc+=Number(data.amount)
                 if(Number(data.amount) > 0){
                     if(payrollRegularDataStore.getSelectedDataMaintenanceDetails(data.code)){
@@ -77,8 +78,8 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
 
     const getAllowanceRecords = () => {
         let rows = [];
-        if(payrollRegularDataStore.selected_data_details.payrollRegularDataAllow_payrollRegularData){
-            payrollRegularDataStore.selected_data_details.payrollRegularDataAllow_payrollRegularData.map((data) => {
+        if(payrollRegularDataStore.form_data.payrollRegularDataAllow_payrollRegularData){
+            payrollRegularDataStore.form_data.payrollRegularDataAllow_payrollRegularData.map((data) => {
                 total_allow+=Number(data.amount)
                 if(Number(data.amount) > 0){
                     if(payrollRegularDataStore.getSelectedDataMaintenanceDetails(data.code)){
@@ -199,14 +200,14 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
 
                             <div className="col-md-3">
                                 <span> Employee No: {'\n'} </span>
-                                <h5>{ payrollRegularDataStore.selected_data_details.employee_no }</h5>
+                                <h5>{ payrollRegularDataStore.form_data.employee_no }</h5>
                             </div>
 
                             <div className="col-md-3">
                                 <span> Fullname: {'\n'} </span>
                                 { payrollRegularDataStore.getSelectedDataMaintenanceDetails('fullname') ? 
                                     <h5 style={{ color:'#4099ff' }}>{ payrollRegularDataStore.getSelectedDataMaintenanceDetails('fullname').mod_value }</h5>: 
-                                    <h5>{ payrollRegularDataStore.selected_data_details.fullname }</h5>
+                                    <h5>{ payrollRegularDataStore.form_data.fullname }</h5>
                                 }
                             </div>
 
@@ -217,7 +218,7 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
                                         { payrollRegularMntStore.getStationOptionsLabel(payrollRegularDataStore.getSelectedDataMaintenanceDetails('station').mod_value) }
                                     </h5> :
                                     <h5>
-                                        { payrollRegularMntStore.getStationOptionsLabel(payrollRegularDataStore.selected_data_details.station_no) }
+                                        { payrollRegularMntStore.getStationOptionsLabel(payrollRegularDataStore.form_data.station_no) }
                                     </h5>
                                 }
                             </div>
@@ -226,7 +227,7 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
                                 <span> Position: {'\n'} </span>
                                 { payrollRegularDataStore.getSelectedDataMaintenanceDetails('position') ? 
                                     <h5 style={{ color:'#4099ff' }}>{ payrollRegularDataStore.getSelectedDataMaintenanceDetails('position').mod_value }</h5>: 
-                                    <h5>{ payrollRegularDataStore.selected_data_details.position }</h5>
+                                    <h5>{ payrollRegularDataStore.form_data.position }</h5>
                                 }
                             </div>
 
@@ -239,7 +240,7 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
                                         { payrollRegularMntStore.getPaygroupOptionsLabel(payrollRegularDataStore.getSelectedDataMaintenanceDetails('paygroup').mod_value) }
                                     </h5> :
                                     <h5>
-                                        { payrollRegularMntStore.getPaygroupOptionsLabel(payrollRegularDataStore.selected_data_details.paygroup) }
+                                        { payrollRegularMntStore.getPaygroupOptionsLabel(payrollRegularDataStore.form_data.paygroup) }
                                     </h5>
                                 }
                             </div>
@@ -248,7 +249,7 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
                                 <span> Salary Grade: {'\n'} </span>
                                 { payrollRegularDataStore.getSelectedDataMaintenanceDetails('salary_grade') ? 
                                     <h5 style={{ color:'#4099ff' }}>{ payrollRegularDataStore.getSelectedDataMaintenanceDetails('salary_grade').mod_value }</h5>: 
-                                    <h5>{ payrollRegularDataStore.selected_data_details.salary_grade }</h5>
+                                    <h5>{ payrollRegularDataStore.form_data.salary_grade }</h5>
                                 }
                             </div>
 
@@ -256,7 +257,7 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
                                 <span> Step Increment: {'\n'} </span>
                                 { payrollRegularDataStore.getSelectedDataMaintenanceDetails('step_increment') ? 
                                     <h5 style={{ color:'#4099ff' }}>{ payrollRegularDataStore.getSelectedDataMaintenanceDetails('step_increment').mod_value }</h5>: 
-                                    <h5>{ payrollRegularDataStore.selected_data_details.step_increment }</h5>
+                                    <h5>{ payrollRegularDataStore.form_data.step_increment }</h5>
                                 }
                             </div>
 
@@ -267,7 +268,7 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
                                         { numberFormat(payrollRegularDataStore.getSelectedDataMaintenanceDetails('monthly_salary').mod_value, 2) }
                                     </h5> : 
                                     <h5>
-                                        { numberFormat(payrollRegularDataStore.selected_data_details.monthly_salary, 2) }
+                                        { numberFormat(payrollRegularDataStore.form_data.monthly_salary, 2) }
                                     </h5>
                                 }
                             </div>
@@ -278,7 +279,7 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
                                 <span> Plantilla Item: {'\n'} </span>
                                 { payrollRegularDataStore.getSelectedDataMaintenanceDetails('plantilla_item') ? 
                                     <h5 style={{ color:'#4099ff' }}>{ payrollRegularDataStore.getSelectedDataMaintenanceDetails('plantilla_item').mod_value }</h5>: 
-                                    <h5>{ payrollRegularDataStore.selected_data_details.plantilla_item }</h5>
+                                    <h5>{ payrollRegularDataStore.form_data.plantilla_item }</h5>
                                 }
                             </div>
 
@@ -289,7 +290,7 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
                                         { payrollRegularMntStore.getStatusOptionsLabel(payrollRegularDataStore.getSelectedDataMaintenanceDetails('status').mod_value) }
                                     </h5> :
                                     <h5>
-                                        { payrollRegularMntStore.getStatusOptionsLabel(payrollRegularDataStore.selected_data_details.status) }
+                                        { payrollRegularMntStore.getStatusOptionsLabel(payrollRegularDataStore.form_data.status) }
                                     </h5>
                                 }
                             </div>
@@ -298,7 +299,7 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
                                 <span> ATM Account No.: {'\n'} </span>
                                 { payrollRegularDataStore.getSelectedDataMaintenanceDetails('atm_account_no') ? 
                                     <h5 style={{ color:'#4099ff' }}>{ payrollRegularDataStore.getSelectedDataMaintenanceDetails('atm_account_no').mod_value }</h5>: 
-                                    <h5>{ payrollRegularDataStore.selected_data_details.atm_account_no }</h5>
+                                    <h5>{ payrollRegularDataStore.form_data.atm_account_no }</h5>
                                 }
                             </div>
 
@@ -306,7 +307,7 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
                                 <span> TIN: {'\n'} </span>
                                 { payrollRegularDataStore.getSelectedDataMaintenanceDetails('tin') ? 
                                     <h5 style={{ color:'#4099ff' }}>{ payrollRegularDataStore.getSelectedDataMaintenanceDetails('tin').mod_value }</h5>: 
-                                    <h5>{ payrollRegularDataStore.selected_data_details.tin }</h5>
+                                    <h5>{ payrollRegularDataStore.form_data.tin }</h5>
                                 }
                             </div>
 
@@ -316,7 +317,7 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
                                 <span> GSIS: {'\n'} </span>
                                 { payrollRegularDataStore.getSelectedDataMaintenanceDetails('gsis') ? 
                                     <h5 style={{ color:'#4099ff' }}>{ payrollRegularDataStore.getSelectedDataMaintenanceDetails('gsis').mod_value }</h5>: 
-                                    <h5>{ payrollRegularDataStore.selected_data_details.gsis }</h5>
+                                    <h5>{ payrollRegularDataStore.form_data.gsis }</h5>
                                 }
                             </div>
                         
@@ -324,7 +325,7 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
                                 <span> Philhealth: {'\n'} </span>
                                 { payrollRegularDataStore.getSelectedDataMaintenanceDetails('philhealth') ? 
                                     <h5 style={{ color:'#4099ff' }}>{ payrollRegularDataStore.getSelectedDataMaintenanceDetails('philhealth').mod_value }</h5>: 
-                                    <h5>{ payrollRegularDataStore.selected_data_details.philhealth }</h5>
+                                    <h5>{ payrollRegularDataStore.form_data.philhealth }</h5>
                                 }
                             </div>
 
@@ -332,17 +333,15 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
                                 <span> Pagibig: {'\n'} </span>
                                 { payrollRegularDataStore.getSelectedDataMaintenanceDetails('pagibig') ? 
                                     <h5 style={{ color:'#4099ff' }}>{ payrollRegularDataStore.getSelectedDataMaintenanceDetails('pagibig').mod_value }</h5>: 
-                                    <h5>{ payrollRegularDataStore.selected_data_details.pagibig }</h5>
+                                    <h5>{ payrollRegularDataStore.form_data.pagibig }</h5>
                                 }
                             </div>
-
-                            <div className="col-md-12 mt-4">{' '}</div>
 
                             <div className="col-md-3">
                                 <span> SSS: {'\n'} </span>
                                 { payrollRegularDataStore.getSelectedDataMaintenanceDetails('sss') ? 
                                     <h5 style={{ color:'#4099ff' }}>{ payrollRegularDataStore.getSelectedDataMaintenanceDetails('sss').mod_value }</h5>: 
-                                    <h5>{ payrollRegularDataStore.selected_data_details.sss }</h5>
+                                    <h5>{ payrollRegularDataStore.form_data.sss }</h5>
                                 }
                             </div>
 
