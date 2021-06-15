@@ -20,16 +20,16 @@ class PayrollRegularDataStore{
     // form vars
     payroll_regular_id = "";
     form_data = {
-        employee_id: { value:'', label:'Select' },
+        employee: { value:"", label:'Select' },
         fullname: '',
-        station: { value:'', label:'Select' },
+        station: { value:"", label:'Select' },
         position: '',
-        paygroup: { value:'', label:'Select' },
+        paygroup: { value:0, label:'Select' },
         salary_grade: '',
         step_increment: '',
         monthly_salary: '',
         plantilla_item: '',
-        status: { value:'', label:'Select' },
+        status: { value:0, label:'Select' },
         atm_account_no: '',
         tin: '',
         gsis: '',
@@ -183,16 +183,16 @@ class PayrollRegularDataStore{
     // Form Setters
     resetForm(){
         this.form_data = {
-            employee_id: { value:'', label:'Select' },
+            employee: { value:'', label:'Select' },
             fullname: '',
             station: { value:'', label:'Select' },
             position: '',
-            paygroup: { value:'', label:'Select' },
+            paygroup: { value:0, label:'Select' },
             salary_grade: '',
             step_increment: '',
             monthly_salary: '',
             plantilla_item: '',
-            status: { value:'', label:'Select' },
+            status: { value:0, label:'Select' },
             atm_account_no: '',
             tin: '',
             gsis: '',
@@ -211,8 +211,8 @@ class PayrollRegularDataStore{
 
     setFormData(value, field){
         switch (field) {
-            case "employee_id":
-                this.form_data.employee_id = value
+            case "employee":
+                this.form_data.employee = value
                 break;
             case "fullname":
                 this.form_data.fullname = value
@@ -266,7 +266,7 @@ class PayrollRegularDataStore{
 
     addDeduction(){
         this.form_data.payrollRegularDataDeduc_payrollRegularData = [
-            ...this.form_data.payrollRegularDataDeduc_payrollRegularData, { deduction_id:"", amount:"" }
+            ...this.form_data.payrollRegularDataDeduc_payrollRegularData, { deduction:"", amount:"" }
         ]
     }
 
@@ -284,7 +284,7 @@ class PayrollRegularDataStore{
 
     addAllowance(){
         this.form_data.payrollRegularDataAllow_payrollRegularData = [
-            ...this.form_data.payrollRegularDataAllow_payrollRegularData, { allowance_id:"", amount:"" }
+            ...this.form_data.payrollRegularDataAllow_payrollRegularData, { allowance:"", amount:"" }
         ]
     }
 

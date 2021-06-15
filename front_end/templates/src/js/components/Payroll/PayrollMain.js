@@ -73,7 +73,6 @@ const PayrollRegularMain = observer(({ employeeStore, dashboardMainStore }) => {
                         <PayrollRegularDetailsContentCreate 
                             payrollRegularStore={payrollRegularStore} 
                             payrollRegularDataStore={payrollRegularDataStore}
-                            dashboardMainStore={dashboardMainStore}
                         /> : <NotFoundPage/> }
                 </Route>
     

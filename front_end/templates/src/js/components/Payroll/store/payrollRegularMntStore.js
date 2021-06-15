@@ -184,7 +184,7 @@ class PayrollRegularMntStore{
                     let stations = response.data;
                     if(stations.length > 0){
                         stations.forEach(data => {
-                            this.station_options.push({ value:data.station_id, label:data.name });
+                            this.station_options.push({ value:data.id, label:data.name });
                         });
                     }
                 })

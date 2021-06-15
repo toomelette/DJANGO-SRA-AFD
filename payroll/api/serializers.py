@@ -34,12 +34,26 @@ class PayrollRegularDataDeductionsDetailsSerializer(serializers.ModelSerializer)
           read_only_fields = ('id',)
 
 
+class PayrollRegularDataDeductionsFormSerializer(serializers.ModelSerializer):
+     deduction = serializers.IntegerField(required=True)
+     class Meta:
+          model = PayrollRegularDataDeductions
+          fields = ('deduction', 'amount')
+
+
 class PayrollRegularDataAllowancesDetailsSerializer(serializers.ModelSerializer):
      allowance = AllowanceSerializer(many=False)
      class Meta:
           model = PayrollRegularDataAllowances
           fields = ('id', 'code', 'name', 'description', 'amount', 'allowance')
           read_only_fields = ('id',)
+
+
+class PayrollRegularDataAllowancesFormSerializer(serializers.ModelSerializer):
+     allowance = serializers.IntegerField(required=True)
+     class Meta:
+          model = PayrollRegularDataAllowances
+          fields = ('allowance', 'amount')
 
 
 class PayrollRegularMaintenanceDetailsSerializer(serializers.ModelSerializer):
@@ -57,8 +71,8 @@ class PayrollRegularMaintenanceDetailsSerializer(serializers.ModelSerializer):
 
 
 class PayrollRegularDataSerializer(serializers.ModelSerializer):
-     payrollRegularDataDeduc_payrollRegularData = PayrollRegularDataDeductionsDetailsSerializer(many=True)
-     payrollRegularDataAllow_payrollRegularData = PayrollRegularDataAllowancesDetailsSerializer(many=True)
+     payrollRegularDataDeduc_payrollRegularData = PayrollRegularDataDeductionsDetailsSerializer(many=True, allow_empty=True)
+     payrollRegularDataAllow_payrollRegularData = PayrollRegularDataAllowancesDetailsSerializer(many=True, allow_empty=True)
      payrollRegularMnt_payrollRegularData = PayrollRegularMaintenanceDetailsSerializer(many=True)
      class Meta:
           model = PayrollRegularData
@@ -89,6 +103,37 @@ class PayrollRegularDataSerializer(serializers.ModelSerializer):
           read_only_fields = ('id',)
 
 
+class PayrollRegularDataFormSerializer(serializers.ModelSerializer):
+     payrollRegularDataDeduc_payrollRegularData = PayrollRegularDataDeductionsFormSerializer(many=True)
+     payrollRegularDataAllow_payrollRegularData = PayrollRegularDataAllowancesFormSerializer(many=True)
+     employee = serializers.CharField(required=True, max_length=20)
+     station = serializers.CharField(required=True, max_length=20)
+     class Meta:
+          model = PayrollRegularData
+          fields = (
+               'payroll_regular',
+               'employee',
+               'station',
+               'paygroup' ,
+               'fullname',
+               'position',
+               'salary_grade',
+               'step_increment',
+               'monthly_salary',
+               'plantilla_item',
+               'status',
+               'is_atm',
+               'atm_account_no',
+               'tin',
+               'gsis',
+               'philhealth',
+               'pagibig',
+               'sss',
+               'payrollRegularDataDeduc_payrollRegularData',
+               'payrollRegularDataAllow_payrollRegularData',
+          )
+
+
 class PayrollRegularDataDetailsSerializer(serializers.ModelSerializer):
     class Meta:
           model = PayrollRegularData
@@ -113,7 +158,6 @@ class PayrollRegularDataDetailsSerializer(serializers.ModelSerializer):
                'pagibig',
                'sss',
           )
-          read_only_fields = ('id',)
 
 
 class PayrollRegularSerializer(serializers.ModelSerializer): 

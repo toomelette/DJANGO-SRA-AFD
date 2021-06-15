@@ -21,13 +21,13 @@ const PayrollRegularFormContent = observer(({ payrollRegularDataStore }) => {
 
 
     const handleSelectEmployeeChange = (value) => {
-        payrollRegularDataStore.setFormData(value, "employee_id")
+        payrollRegularDataStore.setFormData(value, "employee")
         axios.get('api/employee/' + value.value)
         .then((response) => {
-            let station = payrollRegularMntStore.station_options.find(data => data.value == response.data.station)
+            let station = payrollRegularMntStore.station_options.find(data => data.value == response.data.station_link)
             let status = payrollRegularMntStore.STATUS_OPTIONS.find(data => data.value == response.data.application_status)
             payrollRegularDataStore.setFormData(response.data.fullname, "fullname")
-            payrollRegularDataStore.setFormData({ value:response.data.station, label:station?.label }, "station")
+            payrollRegularDataStore.setFormData({ value:response.data.station_link, label:station?.label }, "station")
             payrollRegularDataStore.setFormData(response.data.position, "position")
             payrollRegularDataStore.setFormData(response.data.salary_grade, "salary_grade")
             payrollRegularDataStore.setFormData(response.data.step_increment, "step_increment")
@@ -51,11 +51,11 @@ const PayrollRegularFormContent = observer(({ payrollRegularDataStore }) => {
             col="col-md-3"
             name="employee"
             label="Employee:"
-            value={ payrollRegularDataStore.form_data.employee_id }
+            value={ payrollRegularDataStore.form_data.employee }
             isDisabled={ false }
             options={ employeeStore.employee_options }
             onChange={ (value) => handleSelectEmployeeChange(value) }
-            errorField={ payrollRegularDataStore.error_fields.employee_id }
+            errorField={ payrollRegularDataStore.error_fields.employee }
         />
 
         <InputText 
@@ -219,7 +219,7 @@ const PayrollRegularFormContent = observer(({ payrollRegularDataStore }) => {
                     <thead>
                         <tr>
                             <th style={{maxWidth:'250px'}}>Deduction</th>
-                            <th style={{maxWidth:'200px'}}>Amount</th>
+                            <th style={{maxWidth:'150px'}}>Amount</th>
                             <th style={{maxWidth:'70px'}}>Action</th>
                         </tr>
                     </thead>
@@ -234,10 +234,10 @@ const PayrollRegularFormContent = observer(({ payrollRegularDataStore }) => {
                                         value={ val.deduction_id }
                                         isDisabled={ false }
                                         options={ payrollRegularMntStore.deduction_options }
-                                        onChange={ (value) => payrollRegularDataStore.modifyDeduction(key, "deduction_id", value) }
+                                        onChange={ (value) => payrollRegularDataStore.modifyDeduction(key, "deduction", value) }
                                     />
                                 </td>
-                                <td className="align-middle pt-0 pb-0" style={{maxWidth:'200px'}}>
+                                <td className="align-middle pt-0 pb-0" style={{maxWidth:'150px'}}>
                                     <InputNumeric
                                         col="col-sm-12 m-0 p-0"
                                         placeholder="Amount"
@@ -258,7 +258,7 @@ const PayrollRegularFormContent = observer(({ payrollRegularDataStore }) => {
                     <tfoot>
                         <tr>
                             <td style={{maxWidth:'250px'}}></td>
-                            <td style={{maxWidth:'200px'}}></td>
+                            <td style={{maxWidth:'150px'}}></td>
                             <td style={{maxWidth:'70px'}}>
                                 <button className="btn btn-sm btn-success btn-outline-success mb-2 pt-2 pb-2" 
                                         onClick={ () => payrollRegularDataStore.addDeduction() }>
@@ -280,7 +280,7 @@ const PayrollRegularFormContent = observer(({ payrollRegularDataStore }) => {
                     <thead>
                         <tr>
                             <th style={{maxWidth:'250px'}}>Allowance</th>
-                            <th style={{maxWidth:'200px'}}>Amount</th>
+                            <th style={{maxWidth:'150px'}}>Amount</th>
                             <th style={{maxWidth:'70px'}}>Action</th>
                         </tr>
                     </thead>
@@ -295,10 +295,10 @@ const PayrollRegularFormContent = observer(({ payrollRegularDataStore }) => {
                                         value={ val.allowance_id }
                                         isDisabled={ false }
                                         options={ payrollRegularMntStore.allowance_options }
-                                        onChange={ (value) => payrollRegularDataStore.modifyAllowance(key, "allowance_id", value) }
+                                        onChange={ (value) => payrollRegularDataStore.modifyAllowance(key, "allowance", value) }
                                     />
                                 </td>
-                                <td className="align-middle pt-0 pb-0" style={{maxWidth:'200px'}}>
+                                <td className="align-middle pt-0 pb-0" style={{maxWidth:'150px'}}>
                                     <InputNumeric
                                         col="col-sm-12 m-0 p-0"
                                         placeholder="Amount"
@@ -319,7 +319,7 @@ const PayrollRegularFormContent = observer(({ payrollRegularDataStore }) => {
                     <tfoot>
                         <tr>
                             <td style={{maxWidth:'250px'}}></td>
-                            <td style={{maxWidth:'200px'}}></td>
+                            <td style={{maxWidth:'150px'}}></td>
                             <td style={{maxWidth:'70px'}}>
                                 <button className="btn btn-sm btn-success btn-outline-success mb-2 pt-2 pb-2" 
                                         onClick={ () => payrollRegularDataStore.addAllowance() }>

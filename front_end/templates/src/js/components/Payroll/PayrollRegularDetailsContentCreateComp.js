@@ -5,65 +5,114 @@ import { Link, useHistory, useParams } from 'react-router-dom'
 
 import eventBus from '../Utils/EventBus'
 import DivLoader from '../Utils/DivLoaderComp'
+import { defaultValueSetter } from '../Utils/DataFilters'
 import PayrollRegularFormContent from './PayrollRegularFormContentComp'
 
 
-const PayrollRegularDetailsContentCreate = observer(({ payrollRegularStore, payrollRegularDataStore, dashboardMainStore }) => {
+const PayrollRegularDetailsContentCreate = observer(({ payrollRegularStore, payrollRegularDataStore}) => {
     
     const history = useHistory();
     const { payroll_regular_id } = useParams();
     const [page_loader, SetPageLoader] = useState(false);
 
 
-    const redirectBackToTemplateList = useCallback(() => {
-        history.push('/template'), [history]
+    const redirectBackToPayrollRegularDetails = useCallback(() => {
+        history.push('/payroll/payroll_regular/'+payroll_regular_id), [history]
     });
 
 
     const handleResetForm = (e) =>{
         e.preventDefault()
-        payrollRegularStore.resetForm()
+        payrollRegularDataStore.resetForm()
     }
 
 
     const handleCreate = (e, is_save_another) => {
         e.preventDefault()
         SetPageLoader(true)
-        // axios.post('api/template/', { 
-        //     name: payrollRegularStore.name, 
-        //     description: payrollRegularStore.description, 
-        //     process_date: payrollRegularStore.process_date, 
-        //     template_data: payrollRegularStore.template_data, 
-        // }).then((response) => {
-        //     eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
-        //         message: "Template Successfully Created!", type: "inverse" 
-        //     });
-        //     payrollRegularStore.fetch();
-        //     payrollRegularStore.setSelectedTemplate(response.data.id);
-        //     payrollRegularStore.resetForm()
-        //     if (is_save_another == 0){
-        //         redirectBackToTemplateList()
-        //     }
-        //     SetPageLoader(false);
-        // }).catch((error) => {
-        //     if(error.response.status == 400){
-        //         let field_errors = error.response.data;
-        //         payrollRegularStore.setErrorFields({
-        //             // Personal Details
-        //             name: field_errors.name?.toString(), 
-        //             description: field_errors.description?.toString(), 
-        //             process_date: field_errors.process_date?.toString(), 
-        //             template_data: field_errors.template_data?.toString(), 
-        //             non_field_errors: field_errors.non_field_errors?.toString(),
-        //         });
-        //     }
-        //     if(error.response.status == 404 || error.response.status == 500){
-        //         eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
-        //             message: "Error Occured!", type: "danger" 
-        //         });
-        //     }
-        //     SetPageLoader(false);
-        // });
+        
+        let deductions = []
+        let allowances = []
+
+        if(payrollRegularDataStore.form_data.payrollRegularDataDeduc_payrollRegularData){
+            payrollRegularDataStore.form_data.payrollRegularDataDeduc_payrollRegularData.map(data => {
+                deductions.push({deduction: data.deduction.value, amount: data.amount})
+            })
+        }
+
+        if(payrollRegularDataStore.form_data.payrollRegularDataAllow_payrollRegularData){
+            payrollRegularDataStore.form_data.payrollRegularDataAllow_payrollRegularData.map(data => {
+                allowances.push({allowance: data.allowance.value, amount: data.amount})
+            })
+        }
+
+        axios.post('api/payroll_regular_data/', {
+            payroll_regular: payroll_regular_id,
+            employee: payrollRegularDataStore.form_data.employee.value,
+            station: payrollRegularDataStore.form_data.station.value,
+            paygroup: payrollRegularDataStore.form_data.paygroup.value,
+            fullname: payrollRegularDataStore.form_data.fullname,
+            position: payrollRegularDataStore.form_data.position,
+            salary_grade: defaultValueSetter(payrollRegularDataStore.form_data.salary_grade, "", 0),
+            step_increment: defaultValueSetter(payrollRegularDataStore.form_data.step_increment, "", 0),
+            monthly_salary: defaultValueSetter(payrollRegularDataStore.form_data.monthly_salary, "", 0),
+            plantilla_item: payrollRegularDataStore.form_data.plantilla_item,
+            status: payrollRegularDataStore.form_data.status.value,
+            is_atm: payrollRegularDataStore.form_data.atm_account_no ? 1 : 0,
+            atm_account_no: payrollRegularDataStore.form_data.atm_account_no,
+            tin: payrollRegularDataStore.form_data.tin,
+            gsis: payrollRegularDataStore.form_data.gsis,
+            philhealth: payrollRegularDataStore.form_data.philhealth,
+            pagibig: payrollRegularDataStore.form_data.pagibig,
+            sss: payrollRegularDataStore.form_data.sss,
+            payrollRegularDataDeduc_payrollRegularData: deductions,
+            payrollRegularDataAllow_payrollRegularData: allowances,
+        })
+        .then((response) => {
+            eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
+                message: "Payroll Content Successfully Created!", type: "inverse" 
+            });
+            payrollRegularDataStore.fetch();
+            payrollRegularDataStore.setSelectedData(response.data.id);
+            payrollRegularDataStore.resetForm()
+            if (is_save_another == 0){
+                redirectBackToPayrollRegularDetails()
+            }
+            SetPageLoader(false);
+        }).catch((error) => {
+            if(error.response.status == 400){
+                let field_errors = error.response.data;
+                payrollRegularDataStore.setErrorFields({
+                    payroll_regular: field_errors.payroll_regular_id?.toString(),
+                    employee: field_errors.employee?.toString(),
+                    station: field_errors.station?.toString(),
+                    paygroup: field_errors.paygroup?.toString(),
+                    fullname: field_errors.fullname?.toString(),
+                    position: field_errors.position?.toString(),
+                    salary_grade: field_errors.salary_grade?.toString(),
+                    step_increment: field_errors.step_increment?.toString(),
+                    monthly_salary: field_errors.monthly_salary?.toString(),
+                    plantilla_item: field_errors.plantilla_item?.toString(),
+                    status: field_errors.status?.toString(),
+                    is_atm: field_errors.is_atm?.toString(),
+                    atm_account_no: field_errors.atm_account_no?.toString(),
+                    tin: field_errors.tin?.toString(),
+                    gsis: field_errors.gsis?.toString(),
+                    philhealth: field_errors.philhealth?.toString(),
+                    pagibig: field_errors.pagibig?.toString(),
+                    sss: field_errors.sss?.toString(),
+                    payrollRegularDataDeduc_payrollRegularData: field_errors.payrollRegularDataDeduc_payrollRegularData?.toString(),
+                    payrollRegularDataDeduc_payrollRegularData: field_errors.payrollRegularDataAllow_payrollRegularData?.toString(),
+                    non_field_errors: field_errors.non_field_errors?.toString(),
+                });
+            }
+            if(error.response.status == 404 || error.response.status == 500){
+                eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
+                    message: "Error Occured!", type: "danger" 
+                });
+            }
+            SetPageLoader(false);
+        });
     }
     
 

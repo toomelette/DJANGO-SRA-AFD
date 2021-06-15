@@ -175,6 +175,7 @@ class EmployeeDetailsSerializer(serializers.ModelSerializer):
           fields = (
                # Personal Details
                "station",
+               "station_link",
                "fullname",
                "firstname",
                "middlename",
