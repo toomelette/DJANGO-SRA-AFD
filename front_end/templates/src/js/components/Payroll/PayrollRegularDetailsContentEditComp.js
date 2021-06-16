@@ -9,7 +9,7 @@ import { defaultValueSetter } from '../Utils/DataFilters'
 import PayrollRegularFormContent from './PayrollRegularFormContentComp'
 
 
-const PayrollRegularDetailsContentCreate = observer(({ payrollRegularStore, payrollRegularDataStore}) => {
+const PayrollRegularDetailsContentEdit = observer(({ payrollRegularStore, payrollRegularDataStore}) => {
     
     const history = useHistory();
     const { payroll_regular_id } = useParams();
@@ -46,73 +46,73 @@ const PayrollRegularDetailsContentCreate = observer(({ payrollRegularStore, payr
             })
         }
 
-        axios.post('api/payroll_regular_data/', {
-            payroll_regular: payroll_regular_id,
-            employee: payrollRegularDataStore.form_data.employee.value,
-            station: payrollRegularDataStore.form_data.station.value,
-            paygroup: payrollRegularDataStore.form_data.paygroup.value,
-            fullname: payrollRegularDataStore.form_data.fullname,
-            position: payrollRegularDataStore.form_data.position,
-            salary_grade: defaultValueSetter(payrollRegularDataStore.form_data.salary_grade, "", 0),
-            step_increment: defaultValueSetter(payrollRegularDataStore.form_data.step_increment, "", 0),
-            monthly_salary: defaultValueSetter(payrollRegularDataStore.form_data.monthly_salary, "", 0),
-            plantilla_item: payrollRegularDataStore.form_data.plantilla_item,
-            status: payrollRegularDataStore.form_data.status.value,
-            is_atm: payrollRegularDataStore.form_data.atm_account_no ? 1 : 0,
-            atm_account_no: payrollRegularDataStore.form_data.atm_account_no,
-            tin: payrollRegularDataStore.form_data.tin,
-            gsis: payrollRegularDataStore.form_data.gsis,
-            philhealth: payrollRegularDataStore.form_data.philhealth,
-            pagibig: payrollRegularDataStore.form_data.pagibig,
-            sss: payrollRegularDataStore.form_data.sss,
-            payrollRegularDataDeduc_payrollRegularData: deductions,
-            payrollRegularDataAllow_payrollRegularData: allowances,
-        })
-        .then((response) => {
-            eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
-                message: "Payroll Content Successfully Created!", type: "inverse" 
-            });
-            payrollRegularDataStore.fetch();
-            payrollRegularDataStore.setSelectedData(response.data.id);
-            payrollRegularDataStore.resetForm()
-            if (is_save_another == 0){
-                redirectBackToPayrollRegularDetails()
-            }
-            SetPageLoader(false);
-        }).catch((error) => {
-            if(error.response.status == 400){
-                let field_errors = error.response.data;
-                payrollRegularDataStore.setErrorFields({
-                    payroll_regular: field_errors.payroll_regular_id?.toString(),
-                    employee: field_errors.employee?.toString(),
-                    station: field_errors.station?.toString(),
-                    paygroup: field_errors.paygroup?.toString(),
-                    fullname: field_errors.fullname?.toString(),
-                    position: field_errors.position?.toString(),
-                    salary_grade: field_errors.salary_grade?.toString(),
-                    step_increment: field_errors.step_increment?.toString(),
-                    monthly_salary: field_errors.monthly_salary?.toString(),
-                    plantilla_item: field_errors.plantilla_item?.toString(),
-                    status: field_errors.status?.toString(),
-                    is_atm: field_errors.is_atm?.toString(),
-                    atm_account_no: field_errors.atm_account_no?.toString(),
-                    tin: field_errors.tin?.toString(),
-                    gsis: field_errors.gsis?.toString(),
-                    philhealth: field_errors.philhealth?.toString(),
-                    pagibig: field_errors.pagibig?.toString(),
-                    sss: field_errors.sss?.toString(),
-                    payrollRegularDataDeduc_payrollRegularData: field_errors.payrollRegularDataDeduc_payrollRegularData?.toString(),
-                    payrollRegularDataDeduc_payrollRegularData: field_errors.payrollRegularDataAllow_payrollRegularData?.toString(),
-                    non_field_errors: field_errors.non_field_errors?.toString(),
-                });
-            }
-            if(error.response.status == 404 || error.response.status == 500){
-                eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
-                    message: "Error Occured!", type: "danger" 
-                });
-            }
-            SetPageLoader(false);
-        });
+        // axios.post('api/payroll_regular_data/', {
+        //     payroll_regular: payroll_regular_id,
+        //     employee: payrollRegularDataStore.form_data.employee.value,
+        //     station: payrollRegularDataStore.form_data.station.value,
+        //     paygroup: payrollRegularDataStore.form_data.paygroup.value,
+        //     fullname: payrollRegularDataStore.form_data.fullname,
+        //     position: payrollRegularDataStore.form_data.position,
+        //     salary_grade: defaultValueSetter(payrollRegularDataStore.form_data.salary_grade, "", 0),
+        //     step_increment: defaultValueSetter(payrollRegularDataStore.form_data.step_increment, "", 0),
+        //     monthly_salary: defaultValueSetter(payrollRegularDataStore.form_data.monthly_salary, "", 0),
+        //     plantilla_item: payrollRegularDataStore.form_data.plantilla_item,
+        //     status: payrollRegularDataStore.form_data.status.value,
+        //     is_atm: payrollRegularDataStore.form_data.atm_account_no ? 1 : 0,
+        //     atm_account_no: payrollRegularDataStore.form_data.atm_account_no,
+        //     tin: payrollRegularDataStore.form_data.tin,
+        //     gsis: payrollRegularDataStore.form_data.gsis,
+        //     philhealth: payrollRegularDataStore.form_data.philhealth,
+        //     pagibig: payrollRegularDataStore.form_data.pagibig,
+        //     sss: payrollRegularDataStore.form_data.sss,
+        //     payrollRegularDataDeduc_payrollRegularData: deductions,
+        //     payrollRegularDataAllow_payrollRegularData: allowances,
+        // })
+        // .then((response) => {
+        //     eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
+        //         message: "Payroll Content Successfully Created!", type: "inverse" 
+        //     });
+        //     payrollRegularDataStore.fetch();
+        //     payrollRegularDataStore.setSelectedData(response.data.id);
+        //     payrollRegularDataStore.resetForm()
+        //     if (is_save_another == 0){
+        //         redirectBackToPayrollRegularDetails()
+        //     }
+        //     SetPageLoader(false);
+        // }).catch((error) => {
+        //     if(error.response.status == 400){
+        //         let field_errors = error.response.data;
+        //         payrollRegularDataStore.setErrorFields({
+        //             payroll_regular: field_errors.payroll_regular_id?.toString(),
+        //             employee: field_errors.employee?.toString(),
+        //             station: field_errors.station?.toString(),
+        //             paygroup: field_errors.paygroup?.toString(),
+        //             fullname: field_errors.fullname?.toString(),
+        //             position: field_errors.position?.toString(),
+        //             salary_grade: field_errors.salary_grade?.toString(),
+        //             step_increment: field_errors.step_increment?.toString(),
+        //             monthly_salary: field_errors.monthly_salary?.toString(),
+        //             plantilla_item: field_errors.plantilla_item?.toString(),
+        //             status: field_errors.status?.toString(),
+        //             is_atm: field_errors.is_atm?.toString(),
+        //             atm_account_no: field_errors.atm_account_no?.toString(),
+        //             tin: field_errors.tin?.toString(),
+        //             gsis: field_errors.gsis?.toString(),
+        //             philhealth: field_errors.philhealth?.toString(),
+        //             pagibig: field_errors.pagibig?.toString(),
+        //             sss: field_errors.sss?.toString(),
+        //             payrollRegularDataDeduc_payrollRegularData: field_errors.payrollRegularDataDeduc_payrollRegularData?.toString(),
+        //             payrollRegularDataDeduc_payrollRegularData: field_errors.payrollRegularDataAllow_payrollRegularData?.toString(),
+        //             non_field_errors: field_errors.non_field_errors?.toString(),
+        //         });
+        //     }
+        //     if(error.response.status == 404 || error.response.status == 500){
+        //         eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
+        //             message: "Error Occured!", type: "danger" 
+        //         });
+        //     }
+        //     SetPageLoader(false);
+        // });
     }
     
 
@@ -126,7 +126,7 @@ const PayrollRegularDetailsContentCreate = observer(({ payrollRegularStore, payr
                         <i className="feather icon-user bg-c-blue"></i>
                         <div className="d-inline">
                             <h5>Payroll Regular Details</h5>
-                            <span>Create Payroll Regular Content</span>
+                            <span>Edit Payroll Regular Content</span>
                         </div>
                     </div>
                 </div>
@@ -140,7 +140,7 @@ const PayrollRegularDetailsContentCreate = observer(({ payrollRegularStore, payr
                                 <Link to="/payroll/payroll_regular">Payroll Regular</Link>
                             </li>
                             <li className="breadcrumb-item">
-                                <Link to={"/payroll/payroll_regular/"+payroll_regular_id}>Details</Link>
+                                <Link to={"/payroll/payroll_regular/"+payroll_regular_id}>Edit</Link>
                             </li>
                             <li className="breadcrumb-item">
                                 Create Content
@@ -204,4 +204,4 @@ const PayrollRegularDetailsContentCreate = observer(({ payrollRegularStore, payr
 });
 
 
-export default PayrollRegularDetailsContentCreate
+export default PayrollRegularDetailsContentEdit

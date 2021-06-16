@@ -57,6 +57,7 @@ class PayrollRegularData(models.Model):
     pagibig = models.CharField(max_length=50, default="", blank=True)
     sss = models.CharField(max_length=50, default="", blank=True)
     is_new = models.BooleanField(default=False)
+    is_removed = models.BooleanField(default=False)
     created_by = models.ForeignKey(User, related_name='payrollRegularData_created_by_user', on_delete=models.PROTECT)
     updated_by = models.ForeignKey(User, related_name='payrollRegularData_updated_by_user', on_delete=models.PROTECT)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
@@ -64,7 +65,7 @@ class PayrollRegularData(models.Model):
 
 
 class PayrollRegularMaintenance(models.Model):
-    CATEGORY = ((1,'Modify Field'), (2,'Modify Deductions'), (3,'Modify Allowance'), (4,'Create Content'), (4,'Remove Content'))
+    CATEGORY = ((1,'Modify Field'), (2,'Modify Deductions'), (3,'Modify Allowance'), (4,'Create Content'), (5,'Remove Content'))
     payroll_regular = models.ForeignKey(PayrollRegular, db_column="payroll_regular_id", related_name='payrollRegularMnt_payrollRegular', on_delete=models.CASCADE)
     payroll_regular_data = models.ForeignKey(PayrollRegularData, db_column="payroll_regular_data_id", related_name='payrollRegularMnt_payrollRegularData', on_delete=models.CASCADE)
     category = models.IntegerField(choices=CATEGORY, default=0)

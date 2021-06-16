@@ -30,6 +30,7 @@ from .serializers import (
     PayrollRegularSerializer,
     PayrollRegularDataSerializer,
     PayrollRegularDataFormSerializer,
+    PayrollRegularDataUpdateIsRemovedSerializer,
     PayrollRegularMaintenanceSerializer,
     PayrollRegularMaintenanceFormSerializer
 )
@@ -354,7 +355,7 @@ class PayrollRegularDataViewSet(viewsets.ModelViewSet):
             if deductions:  
                 for data_deduc in deductions:
                     print(data_deduc)
-                    deduction_obj = get_object_or_404(Deductions.objects.all(), id=data_deduc['deduction'])
+                    deduction_obj = get_object_or_404(Deductions.objects.all(), id=data_deduc['id'])
                     payroll_regular_data_deduc_objs.append(
                         PayrollRegularDataDeductions(
                             payroll_regular_data = payroll_regular_data_obj,
@@ -368,7 +369,7 @@ class PayrollRegularDataViewSet(viewsets.ModelViewSet):
 
             if allowances:  
                 for data_allow in allowances:
-                    allowance_obj = get_object_or_404(Allowances.objects.all(), id=data_allow['allowance'])
+                    allowance_obj = get_object_or_404(Allowances.objects.all(), id=data_allow['id'])
                     payroll_regular_data_allow_objs.append(
                         PayrollRegularDataAllowances(
                             payroll_regular_data = payroll_regular_data_obj,
@@ -394,6 +395,20 @@ class PayrollRegularDataViewSet(viewsets.ModelViewSet):
         payroll_regular_data = get_object_or_404(self.queryset, id=pk)
         serializer = self.get_serializer(payroll_regular_data)
         return Response(serializer.data, 200)
+    
+
+    def partial_update(self, request, pk=None):
+        if request.data['pt'] == 'update_is_removed':
+            serializer = PayrollRegularDataUpdateIsRemovedSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            try:
+                payroll_regular_data = get_object_or_404(self.queryset, id=pk)
+                payroll_regular_data.is_removed = serializer.data['is_removed']
+                payroll_regular_data.updated_by_id = request.user.id
+                payroll_regular_data.save()
+                return Response({'id':payroll_regular_data.id}, 200)
+            except:
+                return Response({}, 500)
 
 
     @action(methods=['get'], detail=False)

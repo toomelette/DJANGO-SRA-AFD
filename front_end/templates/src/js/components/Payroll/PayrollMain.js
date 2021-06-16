@@ -10,6 +10,7 @@ import PayrollRegular from './PayrollRegularListComp.js'
 import PayrollRegularCreate from './PayrollRegularCreateComp.js'
 import PayrollRegularDetails from './PayrollRegularDetailsComp.js'
 import PayrollRegularDetailsContentCreate from './PayrollRegularDetailsContentCreateComp.js'
+import PayrollRegularDetailsContentEdit from './PayrollRegularDetailsContentEditComp.js'
 import NotFoundPage from '../ErrorPages/NotFoundPageComp'
 
 import deductionStore from './store/deductionStore'
@@ -56,7 +57,7 @@ const PayrollRegularMain = observer(({ employeeStore, dashboardMainStore }) => {
                     }
                 </Route>
 
-                {/* PAYROLL Regular DETAILS */}
+                {/* PAYROLL Regular Details */}
                 <Route exact path="/payroll/payroll_regular/:payroll_regular_id">
                     { dashboardMainStore.checkIfSubrouteExist('payroll-payroll_regular-details-page') ? 
                         <PayrollRegularDetails 
@@ -71,6 +72,15 @@ const PayrollRegularMain = observer(({ employeeStore, dashboardMainStore }) => {
                 <Route exact path="/payroll/payroll_regular/:payroll_regular_id/create">
                     { dashboardMainStore.checkIfSubrouteExist('payroll-payroll_regular-details-page') ? 
                         <PayrollRegularDetailsContentCreate 
+                            payrollRegularStore={payrollRegularStore} 
+                            payrollRegularDataStore={payrollRegularDataStore}
+                        /> : <NotFoundPage/> }
+                </Route>
+
+                {/* PAYROLL Regular Details Edit Content */}
+                <Route exact path="/payroll/payroll_regular/:payroll_regular_id/edit/:payroll_regular_data_id">
+                    { dashboardMainStore.checkIfSubrouteExist('payroll-payroll_regular-details-page') ? 
+                        <PayrollRegularDetailsContentEdit
                             payrollRegularStore={payrollRegularStore} 
                             payrollRegularDataStore={payrollRegularDataStore}
                         /> : <NotFoundPage/> }

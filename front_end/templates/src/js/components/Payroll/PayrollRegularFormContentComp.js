@@ -231,7 +231,7 @@ const PayrollRegularFormContent = observer(({ payrollRegularDataStore }) => {
                                     <SelectInput
                                         col="col-md-12 m-0 p-0"
                                         name="deduction_id"
-                                        value={ val.deduction_id }
+                                        value={ val }
                                         isDisabled={ false }
                                         options={ payrollRegularMntStore.deduction_options }
                                         onChange={ (value) => payrollRegularDataStore.modifyDeduction(key, "deduction", value) }
@@ -292,7 +292,7 @@ const PayrollRegularFormContent = observer(({ payrollRegularDataStore }) => {
                                     <SelectInput
                                         col="col-md-12 m-0 p-0"
                                         name="allowance_id"
-                                        value={ val.allowance_id }
+                                        value={ val }
                                         isDisabled={ false }
                                         options={ payrollRegularMntStore.allowance_options }
                                         onChange={ (value) => payrollRegularDataStore.modifyAllowance(key, "allowance", value) }

@@ -1,5 +1,6 @@
-import { debounce, stubString } from 'lodash'
+import { debounce, stubString } from "lodash"
 import { makeAutoObservable, runInAction } from "mobx"
+import payrollRegularMntStore from "./payrollRegularMntStore"
 
 class PayrollRegularDataStore{
     
@@ -36,6 +37,8 @@ class PayrollRegularDataStore{
         philhealth: '',
         pagibig: '',
         sss: '',
+        is_new: false,
+        is_removed: false,
         payrollRegularDataDeduc_payrollRegularData:[],
         payrollRegularDataAllow_payrollRegularData:[],
     };
@@ -86,11 +89,65 @@ class PayrollRegularDataStore{
         axios.get('api/payroll_regular_data/' + id)
         .then((response) => {
             runInAction(() => {
-                this.form_data = response.data
-                this.form_data.payrollRegularMnt_payrollRegularData.map(data_mnt => {
+                const paygroup = payrollRegularMntStore.PAYGROUP_OPTIONS.find(data => data.value == response.data.paygroup)
+                const status = payrollRegularMntStore.STATUS_OPTIONS.find(data => data.value == response.data.status)
+                let deductions = [];
+                let allowances = [];
 
+                console.log(response.data.payrollRegularDataDeduc_payrollRegularData)
+
+                response.data.payrollRegularDataDeduc_payrollRegularData.map(data => {
+                    deductions.push({ 
+                        value: data.deduction.id, 
+                        label: data.deduction.code+' - '+data.deduction.name, 
+                        deduction: data.deduction.id, 
+                        code: data.code, 
+                        name: data.name,
+                        amount: data.amount, 
+                    })
+                })
+
+                response.data.payrollRegularDataAllow_payrollRegularData.map(data => {
+                    allowances.push({ 
+                        value: data.allowance.id, 
+                        label: data.allowance.code+' - '+data.allowance.name,  
+                        allowance: data.allowance.id, 
+                        code: data.code, 
+                        name: data.name,
+                        amount: data.amount,
+                    })
+                })
+
+                this.form_data = {
+                    id:response.data.id,
+                    employee: { value:response.data.employee.id, label:response.data.fullname},
+                    employee_no: response.data.employee_no,
+                    station: { value:response.data.station.id, label:response.data.station.name },
+                    station_id: response.data.station.id,
+                    fullname: response.data.fullname,
+                    position: response.data.position,
+                    paygroup: { value:response.data.paygroup, label:paygroup.label },
+                    salary_grade: response.data.salary_grade,
+                    step_increment: response.data.step_increment,
+                    monthly_salary: response.data.monthly_salary,
+                    plantilla_item: response.data.plantilla_item,
+                    status: { value:response.data.status, label:status.label},
+                    atm_account_no: response.data.atm_account_no,
+                    tin: response.data.tin,
+                    gsis: response.data.gsis,
+                    philhealth: response.data.philhealth,
+                    pagibig: response.data.pagibig,
+                    sss: response.data.sss,
+                    is_new:response.data.is_new,
+                    is_removed:response.data.is_removed,
+                    payrollRegularDataDeduc_payrollRegularData:deductions,
+                    payrollRegularDataAllow_payrollRegularData:allowances,
+                    payrollRegularDataMnt_payrollRegularData:response.data.payrollRegularDataMnt_payrollRegularData,
+                };
+                
+                this.form_data.payrollRegularMnt_payrollRegularData.map(data_mnt => {
                     if(data_mnt.category === 2){
-                        let deduc = this.form_data.payrollRegularDataDeduc_payrollRegularData.find(data_deduc=>{
+                        let deduc = this.form_data.payrollRegularDataDeduc_payrollRegularData.find(data_deduc => {
                             return data_deduc.code === data_mnt.field
                         })
                         if(!deduc){
@@ -100,17 +157,12 @@ class PayrollRegularDataStore{
                         }
                         this.form_data.payrollRegularDataDeduc_payrollRegularData = this.form_data.payrollRegularDataDeduc_payrollRegularData.sort(
                             function(a, b){
-                                if ( Number(a.code.substring(1)) < Number(b.code.substring(1)) ){
-                                    return -1;
-                                }
-                                if ( Number(a.code.substring(1)) > Number(b.code.substring(1)) ){
-                                    return 1;
-                                }
+                                if ( Number(a.code.substring(1)) < Number(b.code.substring(1)) ){ return -1;}
+                                if ( Number(a.code.substring(1)) > Number(b.code.substring(1)) ){ return 1; }
                                 return 0;
                             }
                         )
                     }
-
                     if(data_mnt.category === 3){
                         let allow = this.form_data.payrollRegularDataAllow_payrollRegularData.find(data_allow=>{
                             return data_allow.code === data_mnt.field
@@ -122,17 +174,12 @@ class PayrollRegularDataStore{
                         }
                         this.form_data.payrollRegularDataAllow_payrollRegularData = this.form_data.payrollRegularDataAllow_payrollRegularData.sort(
                             function(a, b){
-                                if ( Number(a.code.substring(5)) < Number(b.code.substring(5)) ){
-                                    return -1;
-                                }
-                                if ( Number(a.code.substring(5)) > Number(b.code.substring(5)) ){
-                                    return 1;
-                                }
+                                if ( Number(a.code.substring(5)) < Number(b.code.substring(5)) ){ return -1; }
+                                if ( Number(a.code.substring(5)) > Number(b.code.substring(5)) ){ return 1; }
                                 return 0;
                             }
                         )
                     }
-
                 })
             })
         });

@@ -2,9 +2,11 @@
 import React, { useCallback } from 'react'
 import { observer } from 'mobx-react'
 
+import eventBus from '../Utils/EventBus'
 import { useHistory, useParams } from "react-router-dom"
 import { numberFormat } from '../Utils/DataFilters'
 import { TableFooterDefault } from '../Utils/Table/TableFooters'
+
 
 
 const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrollRegularMntStore }) => {
@@ -14,18 +16,19 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
     let total_deduc = 0;
     let total_allow = 0;
 
-
     const redirectToPayrollRegularCreate = useCallback(() => {
         history.push('/payroll/payroll_regular/'+ payroll_regular_id +'/create'), [history]
     });
 
+    const redirectToPayrollRegularEdit = useCallback((payroll_regular_data_id) => {
+        history.push('/payroll/payroll_regular/'+ payroll_regular_id +'/edit/'+payroll_regular_data_id), [history]
+    });
 
     const handleCreatePayrollRegularRedirect = (e) => {
         e.preventDefault()
         payrollRegularDataStore.resetForm()
         redirectToPayrollRegularCreate()
     }
-
     
     const handleClickContentDetails = (e, id) => {
         e.preventDefault()
@@ -34,6 +37,38 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
         $("#payroll-regular-content-details").modal('toggle')
     }
 
+    const handleUpdateContentIsRemoved = (e, id, value) => {
+        e.preventDefault()
+        axios.patch('api/payroll_regular_data/'+id+'/', {
+            pt: 'update_is_removed',
+            is_removed: value,
+        }).then((response) => {
+            if(value === true){
+                eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
+                    message: "Payroll content successfully removed from list!", type: "inverse" 
+                });
+            }else{
+                eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
+                    message: "Payroll content successfully restored in list!", type: "inverse"
+                });
+            }
+            payrollRegularDataStore.fetch();
+            payrollRegularDataStore.setSelectedData(response.data.id);
+            $("#payroll-regular-content-details").modal('hide')
+        }).catch((error) => {
+            if(error.response.status == 404 || error.response.status == 500){
+                eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
+                    message: "Error Occured!", type: "danger" 
+                });
+            }
+        });
+    }
+
+    const handleEditContent = (e, id) => {
+        e.preventDefault()
+        $("#payroll-regular-content-details").modal('hide')
+        redirectToPayrollRegularEdit(id)
+    }
 
     const getDeductionRecords = () => {
         let rows = [];
@@ -75,7 +110,6 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
         return rows;
     }
 
-
     const getAllowanceRecords = () => {
         let rows = [];
         if(payrollRegularDataStore.form_data.payrollRegularDataAllow_payrollRegularData){
@@ -116,7 +150,6 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
         return rows;
     }
 
-
     return (
     <>
     
@@ -151,17 +184,31 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
                             </thead>
                             <tbody>
                                 { payrollRegularDataStore.list.map((val, key) => { 
-                                    return (
-                                        <tr key={key} className={ val.id == payrollRegularDataStore.selected_data ? "table-info" : "" }>
-                                            <td className="align-middle">{ val.employee_no } - { val.fullname }</td>
-                                            <td className="align-middle">{ val.position }</td>
-                                            <td className="align-middle">
-                                                <a href="#" onClick={ e => handleClickContentDetails(e, val.id) }>
-                                                    <ins className="text-info">View Details</ins>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    ) 
+                                    if(val.is_removed == true){
+                                        return (
+                                            <tr key={key} className={ val.id == payrollRegularDataStore.selected_data ? "table-info" : "" }>
+                                                <td className="align-middle"><del>{ val.employee_no } - { val.fullname }</del></td>
+                                                <td className="align-middle"><del>{ val.position }</del></td>
+                                                <td className="align-middle">
+                                                    <a href="#" onClick={ e => handleClickContentDetails(e, val.id) }>
+                                                        <ins className="text-info">View Details</ins>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        ) 
+                                    }else{
+                                        return (
+                                            <tr key={key} className={ val.id == payrollRegularDataStore.selected_data ? "table-info" : "" }>
+                                                <td className="align-middle">{ val.employee_no } - { val.fullname }</td>
+                                                <td className="align-middle">{ val.position }</td>
+                                                <td className="align-middle">
+                                                    <a href="#" onClick={ e => handleClickContentDetails(e, val.id) }>
+                                                        <ins className="text-info">View Details</ins>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        ) 
+                                    }
                                 }) }
                             </tbody>
                         </table>
@@ -189,10 +236,28 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
             <div className="modal-dialog modal-lg" role="document" style={{ maxWidth:'1200px' }}>
                 <div className="modal-content">
                     <div className="modal-header">
-                        <h4 className="modal-title">Content Details</h4>
-                        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                        <h4 className="modal-title mt-2">Content Details</h4>
+                        <div className="float-right">
+                            <button type="button" data-dismiss="modal" aria-label="Close" className="close ml-3">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            { payrollRegularDataStore.form_data.is_new === true && payrollRegularDataStore.form_data.is_removed === false? 
+                                <button className="btn btn-md btn-primary float-right ml-2" 
+                                        onClick={ e => handleEditContent(e, payrollRegularDataStore.form_data.id) }>
+                                    <i className="fa fa-edit"></i> Edit
+                                </button> : <></>
+                            }
+                            { payrollRegularDataStore.form_data.is_removed === false ? 
+                                <button className="btn btn-md btn-warning float-right ml-2" 
+                                        onClick={ e => handleUpdateContentIsRemoved(e, payrollRegularDataStore.form_data.id, true) }>
+                                    <i className="fa fa-trash"></i> Remove from list
+                                </button> :
+                                <button className="btn btn-md btn-success float-right ml-2"
+                                        onClick={ e => handleUpdateContentIsRemoved(e, payrollRegularDataStore.form_data.id, false) }>
+                                    <i className="fa fa-refresh"></i> Restore
+                                </button>
+                            }
+                        </div>
                     </div>
                     <div className="modal-body">
 
@@ -218,7 +283,7 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
                                         { payrollRegularMntStore.getStationOptionsLabel(payrollRegularDataStore.getSelectedDataMaintenanceDetails('station').mod_value) }
                                     </h5> :
                                     <h5>
-                                        { payrollRegularMntStore.getStationOptionsLabel(payrollRegularDataStore.form_data.station_no) }
+                                        { payrollRegularMntStore.getStationOptionsLabel(payrollRegularDataStore.form_data.station_id) }
                                     </h5>
                                 }
                             </div>
@@ -240,7 +305,7 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
                                         { payrollRegularMntStore.getPaygroupOptionsLabel(payrollRegularDataStore.getSelectedDataMaintenanceDetails('paygroup').mod_value) }
                                     </h5> :
                                     <h5>
-                                        { payrollRegularMntStore.getPaygroupOptionsLabel(payrollRegularDataStore.form_data.paygroup) }
+                                        { payrollRegularDataStore.form_data.paygroup?.label }
                                     </h5>
                                 }
                             </div>
@@ -290,7 +355,7 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
                                         { payrollRegularMntStore.getStatusOptionsLabel(payrollRegularDataStore.getSelectedDataMaintenanceDetails('status').mod_value) }
                                     </h5> :
                                     <h5>
-                                        { payrollRegularMntStore.getStatusOptionsLabel(payrollRegularDataStore.form_data.status) }
+                                        { payrollRegularDataStore.form_data.status?.label }
                                     </h5>
                                 }
                             </div>
