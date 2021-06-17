@@ -315,75 +315,79 @@ class PayrollRegularDataViewSet(viewsets.ModelViewSet):
     def create(self, request):
         serializer = PayrollRegularDataFormSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        try:
-            payroll_regular_data_deduc_objs = []
-            payroll_regular_data_allow_objs = []
-            deductions = serializer.data['payrollRegularDataDeduc_payrollRegularData']
-            allowances = serializer.data['payrollRegularDataAllow_payrollRegularData']
-            employee = get_object_or_404(Employee.objects.all(), id=serializer.data['employee'])
-            station = get_object_or_404(Station.objects.all(), id=serializer.data['station'])
-            payroll_regular = get_object_or_404(PayrollRegular.objects.all(), id=serializer.data['payroll_regular'])
+        is_exist = self.queryset.filter(employee_id=serializer.data['employee']).count()
+        if is_exist > 0:
+            return Response({'employee':'Employee already exist in payroll!'}, 400)
+        else:
+            try:    
+                payroll_regular_data_deduc_objs = []
+                payroll_regular_data_allow_objs = []
+                deductions = serializer.data['payrollRegularDataDeduc_payrollRegularData']
+                allowances = serializer.data['payrollRegularDataAllow_payrollRegularData']
+                employee = get_object_or_404(Employee.objects.all(), id=serializer.data['employee'])
+                station = get_object_or_404(Station.objects.all(), id=serializer.data['station'])
+                payroll_regular = get_object_or_404(PayrollRegular.objects.all(), id=serializer.data['payroll_regular'])
 
-            payroll_regular_data_obj = PayrollRegularData()
-            payroll_regular_data_obj.payroll_regular = payroll_regular
-            payroll_regular_data_obj.employee = employee
-            payroll_regular_data_obj.station = station
-            payroll_regular_data_obj.employee_no = employee.employee_id
-            payroll_regular_data_obj.station_no = station.station_id
-            payroll_regular_data_obj.paygroup = serializer.data['paygroup']
-            payroll_regular_data_obj.fullname = serializer.data['fullname']
-            payroll_regular_data_obj.position = serializer.data['position']
-            payroll_regular_data_obj.salary_grade = serializer.data['salary_grade']
-            payroll_regular_data_obj.step_increment = serializer.data['step_increment']
-            payroll_regular_data_obj.monthly_salary = serializer.data['monthly_salary']
-            payroll_regular_data_obj.plantilla_item = serializer.data['plantilla_item']
-            payroll_regular_data_obj.status = serializer.data['status']
-            payroll_regular_data_obj.is_atm = serializer.data['is_atm']
-            payroll_regular_data_obj.atm_account_no = serializer.data['atm_account_no']
-            payroll_regular_data_obj.tin = serializer.data['tin']
-            payroll_regular_data_obj.gsis = serializer.data['gsis']
-            payroll_regular_data_obj.philhealth = serializer.data['philhealth']
-            payroll_regular_data_obj.pagibig = serializer.data['pagibig']
-            payroll_regular_data_obj.sss = serializer.data['sss']
-            payroll_regular_data_obj.is_new = True
-            payroll_regular_data_obj.created_by_id = request.user.id
-            payroll_regular_data_obj.updated_by_id = request.user.id
-            payroll_regular_data_obj.save()
+                payroll_regular_data_obj = PayrollRegularData()
+                payroll_regular_data_obj.payroll_regular = payroll_regular
+                payroll_regular_data_obj.employee = employee
+                payroll_regular_data_obj.station = station
+                payroll_regular_data_obj.employee_no = employee.employee_id
+                payroll_regular_data_obj.station_no = station.station_id
+                payroll_regular_data_obj.paygroup = serializer.data['paygroup']
+                payroll_regular_data_obj.fullname = serializer.data['fullname']
+                payroll_regular_data_obj.position = serializer.data['position']
+                payroll_regular_data_obj.salary_grade = serializer.data['salary_grade']
+                payroll_regular_data_obj.step_increment = serializer.data['step_increment']
+                payroll_regular_data_obj.monthly_salary = serializer.data['monthly_salary']
+                payroll_regular_data_obj.plantilla_item = serializer.data['plantilla_item']
+                payroll_regular_data_obj.status = serializer.data['status']
+                payroll_regular_data_obj.is_atm = serializer.data['is_atm']
+                payroll_regular_data_obj.atm_account_no = serializer.data['atm_account_no']
+                payroll_regular_data_obj.tin = serializer.data['tin']
+                payroll_regular_data_obj.gsis = serializer.data['gsis']
+                payroll_regular_data_obj.philhealth = serializer.data['philhealth']
+                payroll_regular_data_obj.pagibig = serializer.data['pagibig']
+                payroll_regular_data_obj.sss = serializer.data['sss']
+                payroll_regular_data_obj.is_new = True
+                payroll_regular_data_obj.created_by_id = request.user.id
+                payroll_regular_data_obj.updated_by_id = request.user.id
+                payroll_regular_data_obj.save()
 
-            if deductions:  
-                for data_deduc in deductions:
-                    print(data_deduc)
-                    deduction_obj = get_object_or_404(Deductions.objects.all(), id=data_deduc['id'])
-                    payroll_regular_data_deduc_objs.append(
-                        PayrollRegularDataDeductions(
-                            payroll_regular_data = payroll_regular_data_obj,
-                            deduction = deduction_obj,
-                            code = deduction_obj.code,
-                            name = deduction_obj.name,
-                            description = deduction_obj.description,
-                            amount = data_deduc['amount'],
+                if deductions:  
+                    for data_deduc in deductions:
+                        print(data_deduc)
+                        deduction_obj = get_object_or_404(Deductions.objects.all(), id=data_deduc['id'])
+                        payroll_regular_data_deduc_objs.append(
+                            PayrollRegularDataDeductions(
+                                payroll_regular_data = payroll_regular_data_obj,
+                                deduction = deduction_obj,
+                                code = deduction_obj.code,
+                                name = deduction_obj.name,
+                                description = deduction_obj.description,
+                                amount = data_deduc['amount'],
+                            )
                         )
-                    )
 
-            if allowances:  
-                for data_allow in allowances:
-                    allowance_obj = get_object_or_404(Allowances.objects.all(), id=data_allow['id'])
-                    payroll_regular_data_allow_objs.append(
-                        PayrollRegularDataAllowances(
-                            payroll_regular_data = payroll_regular_data_obj,
-                            allowance = allowance_obj,
-                            code = allowance_obj.code,
-                            name = allowance_obj.name,
-                            description = allowance_obj.description,
-                            amount = data_allow['amount'],
+                if allowances:  
+                    for data_allow in allowances:
+                        allowance_obj = get_object_or_404(Allowances.objects.all(), id=data_allow['id'])
+                        payroll_regular_data_allow_objs.append(
+                            PayrollRegularDataAllowances(
+                                payroll_regular_data = payroll_regular_data_obj,
+                                allowance = allowance_obj,
+                                code = allowance_obj.code,
+                                name = allowance_obj.name,
+                                description = allowance_obj.description,
+                                amount = data_allow['amount'],
+                            )
                         )
-                    )
-            
-            PayrollRegularDataDeductions.objects.bulk_create(payroll_regular_data_deduc_objs)
-            PayrollRegularDataAllowances.objects.bulk_create(payroll_regular_data_allow_objs)
-            return Response({'id': payroll_regular_data_obj.id}, 200)
-        except:
-            return Response(500)
+                
+                PayrollRegularDataDeductions.objects.bulk_create(payroll_regular_data_deduc_objs)
+                PayrollRegularDataAllowances.objects.bulk_create(payroll_regular_data_allow_objs)
+                return Response({'id': payroll_regular_data_obj.id}, 200)
+            except:
+                return Response(500)
 
     
     def retrieve(self, request, pk=None):
@@ -409,74 +413,78 @@ class PayrollRegularDataViewSet(viewsets.ModelViewSet):
     def update(self, request, pk=None):
         serializer = PayrollRegularDataFormSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        try:
-            payroll_regular_data_deduc_objs = []
-            payroll_regular_data_allow_objs = []
-            deductions = serializer.data['payrollRegularDataDeduc_payrollRegularData']
-            allowances = serializer.data['payrollRegularDataAllow_payrollRegularData']
-            employee = get_object_or_404(Employee.objects.all(), id=serializer.data['employee'])
-            station = get_object_or_404(Station.objects.all(), id=serializer.data['station'])
+        is_exist = self.queryset.filter(employee_id=serializer.data['employee']).exclude(id=pk).count()
+        if is_exist > 0:
+            return Response({'employee':'Employee already exist in payroll!'}, 400)
+        else:
+            try:
+                payroll_regular_data_deduc_objs = []
+                payroll_regular_data_allow_objs = []
+                deductions = serializer.data['payrollRegularDataDeduc_payrollRegularData']
+                allowances = serializer.data['payrollRegularDataAllow_payrollRegularData']
+                employee = get_object_or_404(Employee.objects.all(), id=serializer.data['employee'])
+                station = get_object_or_404(Station.objects.all(), id=serializer.data['station'])
 
-            payroll_regular_data_obj = get_object_or_404(self.queryset, id=pk)
-            payroll_regular_data_obj.employee = employee
-            payroll_regular_data_obj.station = station
-            payroll_regular_data_obj.employee_no = employee.employee_id
-            payroll_regular_data_obj.station_no = station.station_id
-            payroll_regular_data_obj.paygroup = serializer.data['paygroup']
-            payroll_regular_data_obj.fullname = serializer.data['fullname']
-            payroll_regular_data_obj.position = serializer.data['position']
-            payroll_regular_data_obj.salary_grade = serializer.data['salary_grade']
-            payroll_regular_data_obj.step_increment = serializer.data['step_increment']
-            payroll_regular_data_obj.monthly_salary = serializer.data['monthly_salary']
-            payroll_regular_data_obj.plantilla_item = serializer.data['plantilla_item']
-            payroll_regular_data_obj.status = serializer.data['status']
-            payroll_regular_data_obj.is_atm = serializer.data['is_atm']
-            payroll_regular_data_obj.atm_account_no = serializer.data['atm_account_no']
-            payroll_regular_data_obj.tin = serializer.data['tin']
-            payroll_regular_data_obj.gsis = serializer.data['gsis']
-            payroll_regular_data_obj.philhealth = serializer.data['philhealth']
-            payroll_regular_data_obj.pagibig = serializer.data['pagibig']
-            payroll_regular_data_obj.sss = serializer.data['sss']
-            payroll_regular_data_obj.updated_by_id = request.user.id
-            payroll_regular_data_obj.save()
+                payroll_regular_data_obj = get_object_or_404(self.queryset, id=pk)
+                payroll_regular_data_obj.employee = employee
+                payroll_regular_data_obj.station = station
+                payroll_regular_data_obj.employee_no = employee.employee_id
+                payroll_regular_data_obj.station_no = station.station_id
+                payroll_regular_data_obj.paygroup = serializer.data['paygroup']
+                payroll_regular_data_obj.fullname = serializer.data['fullname']
+                payroll_regular_data_obj.position = serializer.data['position']
+                payroll_regular_data_obj.salary_grade = serializer.data['salary_grade']
+                payroll_regular_data_obj.step_increment = serializer.data['step_increment']
+                payroll_regular_data_obj.monthly_salary = serializer.data['monthly_salary']
+                payroll_regular_data_obj.plantilla_item = serializer.data['plantilla_item']
+                payroll_regular_data_obj.status = serializer.data['status']
+                payroll_regular_data_obj.is_atm = serializer.data['is_atm']
+                payroll_regular_data_obj.atm_account_no = serializer.data['atm_account_no']
+                payroll_regular_data_obj.tin = serializer.data['tin']
+                payroll_regular_data_obj.gsis = serializer.data['gsis']
+                payroll_regular_data_obj.philhealth = serializer.data['philhealth']
+                payroll_regular_data_obj.pagibig = serializer.data['pagibig']
+                payroll_regular_data_obj.sss = serializer.data['sss']
+                payroll_regular_data_obj.updated_by_id = request.user.id
+                payroll_regular_data_obj.save()
 
-            payroll_regular_data_obj.payrollRegularDataDeduc_payrollRegularData.all().delete()
-            payroll_regular_data_obj.payrollRegularDataAllow_payrollRegularData.all().delete()
+                payroll_regular_data_obj.payrollRegularDataDeduc_payrollRegularData.all().delete()
+                payroll_regular_data_obj.payrollRegularDataAllow_payrollRegularData.all().delete()
 
-            if deductions:  
-                for data_deduc in deductions:
-                    print(data_deduc)
-                    deduction_obj = get_object_or_404(Deductions.objects.all(), id=data_deduc['id'])
-                    payroll_regular_data_deduc_objs.append(
-                        PayrollRegularDataDeductions(
-                            payroll_regular_data = payroll_regular_data_obj,
-                            deduction = deduction_obj,
-                            code = deduction_obj.code,
-                            name = deduction_obj.name,
-                            description = deduction_obj.description,
-                            amount = data_deduc['amount'],
+                if deductions:  
+                    for data_deduc in deductions:
+                        print(data_deduc)
+                        deduction_obj = get_object_or_404(Deductions.objects.all(), id=data_deduc['id'])
+                        payroll_regular_data_deduc_objs.append(
+                            PayrollRegularDataDeductions(
+                                payroll_regular_data = payroll_regular_data_obj,
+                                deduction = deduction_obj,
+                                code = deduction_obj.code,
+                                name = deduction_obj.name,
+                                description = deduction_obj.description,
+                                amount = data_deduc['amount'],
+                            )
                         )
-                    )
 
-            if allowances:  
-                for data_allow in allowances:
-                    allowance_obj = get_object_or_404(Allowances.objects.all(), id=data_allow['id'])
-                    payroll_regular_data_allow_objs.append(
-                        PayrollRegularDataAllowances(
-                            payroll_regular_data = payroll_regular_data_obj,
-                            allowance = allowance_obj,
-                            code = allowance_obj.code,
-                            name = allowance_obj.name,
-                            description = allowance_obj.description,
-                            amount = data_allow['amount'],
+                if allowances:  
+                    for data_allow in allowances:
+                        allowance_obj = get_object_or_404(Allowances.objects.all(), id=data_allow['id'])
+                        payroll_regular_data_allow_objs.append(
+                            PayrollRegularDataAllowances(
+                                payroll_regular_data = payroll_regular_data_obj,
+                                allowance = allowance_obj,
+                                code = allowance_obj.code,
+                                name = allowance_obj.name,
+                                description = allowance_obj.description,
+                                amount = data_allow['amount'],
+                            )
                         )
-                    )
-            
-            PayrollRegularDataDeductions.objects.bulk_create(payroll_regular_data_deduc_objs)
-            PayrollRegularDataAllowances.objects.bulk_create(payroll_regular_data_allow_objs)
-            return Response({'id': payroll_regular_data_obj.id}, 200)
-        except:
-            return Response(500)
+                
+                PayrollRegularDataDeductions.objects.bulk_create(payroll_regular_data_deduc_objs)
+                PayrollRegularDataAllowances.objects.bulk_create(payroll_regular_data_allow_objs)
+                return Response({'id': payroll_regular_data_obj.id}, 200)
+            except:
+                return Response(500)
 
 
     @action(methods=['get'], detail=False)
@@ -512,40 +520,48 @@ class PayrollRegularMaintenanceViewSet(viewsets.ModelViewSet):
     def create(self, request):
         serializer = PayrollRegularMaintenanceFormSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        try:
-            payroll_regular_mnt = PayrollRegularMaintenance()
-            payroll_regular_mnt.payroll_regular_id = serializer.data['pr_id']
-            payroll_regular_mnt.payroll_regular_data_id = serializer.data['prd_id']
-            payroll_regular_mnt.category = serializer.data['category']
-            payroll_regular_mnt.field = serializer.data['field']
-            payroll_regular_mnt.field_description = serializer.data['field_description']
-            payroll_regular_mnt.mod_value = serializer.data['mod_value']
-            payroll_regular_mnt.remarks = serializer.data['remarks']
-            payroll_regular_mnt.created_by_id = request.user.id
-            payroll_regular_mnt.updated_by_id = request.user.id
-            payroll_regular_mnt.save()
-            return Response({'id': payroll_regular_mnt.id}, 200)
-        except:
-            return Response(500)
+        is_exist = self.queryset.filter(payroll_regular_data_id=serializer.data['prd_id'], field=serializer.data['field']).count()
+        if is_exist > 0:
+            return Response({"prd_id":"The employee and field already exist!"}, 400)
+        else:
+            try:
+                payroll_regular_mnt = PayrollRegularMaintenance()
+                payroll_regular_mnt.payroll_regular_id = serializer.data['pr_id']
+                payroll_regular_mnt.payroll_regular_data_id = serializer.data['prd_id']
+                payroll_regular_mnt.category = serializer.data['category']
+                payroll_regular_mnt.field = serializer.data['field']
+                payroll_regular_mnt.field_description = serializer.data['field_description']
+                payroll_regular_mnt.mod_value = serializer.data['mod_value']
+                payroll_regular_mnt.remarks = serializer.data['remarks']
+                payroll_regular_mnt.created_by_id = request.user.id
+                payroll_regular_mnt.updated_by_id = request.user.id
+                payroll_regular_mnt.save()
+                return Response({'id': payroll_regular_mnt.id}, 200)
+            except:
+                return Response(500)
         
 
     def update(self, request, pk=None):
         serializer = PayrollRegularMaintenanceFormSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        try:
-            payroll_regular_mnt = get_object_or_404(self.queryset, id=pk)
-            payroll_regular_mnt.payroll_regular_id = serializer.data['pr_id']
-            payroll_regular_mnt.payroll_regular_data_id = serializer.data['prd_id']
-            payroll_regular_mnt.category = serializer.data['category']
-            payroll_regular_mnt.field = serializer.data['field']
-            payroll_regular_mnt.field_description = serializer.data['field_description']
-            payroll_regular_mnt.mod_value = serializer.data['mod_value']
-            payroll_regular_mnt.remarks = serializer.data['remarks']
-            payroll_regular_mnt.updated_by_id = request.user.id
-            payroll_regular_mnt.save()
-            return Response({'id':payroll_regular_mnt.id}, 200)
-        except:
-            return Response({}, 500)
+        is_exist = self.queryset.filter(payroll_regular_data_id=serializer.data['prd_id'], field=serializer.data['field']).exclude(id=pk).count()
+        if is_exist > 0:
+            return Response({"prd_id":"The employee and field already exist!"}, 400)
+        else:
+            try:
+                payroll_regular_mnt = get_object_or_404(self.queryset, id=pk)
+                payroll_regular_mnt.payroll_regular_id = serializer.data['pr_id']
+                payroll_regular_mnt.payroll_regular_data_id = serializer.data['prd_id']
+                payroll_regular_mnt.category = serializer.data['category']
+                payroll_regular_mnt.field = serializer.data['field']
+                payroll_regular_mnt.field_description = serializer.data['field_description']
+                payroll_regular_mnt.mod_value = serializer.data['mod_value']
+                payroll_regular_mnt.remarks = serializer.data['remarks']
+                payroll_regular_mnt.updated_by_id = request.user.id
+                payroll_regular_mnt.save()
+                return Response({'id':payroll_regular_mnt.id}, 200)
+            except:
+                return Response({}, 500)
 
 
     def destroy(self, request, pk=None):

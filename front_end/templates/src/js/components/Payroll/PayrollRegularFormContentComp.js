@@ -27,13 +27,17 @@ const PayrollRegularFormContent = observer(({ payrollRegularDataStore }) => {
             let station = payrollRegularMntStore.station_options.find(data => data.value == response.data.station_link)
             let status = payrollRegularMntStore.STATUS_OPTIONS.find(data => data.value == response.data.application_status)
             payrollRegularDataStore.setFormData(response.data.fullname, "fullname")
-            payrollRegularDataStore.setFormData({ value:response.data.station_link, label:station?.label }, "station")
+            if(station){
+                payrollRegularDataStore.setFormData({ value:response.data.station_link, label:station?.label }, "station")
+            }
             payrollRegularDataStore.setFormData(response.data.position, "position")
             payrollRegularDataStore.setFormData(response.data.salary_grade, "salary_grade")
             payrollRegularDataStore.setFormData(response.data.step_increment, "step_increment")
             payrollRegularDataStore.setFormData(response.data.monthly_salary, "monthly_salary")
             payrollRegularDataStore.setFormData(response.data.plantilla_item, "plantilla_item")
-            payrollRegularDataStore.setFormData({ value:response.data.application_status, label:status?.label }, "status")
+            if(status){
+                payrollRegularDataStore.setFormData({ value:response.data.application_status, label:status?.label }, "status")
+            }
             payrollRegularDataStore.setFormData(response.data.tin, "tin")
             payrollRegularDataStore.setFormData(response.data.gsis, "gsis")
             payrollRegularDataStore.setFormData(response.data.philhealth, "philhealth")

@@ -53,7 +53,7 @@ const PayrollRegularMntDetails = observer(({ payrollRegularDataStore, payrollReg
             if(error.response.status == 400){
                 let field_errors = error.response.data;
                 payrollRegularMntStore.setErrorFields({
-                    prd_id: field_errors.prd_id?.toString(),
+                    payroll_regular_data: field_errors.prd_id?.toString(),
                     category: field_errors.category?.toString(), 
                     field: field_errors.field?.toString(), 
                     mod_value: field_errors.mod_value?.toString(), 
@@ -109,7 +109,7 @@ const PayrollRegularMntDetails = observer(({ payrollRegularDataStore, payrollReg
             if(error.response.status == 400){
                 let field_errors = error.response.data;
                 payrollRegularMntStore.setErrorFields({
-                    prd_id: field_errors.prd_id?.toString(),
+                    payroll_regular_data: field_errors.prd_id?.toString(),
                     category: field_errors.category?.toString(), 
                     field: field_errors.field?.toString(), 
                     mod_value: field_errors.mod_value?.toString(), 
