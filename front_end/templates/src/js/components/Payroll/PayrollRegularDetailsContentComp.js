@@ -80,7 +80,7 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
                         rows.push(
                             <tr key={data.code} style={{color:'#4099ff'}}>
                                 <td className="align-middle">
-                                    <span style={{ fontWeight:'bold' }}>({ data.code })</span> - { data.name }
+                                    { data.label }
                                 </td>
                                 <td className="align-middle">
                                     { numberFormat(payrollRegularDataStore.getSelectedDataMaintenanceDetails(data.code).mod_value, 2) }
@@ -91,7 +91,7 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
                         rows.push(
                             <tr key={data.code}>
                                 <td className="align-middle">
-                                    <span style={{ fontWeight:'bold' }}>({ data.code })</span> - { data.name }
+                                    { data.label }
                                 </td>
                                 <td className="align-middle">
                                     { numberFormat(data.amount, 2) }
@@ -120,7 +120,7 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
                         rows.push(
                             <tr key={data.code} style={{color:'#4099ff'}}>
                                 <td className="align-middle">
-                                    <span style={{ fontWeight:'bold' }}>({ data.code })</span> - { data.name }
+                                    { data.label }
                                 </td>
                                 <td className="align-middle">
                                     { numberFormat(payrollRegularDataStore.getSelectedDataMaintenanceDetails(data.code).mod_value, 2) }
@@ -131,7 +131,7 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
                         rows.push(
                             <tr key={data.code}>
                                 <td className="align-middle">
-                                    <span style={{ fontWeight:'bold' }}>({ data.code })</span> - { data.name }
+                                    { data.label }
                                 </td>
                                 <td className="align-middle">
                                     { numberFormat(data.amount, 2) }

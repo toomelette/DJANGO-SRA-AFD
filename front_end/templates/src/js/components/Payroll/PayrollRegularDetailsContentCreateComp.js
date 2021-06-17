@@ -36,13 +36,13 @@ const PayrollRegularDetailsContentCreate = observer(({ payrollRegularStore, payr
 
         if(payrollRegularDataStore.form_data.payrollRegularDataDeduc_payrollRegularData){
             payrollRegularDataStore.form_data.payrollRegularDataDeduc_payrollRegularData.map(data => {
-                deductions.push({id: data.deduction.value, amount: data.amount})
+                deductions.push({id: data.value, amount: data.amount})
             })
         }
 
         if(payrollRegularDataStore.form_data.payrollRegularDataAllow_payrollRegularData){
             payrollRegularDataStore.form_data.payrollRegularDataAllow_payrollRegularData.map(data => {
-                allowances.push({id: data.allowance.value, amount: data.amount})
+                allowances.push({id: data.value, amount: data.amount})
             })
         }
 

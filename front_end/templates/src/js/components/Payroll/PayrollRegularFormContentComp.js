@@ -234,7 +234,7 @@ const PayrollRegularFormContent = observer(({ payrollRegularDataStore }) => {
                                         value={ val }
                                         isDisabled={ false }
                                         options={ payrollRegularMntStore.deduction_options }
-                                        onChange={ (value) => payrollRegularDataStore.modifyDeduction(key, "deduction", value) }
+                                        onChange={ (value) => payrollRegularDataStore.modifyDeduction(key, "value", value) }
                                     />
                                 </td>
                                 <td className="align-middle pt-0 pb-0" style={{maxWidth:'150px'}}>
@@ -295,7 +295,7 @@ const PayrollRegularFormContent = observer(({ payrollRegularDataStore }) => {
                                         value={ val }
                                         isDisabled={ false }
                                         options={ payrollRegularMntStore.allowance_options }
-                                        onChange={ (value) => payrollRegularDataStore.modifyAllowance(key, "allowance", value) }
+                                        onChange={ (value) => payrollRegularDataStore.modifyAllowance(key, "value", value) }
                                     />
                                 </td>
                                 <td className="align-middle pt-0 pb-0" style={{maxWidth:'150px'}}>

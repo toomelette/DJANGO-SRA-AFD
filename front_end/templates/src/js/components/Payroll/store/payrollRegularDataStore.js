@@ -89,35 +89,75 @@ class PayrollRegularDataStore{
         axios.get('api/payroll_regular_data/' + id)
         .then((response) => {
             runInAction(() => {
-                const paygroup = payrollRegularMntStore.PAYGROUP_OPTIONS.find(data => data.value == response.data.paygroup)
-                const status = payrollRegularMntStore.STATUS_OPTIONS.find(data => data.value == response.data.status)
+
                 let deductions = [];
                 let allowances = [];
 
-                console.log(response.data.payrollRegularDataDeduc_payrollRegularData)
+                // FIND OPTION OBJ
+                const paygroup = payrollRegularMntStore.PAYGROUP_OPTIONS.find(data => data.value == response.data.paygroup)
+                const status = payrollRegularMntStore.STATUS_OPTIONS.find(data => data.value == response.data.status)
 
+                // PUSH DEDUCTIONS AND ALLOWANCES INTO DECLARED ARRAY
                 response.data.payrollRegularDataDeduc_payrollRegularData.map(data => {
                     deductions.push({ 
                         value: data.deduction.id, 
                         label: data.deduction.code+' - '+data.deduction.name, 
-                        deduction: data.deduction.id, 
-                        code: data.code, 
-                        name: data.name,
-                        amount: data.amount, 
+                        code: data.code,
+                        amount: data.amount,
                     })
                 })
-
                 response.data.payrollRegularDataAllow_payrollRegularData.map(data => {
                     allowances.push({ 
                         value: data.allowance.id, 
                         label: data.allowance.code+' - '+data.allowance.name,  
-                        allowance: data.allowance.id, 
-                        code: data.code, 
-                        name: data.name,
+                        code: data.code,
                         amount: data.amount,
                     })
                 })
+                
+                // IF DEDUCTION OR ALLOWANCE EXIST IN MAINTENANCE PUSH TO DECLARED ARRAY
+                response.data.payrollRegularMnt_payrollRegularData.map(data_mnt => {
+                    if(data_mnt.category === 2){
+                        let deduc = deductions.find(data_deduc => data_deduc.code === data_mnt.field)
+                        if(!deduc){
+                            deductions.push({ 
+                                label: data_mnt.field+" - "+data_mnt.field_description, 
+                                code: data_mnt.field, 
+                                amount: data_mnt.mod_value,
+                                
+                            })
+                        }
+                    }
+                    if(data_mnt.category === 3){
+                        let allow = allowances.find(data_allow => data_allow.code === data_mnt.field)
+                        if(!allow){
+                            allowances.push({ 
+                                label: data_mnt.field+" - "+data_mnt.field_description, 
+                                code: data_mnt.field, 
+                                amount: data_mnt.mod_value,
+                                
+                            })
+                        }
+                    }
+                })
 
+                // SORT DECLARED ARRAYS
+                deductions = deductions.sort(
+                    function(a, b){
+                        if ( Number(a.code.substring(1)) < Number(b.code.substring(1)) ){ return -1;}
+                        if ( Number(a.code.substring(1)) > Number(b.code.substring(1)) ){ return 1; }
+                        return 0;
+                    }
+                )
+                allowances = allowances.sort(
+                    function(a, b){
+                        if ( Number(a.code.substring(5)) < Number(b.code.substring(5)) ){ return -1; }
+                        if ( Number(a.code.substring(5)) > Number(b.code.substring(5)) ){ return 1; }
+                        return 0;
+                    }
+                )
+
+                // SET FORM DATA
                 this.form_data = {
                     id:response.data.id,
                     employee: { value:response.data.employee.id, label:response.data.fullname},
@@ -140,47 +180,11 @@ class PayrollRegularDataStore{
                     sss: response.data.sss,
                     is_new:response.data.is_new,
                     is_removed:response.data.is_removed,
-                    payrollRegularDataDeduc_payrollRegularData:deductions,
-                    payrollRegularDataAllow_payrollRegularData:allowances,
-                    payrollRegularDataMnt_payrollRegularData:response.data.payrollRegularDataMnt_payrollRegularData,
+                    payrollRegularDataDeduc_payrollRegularData: deductions,
+                    payrollRegularDataAllow_payrollRegularData: allowances,
+                    payrollRegularMnt_payrollRegularData: response.data.payrollRegularMnt_payrollRegularData,
                 };
-                
-                this.form_data.payrollRegularMnt_payrollRegularData.map(data_mnt => {
-                    if(data_mnt.category === 2){
-                        let deduc = this.form_data.payrollRegularDataDeduc_payrollRegularData.find(data_deduc => {
-                            return data_deduc.code === data_mnt.field
-                        })
-                        if(!deduc){
-                            this.form_data.payrollRegularDataDeduc_payrollRegularData.push(
-                                { code: data_mnt.field, amount: data_mnt.mod_value, name: data_mnt.field_description }
-                            )
-                        }
-                        this.form_data.payrollRegularDataDeduc_payrollRegularData = this.form_data.payrollRegularDataDeduc_payrollRegularData.sort(
-                            function(a, b){
-                                if ( Number(a.code.substring(1)) < Number(b.code.substring(1)) ){ return -1;}
-                                if ( Number(a.code.substring(1)) > Number(b.code.substring(1)) ){ return 1; }
-                                return 0;
-                            }
-                        )
-                    }
-                    if(data_mnt.category === 3){
-                        let allow = this.form_data.payrollRegularDataAllow_payrollRegularData.find(data_allow=>{
-                            return data_allow.code === data_mnt.field
-                        })
-                        if(!allow){
-                            this.form_data.payrollRegularDataAllow_payrollRegularData.push(
-                                { code: data_mnt.field, amount: data_mnt.mod_value, name: data_mnt.field_description }
-                            )
-                        }
-                        this.form_data.payrollRegularDataAllow_payrollRegularData = this.form_data.payrollRegularDataAllow_payrollRegularData.sort(
-                            function(a, b){
-                                if ( Number(a.code.substring(5)) < Number(b.code.substring(5)) ){ return -1; }
-                                if ( Number(a.code.substring(5)) > Number(b.code.substring(5)) ){ return 1; }
-                                return 0;
-                            }
-                        )
-                    }
-                })
+
             })
         });
     }   
@@ -205,7 +209,6 @@ class PayrollRegularDataStore{
     }
 
 
-
     // List Setters
     setIsOpenedForm(is_opened_form){
         this.is_opened_form = is_opened_form;
@@ -214,7 +217,6 @@ class PayrollRegularDataStore{
     setSelectedData(id){
         this.selected_data = id;
     }
-
 
     getSelectedDataMaintenanceDetails(field){
         if(this.form_data.payrollRegularMnt_payrollRegularData){
@@ -313,13 +315,18 @@ class PayrollRegularDataStore{
 
     addDeduction(){
         this.form_data.payrollRegularDataDeduc_payrollRegularData = [
-            ...this.form_data.payrollRegularDataDeduc_payrollRegularData, { deduction:"", amount:"" }
+            ...this.form_data.payrollRegularDataDeduc_payrollRegularData, { value:"", label:"", code:"", amount:""}
         ]
     }
 
     modifyDeduction(index, name, value){
         const list = [...this.form_data.payrollRegularDataDeduc_payrollRegularData];
-        list[index][name] = value;
+        if(name === 'value'){
+            list[index][name] = value.value;
+            list[index]['label'] = value.label;
+        }else{
+            list[index][name] = value;
+        }
         this.form_data.payrollRegularDataDeduc_payrollRegularData = list;
     }
 
@@ -331,13 +338,18 @@ class PayrollRegularDataStore{
 
     addAllowance(){
         this.form_data.payrollRegularDataAllow_payrollRegularData = [
-            ...this.form_data.payrollRegularDataAllow_payrollRegularData, { allowance:"", amount:"" }
+            ...this.form_data.payrollRegularDataAllow_payrollRegularData, { value:"", label:"", code:"", amount:""}
         ]
     }
 
     modifyAllowance(index, name, value){
         const list = [...this.form_data.payrollRegularDataAllow_payrollRegularData];
-        list[index][name] = value;
+        if(name === 'value'){
+            list[index][name] = value.value;
+            list[index]['label'] = value.label;
+        }else{
+            list[index][name] = value;
+        }
         this.form_data.payrollRegularDataAllow_payrollRegularData = list;
     }
 
