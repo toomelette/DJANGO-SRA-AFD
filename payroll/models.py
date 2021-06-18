@@ -63,6 +63,14 @@ class PayrollRegularData(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
 
+    def set_field_via_mnt(self, array, prd_id, field, default_value):
+        print(field)
+        obj = next((item for item in array if item['prd_id'] == prd_id and item['category'] == 1 and item['field'] == field), None)
+        print(obj)
+        if obj:
+            default_value = obj['mod_value']
+        return default_value
+
 
 class PayrollRegularMaintenance(models.Model):
     CATEGORY = ((1,'Modify Field'), (2,'Modify Deductions'), (3,'Modify Allowance'), (4,'Create Content'), (5,'Remove Content'))

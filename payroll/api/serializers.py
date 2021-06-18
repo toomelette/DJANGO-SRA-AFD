@@ -194,6 +194,7 @@ class PayrollRegularMaintenanceSerializer(serializers.ModelSerializer):
                'id', 
                'category',
                'field',
+               'field_description',
                'mod_value',
                'remarks',
                'payroll_regular_data',

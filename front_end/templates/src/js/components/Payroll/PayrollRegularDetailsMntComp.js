@@ -252,18 +252,44 @@ const PayrollRegularMntDetails = observer(({ payrollRegularDataStore, payrollReg
                                 { payrollRegularMntStore.list.map((val, key) => { 
                                     return (
                                         <tr key={key} className={ val.id == payrollRegularMntStore.payroll_regular_mnt_id ? "table-info" : "" }>
-                                            <td className="align-middle">
-                                                { val.payroll_regular_data?.employee_no +" - "+ val.payroll_regular_data?.fullname}
-                                                <p className="m-0 p-0">{ tableRowChanges(val.category, val.field, val.mod_value) }</p>
-                                            </td>
-                                            <td className="align-middle">
-                                                <a href="" onClick={ e => handleOpenEditPayrollRegularMntModal(e, val.id) }>
-                                                    <i className="feather icon-edit f-w-1000 f-18 m-r-15 text-c-blue"></i>
-                                                </a>
-                                                <a href="" onClick={ e => handleOpenDeletePayrollRegularMntModal(e, val.id) }>
-                                                    <i className="feather icon-trash-2 f-w-1000 f-18 text-c-red"></i>
-                                                </a>
-                                            </td>
+
+                                            { val.category === 1 || val.category === 2 || val.category === 3 ? 
+                                                <>
+                                                    <td className="align-middle">
+                                                        { val.payroll_regular_data?.employee_no +" - "+ val.payroll_regular_data?.fullname}
+                                                        <p className="m-0 p-0">{ tableRowChanges(val.category, val.field, val.mod_value) }</p>
+                                                    </td>
+                                                    <td className="align-middle">
+                                                        <a href="" onClick={ e => handleOpenEditPayrollRegularMntModal(e, val.id) }>
+                                                            <i className="feather icon-edit f-w-1000 f-18 m-r-15 text-c-blue"></i>
+                                                        </a>
+                                                        <a href="" onClick={ e => handleOpenDeletePayrollRegularMntModal(e, val.id) }>
+                                                            <i className="feather icon-trash-2 f-w-1000 f-18 text-c-red"></i>
+                                                        </a>
+                                                    </td>
+                                                </> : <></>
+                                            }
+
+                                            { val.category == 4 ?
+                                                <>
+                                                    <td className="align-middle">
+                                                        { val.payroll_regular_data?.employee_no +" - "+ val.payroll_regular_data?.fullname}
+                                                        <p className="m-0 p-0 text-success">{ val.field_description }</p>
+                                                    </td>
+                                                    <td className="align-middle"></td>
+                                                </> : <> </>
+                                            }
+
+                                            { val.category == 5 ?
+                                                <>
+                                                    <td className="align-middle">
+                                                        { val.payroll_regular_data?.employee_no +" - "+ val.payroll_regular_data?.fullname}
+                                                        <p className="m-0 p-0 text-danger">{ val.field_description }</p>
+                                                    </td>
+                                                    <td className="align-middle"></td>
+                                                </> : <> </>
+                                            }
+
                                         </tr>
                                     ) 
                                 }) }

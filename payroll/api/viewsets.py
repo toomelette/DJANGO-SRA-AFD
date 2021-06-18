@@ -1,5 +1,6 @@
 import json
 import datetime
+from typing import Dict
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets
@@ -194,10 +195,24 @@ class PayrollRegularViewSet(viewsets.ModelViewSet):
     def create_generate_from_last(self, request):
         payroll_regular_latest = self.queryset.prefetch_related(
             'payrollRegularData_payrollRegular',
+            'payrollRegularMnt_payrollRegular',
             'payrollRegularData_payrollRegular__payrollRegularDataDeduc_payrollRegularData', 
-            'payrollRegularData_payrollRegular__payrollRegularDataAllow_payrollRegularData'
+            'payrollRegularData_payrollRegular__payrollRegularDataAllow_payrollRegularData',
         ).latest('created_by')
-        
+
+        payroll_regular_data_deduc_objs = []
+        payroll_regular_data_allow_objs = []
+        payroll_regular_mnt_list = []
+
+        for data_mnt in payroll_regular_latest.payrollRegularMnt_payrollRegular.all():
+            payroll_regular_mnt_list.append({ 
+                'prd_id' : data_mnt.payroll_regular_data_id, 
+                'category' : data_mnt.category, 
+                'field' : data_mnt.field, 
+                'field_description' : data_mnt.field_description, 
+                'mod_value' : data_mnt.mod_value 
+            })
+
         try:
             payroll_regular_obj = PayrollRegular()
             payroll_regular_obj.process_date = datetime.date.today()
@@ -208,71 +223,66 @@ class PayrollRegularViewSet(viewsets.ModelViewSet):
             payroll_regular_obj.save()
 
             if payroll_regular_latest.payrollRegularData_payrollRegular:
-                payroll_regular_data_deduc_objs = []
-                payroll_regular_data_allow_objs = []
-
                 for data in payroll_regular_latest.payrollRegularData_payrollRegular.all():
-                    payroll_regular_data_obj = PayrollRegularData()
-                    payroll_regular_data_obj.payroll_regular = payroll_regular_obj
-                    payroll_regular_data_obj.employee = data.employee
-                    payroll_regular_data_obj.station = data.station
-                    payroll_regular_data_obj.employee_no = data.employee_no
-                    payroll_regular_data_obj.station_no = data.station_no
-                    payroll_regular_data_obj.paygroup = data.paygroup
-                    payroll_regular_data_obj.fullname = data.fullname
-                    payroll_regular_data_obj.position = data.position
-                    payroll_regular_data_obj.salary_grade = data.salary_grade
-                    payroll_regular_data_obj.step_increment = data.step_increment
-                    payroll_regular_data_obj.monthly_salary = data.monthly_salary
-                    payroll_regular_data_obj.plantilla_item = data.plantilla_item
-                    payroll_regular_data_obj.status = data.status
-                    payroll_regular_data_obj.is_atm = data.is_atm
-                    payroll_regular_data_obj.atm_account_no = data.atm_account_no
-                    payroll_regular_data_obj.tin = data.tin
-                    payroll_regular_data_obj.gsis = data.gsis
-                    payroll_regular_data_obj.philhealth = data.philhealth
-                    payroll_regular_data_obj.pagibig = data.pagibig
-                    payroll_regular_data_obj.sss = data.sss
-                    payroll_regular_data_obj.is_new = False
-                    payroll_regular_data_obj.created_by_id = request.user.id
-                    payroll_regular_data_obj.updated_by_id = request.user.id
-                    payroll_regular_data_obj.save()
+                    if data.is_removed == False:
+                        payroll_regular_data_obj = PayrollRegularData()
+                        payroll_regular_data_obj.payroll_regular = payroll_regular_obj
+                        payroll_regular_data_obj.employee = data.employee
+                        payroll_regular_data_obj.station_id = payroll_regular_data_obj.set_field_via_mnt(payroll_regular_mnt_list, data.id, 'station', data.station)
+                        payroll_regular_data_obj.employee_no = data.employee_no
+                        payroll_regular_data_obj.station_no = data.station_no
+                        payroll_regular_data_obj.paygroup = payroll_regular_data_obj.set_field_via_mnt(payroll_regular_mnt_list, data.id, 'paygroup', data.paygroup)
+                        payroll_regular_data_obj.fullname = payroll_regular_data_obj.set_field_via_mnt(payroll_regular_mnt_list, data.id, 'fullname', data.fullname)
+                        payroll_regular_data_obj.position = payroll_regular_data_obj.set_field_via_mnt(payroll_regular_mnt_list, data.id, 'position', data.position)
+                        payroll_regular_data_obj.salary_grade = payroll_regular_data_obj.set_field_via_mnt(payroll_regular_mnt_list, data.id, 'salary_grade', data.salary_grade)
+                        payroll_regular_data_obj.step_increment = payroll_regular_data_obj.set_field_via_mnt(payroll_regular_mnt_list, data.id, 'step_increment', data.step_increment)
+                        payroll_regular_data_obj.monthly_salary = payroll_regular_data_obj.set_field_via_mnt(payroll_regular_mnt_list, data.id, 'monthly_salary', data.monthly_salary)
+                        payroll_regular_data_obj.plantilla_item = payroll_regular_data_obj.set_field_via_mnt(payroll_regular_mnt_list, data.id, 'plantilla_item', data.plantilla_item)
+                        payroll_regular_data_obj.status = payroll_regular_data_obj.set_field_via_mnt(payroll_regular_mnt_list, data.id, 'status', data.status)
+                        payroll_regular_data_obj.is_atm = data.is_atm
+                        payroll_regular_data_obj.atm_account_no = payroll_regular_data_obj.set_field_via_mnt(payroll_regular_mnt_list, data.id, 'atm_account_no', data.atm_account_no)
+                        payroll_regular_data_obj.tin = payroll_regular_data_obj.set_field_via_mnt(payroll_regular_mnt_list, data.id, 'tin', data.tin)
+                        payroll_regular_data_obj.gsis = payroll_regular_data_obj.set_field_via_mnt(payroll_regular_mnt_list, data.id, 'gsis', data.gsis)
+                        payroll_regular_data_obj.philhealth = payroll_regular_data_obj.set_field_via_mnt(payroll_regular_mnt_list, data.id, 'philhealth', data.philhealth)
+                        payroll_regular_data_obj.pagibig = payroll_regular_data_obj.set_field_via_mnt(payroll_regular_mnt_list, data.id, 'pagibig', data.pagibig)
+                        payroll_regular_data_obj.sss = payroll_regular_data_obj.set_field_via_mnt(payroll_regular_mnt_list, data.id, 'sss', data.sss)
+                        payroll_regular_data_obj.is_new = False
+                        payroll_regular_data_obj.created_by_id = request.user.id
+                        payroll_regular_data_obj.updated_by_id = request.user.id
+                        payroll_regular_data_obj.save()
 
-                    if data.payrollRegularDataDeduc_payrollRegularData: 
-                        for data_deduc in data.payrollRegularDataDeduc_payrollRegularData.all():
-                            payroll_regular_data_deduc_objs.append(
-                                PayrollRegularDataDeductions(
-                                    payroll_regular_data = payroll_regular_data_obj,
-                                    deduction = data_deduc.deduction,
-                                    code = data_deduc.code,
-                                    name = data_deduc.name,
-                                    description = data_deduc.description,
-                                    amount = data_deduc.amount,
+                        if data.payrollRegularDataDeduc_payrollRegularData: 
+                            for data_deduc in data.payrollRegularDataDeduc_payrollRegularData.all():
+                                payroll_regular_data_deduc_objs.append(
+                                    PayrollRegularDataDeductions(
+                                        payroll_regular_data = payroll_regular_data_obj,
+                                        deduction = data_deduc.deduction,
+                                        code = data_deduc.code,
+                                        name = data_deduc.name,
+                                        description = data_deduc.description,
+                                        amount = data_deduc.amount,
+                                    )
                                 )
-                            )
 
-                    if data.payrollRegularDataAllow_payrollRegularData: 
-                        for data_allow in data.payrollRegularDataAllow_payrollRegularData.all():
-                            payroll_regular_data_allow_objs.append(
-                                PayrollRegularDataAllowances(
-                                    payroll_regular_data = payroll_regular_data_obj,
-                                    allowance = data_allow.allowance,
-                                    code = data_allow.code,
-                                    name = data_allow.name,
-                                    description = data_allow.description, 
-                                    amount = data_allow.amount,
+                        if data.payrollRegularDataAllow_payrollRegularData: 
+                            for data_allow in data.payrollRegularDataAllow_payrollRegularData.all():
+                                payroll_regular_data_allow_objs.append(
+                                    PayrollRegularDataAllowances(
+                                        payroll_regular_data = payroll_regular_data_obj,
+                                        allowance = data_allow.allowance,
+                                        code = data_allow.code,
+                                        name = data_allow.name,
+                                        description = data_allow.description, 
+                                        amount = data_allow.amount,
+                                    )
                                 )
-                            )
 
-                PayrollRegularDataDeductions.objects.bulk_create(payroll_regular_data_deduc_objs)
-                PayrollRegularDataAllowances.objects.bulk_create(payroll_regular_data_allow_objs)
+            PayrollRegularDataDeductions.objects.bulk_create(payroll_regular_data_deduc_objs)
+            PayrollRegularDataAllowances.objects.bulk_create(payroll_regular_data_allow_objs)
 
             return Response({'id':payroll_regular_obj.id}, 200)
-        
         except:
-
             return Response(500)
-
     
     def retrieve(self, request, pk=None):
         payroll_regular = get_object_or_404(self.queryset, id=pk)
@@ -316,6 +326,7 @@ class PayrollRegularDataViewSet(viewsets.ModelViewSet):
         serializer = PayrollRegularDataFormSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         is_exist = self.queryset.filter(employee_id=serializer.data['employee']).count()
+
         if is_exist > 0:
             return Response({'employee':'Employee already exist in payroll!'}, 400)
         else:
@@ -382,9 +393,19 @@ class PayrollRegularDataViewSet(viewsets.ModelViewSet):
                                 amount = data_allow['amount'],
                             )
                         )
-                
+
                 PayrollRegularDataDeductions.objects.bulk_create(payroll_regular_data_deduc_objs)
                 PayrollRegularDataAllowances.objects.bulk_create(payroll_regular_data_allow_objs)
+
+                payroll_regular_mnt = PayrollRegularMaintenance()
+                payroll_regular_mnt.payroll_regular = payroll_regular
+                payroll_regular_mnt.payroll_regular_data = payroll_regular_data_obj
+                payroll_regular_mnt.category = 4
+                payroll_regular_mnt.field_description = "Added New Employee"
+                payroll_regular_mnt.created_by_id = request.user.id
+                payroll_regular_mnt.updated_by_id = request.user.id
+                payroll_regular_mnt.save()
+
                 return Response({'id': payroll_regular_data_obj.id}, 200)
             except:
                 return Response(500)
@@ -405,6 +426,30 @@ class PayrollRegularDataViewSet(viewsets.ModelViewSet):
                 payroll_regular_data.is_removed = serializer.data['is_removed']
                 payroll_regular_data.updated_by_id = request.user.id
                 payroll_regular_data.save()
+                
+                is_payroll_regular_mnt_exist = PayrollRegularMaintenance.objects.all().filter(
+                    payroll_regular=payroll_regular_data.payroll_regular_id,
+                    payroll_regular_data=payroll_regular_data.id,
+                    category=5,
+                ).count()
+
+                if serializer.data['is_removed'] == True:
+                    if is_payroll_regular_mnt_exist == 0:
+                        payroll_regular_mnt = PayrollRegularMaintenance()
+                        payroll_regular_mnt.payroll_regular = payroll_regular_data.payroll_regular
+                        payroll_regular_mnt.payroll_regular_data = payroll_regular_data
+                        payroll_regular_mnt.category = 5
+                        payroll_regular_mnt.field_description = "Removed Employee"
+                        payroll_regular_mnt.created_by_id = request.user.id
+                        payroll_regular_mnt.updated_by_id = request.user.id
+                        payroll_regular_mnt.save()
+                else:
+                    if is_payroll_regular_mnt_exist > 0:
+                        PayrollRegularMaintenance.objects.all().get(
+                            payroll_regular=payroll_regular_data.payroll_regular_id, 
+                            payroll_regular_data=payroll_regular_data.id, 
+                            category=5).delete()
+
                 return Response({'id':payroll_regular_data.id}, 200)
             except:
                 return Response({}, 500)
@@ -465,7 +510,6 @@ class PayrollRegularDataViewSet(viewsets.ModelViewSet):
                                 amount = data_deduc['amount'],
                             )
                         )
-
                 if allowances:  
                     for data_allow in allowances:
                         allowance_obj = get_object_or_404(Allowances.objects.all(), id=data_allow['id'])
@@ -479,7 +523,6 @@ class PayrollRegularDataViewSet(viewsets.ModelViewSet):
                                 amount = data_allow['amount'],
                             )
                         )
-                
                 PayrollRegularDataDeductions.objects.bulk_create(payroll_regular_data_deduc_objs)
                 PayrollRegularDataAllowances.objects.bulk_create(payroll_regular_data_allow_objs)
                 return Response({'id': payroll_regular_data_obj.id}, 200)

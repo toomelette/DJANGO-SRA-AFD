@@ -53,6 +53,7 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
                 });
             }
             payrollRegularDataStore.fetch();
+            payrollRegularMntStore.fetch();
             payrollRegularDataStore.setSelectedData(response.data.id);
             $("#payroll-regular-content-details").modal('hide')
         }).catch((error) => {
@@ -184,31 +185,30 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
                             </thead>
                             <tbody>
                                 { payrollRegularDataStore.list.map((val, key) => { 
-                                    if(val.is_removed == true){
-                                        return (
-                                            <tr key={key} className={ val.id == payrollRegularDataStore.selected_data ? "table-info" : "" }>
-                                                <td className="align-middle"><del>{ val.employee_no } - { val.fullname }</del></td>
-                                                <td className="align-middle"><del>{ val.position }</del></td>
-                                                <td className="align-middle">
-                                                    <a href="#" onClick={ e => handleClickContentDetails(e, val.id) }>
-                                                        <ins className="text-info">View Details</ins>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        ) 
-                                    }else{
-                                        return (
-                                            <tr key={key} className={ val.id == payrollRegularDataStore.selected_data ? "table-info" : "" }>
-                                                <td className="align-middle">{ val.employee_no } - { val.fullname }</td>
-                                                <td className="align-middle">{ val.position }</td>
-                                                <td className="align-middle">
-                                                    <a href="#" onClick={ e => handleClickContentDetails(e, val.id) }>
-                                                        <ins className="text-info">View Details</ins>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        ) 
-                                    }
+                                    return (
+                                        <tr key={key} className={ val.id == payrollRegularDataStore.selected_data ? "table-info" : "" }>
+                                            <td className="align-middle">
+                                                { val.is_removed == true ? 
+                                                    <del>{ val.employee_no } - { val.fullname }</del> :
+                                                    <>{ val.employee_no } - { val.fullname }</>
+                                                }
+                                                { val.is_new == true ?
+                                                    <label class="label label-success ml-3">new</label> : <></>
+                                                }
+                                            </td>
+                                            <td className="align-middle">
+                                                { val.is_removed == true ? 
+                                                    <del>{ val.position }</del> :
+                                                    <>{ val.position }</>
+                                                }
+                                            </td>
+                                            <td className="align-middle">
+                                                <a href="#" onClick={ e => handleClickContentDetails(e, val.id) }>
+                                                    <ins className="text-info">View Details</ins>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    ) 
                                 }) }
                             </tbody>
                         </table>

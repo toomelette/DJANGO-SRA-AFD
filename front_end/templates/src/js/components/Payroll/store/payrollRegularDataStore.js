@@ -90,6 +90,7 @@ class PayrollRegularDataStore{
         .then((response) => {
             runInAction(() => {
 
+                // DECLARE ARRAY
                 let deductions = [];
                 let allowances = [];
 
