@@ -198,14 +198,14 @@ class PayrollRegularViewSet(viewsets.ModelViewSet):
             'payrollRegularMnt_payrollRegular',
             'payrollRegularData_payrollRegular__payrollRegularDataDeduc_payrollRegularData', 
             'payrollRegularData_payrollRegular__payrollRegularDataAllow_payrollRegularData',
-        ).latest('created_by')
+        ).latest('process_date')
 
         payroll_regular_data_deduc_objs = []
         payroll_regular_data_allow_objs = []
         payroll_regular_mnt_list = []
 
         for data_mnt in payroll_regular_latest.payrollRegularMnt_payrollRegular.all():
-            payroll_regular_mnt_list.append({ 
+            payroll_regular_mnt_list.append({
                 'prd_id' : data_mnt.payroll_regular_data_id, 
                 'category' : data_mnt.category, 
                 'field' : data_mnt.field, 
@@ -228,7 +228,7 @@ class PayrollRegularViewSet(viewsets.ModelViewSet):
                         payroll_regular_data_obj = PayrollRegularData()
                         payroll_regular_data_obj.payroll_regular = payroll_regular_obj
                         payroll_regular_data_obj.employee = data.employee
-                        payroll_regular_data_obj.station_id = payroll_regular_data_obj.set_field_via_mnt(payroll_regular_mnt_list, data.id, 'station', data.station)
+                        payroll_regular_data_obj.station_id = payroll_regular_data_obj.set_field_via_mnt(payroll_regular_mnt_list, data.id, 'station', data.station_id)
                         payroll_regular_data_obj.employee_no = data.employee_no
                         payroll_regular_data_obj.station_no = data.station_no
                         payroll_regular_data_obj.paygroup = payroll_regular_data_obj.set_field_via_mnt(payroll_regular_mnt_list, data.id, 'paygroup', data.paygroup)
@@ -284,6 +284,7 @@ class PayrollRegularViewSet(viewsets.ModelViewSet):
         except:
             return Response(500)
     
+
     def retrieve(self, request, pk=None):
         payroll_regular = get_object_or_404(self.queryset, id=pk)
         serializer = self.get_serializer(payroll_regular)
