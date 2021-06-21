@@ -281,9 +281,11 @@ class PayrollRegularViewSet(viewsets.ModelViewSet):
                                     )
                                 )
 
+                        # Insert New Maintenance
                         for data_mnt in payroll_regular_mnt_list:
                             if data_mnt['category'] == 2 and data_mnt['prd_id'] == data.id:
-                                existing_deduc_mnt = next((data for data in data.payrollRegularDataDeduc_payrollRegularData.all() if data.code == data_mnt['field']), None)
+                                existing_deduc_mnt = next((data for data in data.payrollRegularDataDeduc_payrollRegularData.all() 
+                                    if data.payroll_regular_data_id == data_mnt['prd_id'] and data.code == data_mnt['field']), None)
                                 if existing_deduc_mnt == None:
                                     deduction = get_object_or_404(Deductions.objects.all(), code=data_mnt['field'])
                                     payroll_regular_data_deduc_objs.append(
@@ -297,7 +299,8 @@ class PayrollRegularViewSet(viewsets.ModelViewSet):
                                         )
                                     )
                             if data_mnt['category'] == 3 and data_mnt['prd_id'] == data.id:
-                                existing_allow_mnt = next((data for data in data.payrollRegularDataAllow_payrollRegularData.all() if data.code == data_mnt['field']), None)
+                                existing_allow_mnt = next((data for data in data.payrollRegularDataAllow_payrollRegularData.all() 
+                                    if data.payroll_regular_data_id == data_mnt['prd_id'] and data.code == data_mnt['field']), None)
                                 if existing_allow_mnt == None:
                                     allowance = get_object_or_404(Allowances.objects.all(), code=data_mnt['field'])
                                     payroll_regular_data_allow_objs.append(
