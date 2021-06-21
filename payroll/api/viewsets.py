@@ -253,6 +253,8 @@ class PayrollRegularViewSet(viewsets.ModelViewSet):
 
                         if data.payrollRegularDataDeduc_payrollRegularData: 
                             for data_deduc in data.payrollRegularDataDeduc_payrollRegularData.all():
+                                existing_deduc = next((item for item in payroll_regular_mnt_list 
+                                if item['prd_id'] == data.id and item['category'] == 2 and item['field'] == data_deduc.code), None)
                                 payroll_regular_data_deduc_objs.append(
                                     PayrollRegularDataDeductions(
                                         payroll_regular_data = payroll_regular_data_obj,
@@ -260,12 +262,14 @@ class PayrollRegularViewSet(viewsets.ModelViewSet):
                                         code = data_deduc.code,
                                         name = data_deduc.name,
                                         description = data_deduc.description,
-                                        amount = data_deduc.amount,
+                                        amount = existing_deduc['mod_value'] if existing_deduc else data_deduc.amount,
                                     )
-                                )
+                                )       
 
                         if data.payrollRegularDataAllow_payrollRegularData: 
                             for data_allow in data.payrollRegularDataAllow_payrollRegularData.all():
+                                existing_allow = next((item for item in payroll_regular_mnt_list 
+                                if item['prd_id'] == data.id and item['category'] == 3 and item['field'] == data_allow.code), None)
                                 payroll_regular_data_allow_objs.append(
                                     PayrollRegularDataAllowances(
                                         payroll_regular_data = payroll_regular_data_obj,
@@ -273,9 +277,41 @@ class PayrollRegularViewSet(viewsets.ModelViewSet):
                                         code = data_allow.code,
                                         name = data_allow.name,
                                         description = data_allow.description, 
-                                        amount = data_allow.amount,
+                                        amount = existing_allow['mod_value'] if existing_allow else data_allow.amount,
                                     )
                                 )
+
+                        for data_mnt in payroll_regular_mnt_list:
+                            if data_mnt['category'] == 2:
+                                existing_deduc_mnt = next((data for data in data.payrollRegularDataDeduc_payrollRegularData.all() 
+                                if data.payroll_regular_data_id == data_mnt['prd_id'] and data.code == data_mnt['field']), None)
+                                if existing_deduc_mnt == None:
+                                    deduction = get_object_or_404(Deductions.objects.all(), code=data_mnt['field'])
+                                    payroll_regular_data_deduc_objs.append(
+                                        PayrollRegularDataDeductions(
+                                            payroll_regular_data = payroll_regular_data_obj,
+                                            deduction = deduction,
+                                            code = data_mnt['field'],
+                                            name = data_mnt['field_description'],
+                                            description = data_mnt['field_description'],
+                                            amount = data_mnt['mod_value'],
+                                        )
+                                    )
+                            if data_mnt['category'] == 3:
+                                existing_allow_mnt = next((data for data in data.payrollRegularDataAllow_payrollRegularData.all() 
+                                if data.payroll_regular_data_id == data_mnt['prd_id'] and data.code == data_mnt['field']), None)
+                                if existing_allow_mnt == None:
+                                    allowance = get_object_or_404(Allowances.objects.all(), code=data_mnt['field'])
+                                    payroll_regular_data_allow_objs.append(
+                                        PayrollRegularDataAllowances(
+                                            payroll_regular_data = payroll_regular_data_obj,
+                                            allowance = allowance,
+                                            code = data_mnt['field'],
+                                            name = data_mnt['field_description'],
+                                            description = data_mnt['field_description'],
+                                            amount = data_mnt['mod_value'],
+                                        )
+                                    )
 
             PayrollRegularDataDeductions.objects.bulk_create(payroll_regular_data_deduc_objs)
             PayrollRegularDataAllowances.objects.bulk_create(payroll_regular_data_allow_objs)
@@ -368,7 +404,6 @@ class PayrollRegularDataViewSet(viewsets.ModelViewSet):
 
                 if deductions:  
                     for data_deduc in deductions:
-                        print(data_deduc)
                         deduction_obj = get_object_or_404(Deductions.objects.all(), id=data_deduc['id'])
                         payroll_regular_data_deduc_objs.append(
                             PayrollRegularDataDeductions(
@@ -499,7 +534,6 @@ class PayrollRegularDataViewSet(viewsets.ModelViewSet):
 
                 if deductions:  
                     for data_deduc in deductions:
-                        print(data_deduc)
                         deduction_obj = get_object_or_404(Deductions.objects.all(), id=data_deduc['id'])
                         payroll_regular_data_deduc_objs.append(
                             PayrollRegularDataDeductions(

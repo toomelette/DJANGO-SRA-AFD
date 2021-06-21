@@ -65,9 +65,7 @@ class PayrollRegularData(models.Model):
 
     def set_field_via_mnt(self, array, prd_id, field, default_value): 
         obj = next((item for item in array if item['prd_id'] == prd_id and item['category'] == 1 and item['field'] == field), None)
-        if obj:
-            default_value = obj['mod_value']
-        return default_value
+        return obj['mod_value'] if obj else default_value
 
 
 class PayrollRegularMaintenance(models.Model):
