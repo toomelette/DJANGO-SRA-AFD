@@ -105,6 +105,7 @@ class PayrollRegularDataStore{
                         label: data.deduction.code+' - '+data.deduction.name, 
                         code: data.code,
                         amount: data.amount,
+                        priority_seq: data.priority_seq,
                     })
                 })
                 response.data.payrollRegularDataAllow_payrollRegularData.map(data => {
@@ -125,7 +126,7 @@ class PayrollRegularDataStore{
                                 label: data_mnt.field+" - "+data_mnt.field_description, 
                                 code: data_mnt.field, 
                                 amount: data_mnt.mod_value,
-                                
+                                priority_seq: data_mnt.deduc_priority_seq,
                             })
                         }
                     }

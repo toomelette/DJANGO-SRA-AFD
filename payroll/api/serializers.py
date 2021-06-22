@@ -20,7 +20,7 @@ from employee.api.serializers import (
 class DeductionSerializer(serializers.ModelSerializer): 
      class Meta:
           model = Deductions
-          fields = ('id', 'code', 'name', 'description')
+          fields = ('id', 'code', 'name', 'description', 'priority_seq')
           read_only_fields = ('id',)
 
 
@@ -35,7 +35,7 @@ class PayrollRegularDataDeductionsDetailsSerializer(serializers.ModelSerializer)
      deduction = DeductionSerializer(many=False)
      class Meta:
           model = PayrollRegularDataDeductions
-          fields = ('id', 'code', 'name', 'description', 'amount', 'deduction')
+          fields = ('id', 'code', 'name', 'description', 'amount', 'deduction', 'priority_seq')
           read_only_fields = ('id',)
 
 
@@ -71,6 +71,7 @@ class PayrollRegularMaintenanceDetailsSerializer(serializers.ModelSerializer):
                'field_description',
                'mod_value',
                'remarks',
+               'deduc_priority_seq',
                'payroll_regular_data_id',
           )
 
@@ -197,6 +198,7 @@ class PayrollRegularMaintenanceSerializer(serializers.ModelSerializer):
                'field_description',
                'mod_value',
                'remarks',
+               'deduc_priority_seq',
                'payroll_regular_data',
           )
           read_only_fields = ('id',)
@@ -215,4 +217,5 @@ class PayrollRegularMaintenanceFormSerializer(serializers.ModelSerializer):
                'field_description',
                'mod_value',
                'remarks',
+               'deduc_priority_seq',
           )

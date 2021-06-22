@@ -10,7 +10,7 @@ class DeductionStore{
     page_prev = 0;
     page_current = 1;
     page_next = 2;
-    page_size = 10;
+    page_size = 100;
     page_limit = 0;
 	delaySearch = debounce(() => this.fetch(), 500);
     selected_deduction = "";
@@ -21,6 +21,7 @@ class DeductionStore{
     code = "";
     name = "";
     description="";
+    priority_seq="";
     error_fields={};
 
 
@@ -56,6 +57,7 @@ class DeductionStore{
                 this.code = response.data.code;
                 this.name = response.data.name;
                 this.description = response.data.description;
+                this.priority_seq = response.data.priority_seq;
                 this.elig_error_fields = {};
             })
         });
@@ -120,6 +122,7 @@ class DeductionStore{
         this.code = "";
         this.name = "";
         this.description= "";
+        this.priority_seq= "";
         this.error_fields= {};
     }
 
@@ -137,6 +140,10 @@ class DeductionStore{
 
     setDescription(description){
         this.description = description;
+    }
+
+    setPrioritySeq(priority_seq){
+        this.priority_seq = priority_seq;
     }
 
     setErrorFields(ef){

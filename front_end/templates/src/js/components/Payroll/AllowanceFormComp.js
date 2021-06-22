@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { observer } from 'mobx-react'
-import { InputText, InputNumeric } from '../Utils/Forms/DefaultInputs'
+import { InputText } from '../Utils/Forms/DefaultInputs'
 
 
 const PayrollRegularAllowanceForm = observer(({ allowanceStore }) => {

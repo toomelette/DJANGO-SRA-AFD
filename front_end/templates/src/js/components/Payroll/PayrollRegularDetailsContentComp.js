@@ -75,9 +75,9 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
         let rows = [];
         if(payrollRegularDataStore.form_data.payrollRegularDataDeduc_payrollRegularData){
             payrollRegularDataStore.form_data.payrollRegularDataDeduc_payrollRegularData.map((data) => {
-                total_deduc+=Number(data.amount)
                 if(Number(data.amount) > 0){
                     if(payrollRegularDataStore.getSelectedDataMaintenanceDetails(data.code)){
+                        total_deduc+=Number(payrollRegularDataStore.getSelectedDataMaintenanceDetails(data.code).mod_value)
                         rows.push(
                             <tr key={data.code} style={{color:'#4099ff'}}>
                                 <td className="align-middle">
@@ -89,6 +89,7 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
                             </tr>   
                         )
                     }else{
+                        total_deduc+=Number(data.amount)
                         rows.push(
                             <tr key={data.code}>
                                 <td className="align-middle">
@@ -115,9 +116,9 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
         let rows = [];
         if(payrollRegularDataStore.form_data.payrollRegularDataAllow_payrollRegularData){
             payrollRegularDataStore.form_data.payrollRegularDataAllow_payrollRegularData.map((data) => {
-                total_allow+=Number(data.amount)
                 if(Number(data.amount) > 0){
                     if(payrollRegularDataStore.getSelectedDataMaintenanceDetails(data.code)){
+                        total_allow+=Number(payrollRegularDataStore.getSelectedDataMaintenanceDetails(data.code).mod_value)
                         rows.push(
                             <tr key={data.code} style={{color:'#4099ff'}}>
                                 <td className="align-middle">
@@ -129,6 +130,7 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
                             </tr>   
                         )
                     }else{
+                        total_allow+=Number(data.amount)
                         rows.push(
                             <tr key={data.code}>
                                 <td className="align-middle">
@@ -414,29 +416,6 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
 
                             <div className="col-md-6 mt-4">
                                 <div className="table-responsive">
-                                    <h5>Deductions</h5>
-                                    <table className="table table-sm table-bordered table-hover mt-2">
-                                        <thead>
-                                            <tr>
-                                                <th className="align-middle">Deduction Code</th>
-                                                <th className="align-middle">Amount</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            { getDeductionRecords() }
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <td className="align-middle" style={{ fontWeight:'bold' }}>Total</td>
-                                                <td className="align-middle" style={{ fontWeight:'bold' }}>{ numberFormat(total_deduc, 2) }</td>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
-                            </div>
-
-                            <div className="col-md-6 mt-4">
-                                <div className="table-responsive">
                                     <h5>Allowances</h5>
                                     <table className="table table-sm table-bordered table-hover mt-2">
                                         <thead>
@@ -452,6 +431,29 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
                                             <tr>
                                                 <td className="align-middle" style={{ fontWeight:'bold' }}>Total</td>
                                                 <td className="align-middle" style={{ fontWeight:'bold' }}>{ numberFormat(total_allow, 2) }</td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div className="col-md-6 mt-4">
+                                <div className="table-responsive">
+                                    <h5>Deductions</h5>
+                                    <table className="table table-sm table-bordered table-hover mt-2">
+                                        <thead>
+                                            <tr>
+                                                <th className="align-middle">Deduction Code</th>
+                                                <th className="align-middle">Amount</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            { getDeductionRecords() }
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td className="align-middle" style={{ fontWeight:'bold' }}>Total</td>
+                                                <td className="align-middle" style={{ fontWeight:'bold' }}>{ numberFormat(total_deduc, 2) }</td>
                                             </tr>
                                         </tfoot>
                                     </table>

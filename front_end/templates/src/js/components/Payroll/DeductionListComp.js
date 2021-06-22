@@ -43,6 +43,7 @@ const DeductionList = observer(({ deductionStore, dashboardMainStore }) => {
             code: deductionStore.code, 
             name: deductionStore.name, 
             description: deductionStore.description, 
+            priority_seq: deductionStore.priority_seq, 
         }).then((response) => {
             eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
                 message: "Deduction Successfully Created!", type: "inverse" 
@@ -87,6 +88,7 @@ const DeductionList = observer(({ deductionStore, dashboardMainStore }) => {
             code: deductionStore.code, 
             name: deductionStore.name, 
             description: deductionStore.description, 
+            priority_seq: deductionStore.priority_seq,
         }).then((response) => {
             eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
                 message: "Deduction Successfully Updated!", type: "inverse" 
@@ -213,6 +215,7 @@ const DeductionList = observer(({ deductionStore, dashboardMainStore }) => {
                                                         <th className="align-middle">Code</th>
                                                         <th className="align-middle">Name</th>
                                                         <th className="align-middle">Description</th>
+                                                        <th className="align-middle">Priority Sequence</th>
                                                         <th className="align-middle">Actions</th>
                                                     </tr>
                                                 </thead>
@@ -223,6 +226,7 @@ const DeductionList = observer(({ deductionStore, dashboardMainStore }) => {
                                                         <td className="align-middle">{ val.code }</td>
                                                         <td className="align-middle">{ val.name }</td>
                                                         <td className="align-middle">{ val.description }</td>
+                                                        <td className="align-middle">{ val.priority_seq }</td>
                                                         <td className="align-middle">
                                                             { dashboardMainStore.checkIfSubrouteExist('payroll-deductions-edit') ? 
                                                                 (

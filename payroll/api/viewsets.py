@@ -48,7 +48,7 @@ class DeductionViewSet(viewsets.ModelViewSet):
         filter_conditions = Q()
         if search:
             filter_conditions.add(Q(code__icontains=search) | Q(name__icontains=search), Q.AND)
-        page = self.paginate_queryset(self.queryset.filter(filter_conditions).order_by('-updated_at'))
+        page = self.paginate_queryset(self.queryset.filter(filter_conditions).order_by('id'))
         serializer = self.get_serializer(page, many=True)
         return self.get_paginated_response(serializer.data)
 
@@ -61,6 +61,7 @@ class DeductionViewSet(viewsets.ModelViewSet):
             deduction.code = serializer.data['code']
             deduction.name = serializer.data['name']
             deduction.description = serializer.data['description']
+            deduction.priority_seq = serializer.data['priority_seq']
             deduction.created_by_id = request.user.id
             deduction.updated_by_id = request.user.id
             deduction.save()
@@ -83,6 +84,7 @@ class DeductionViewSet(viewsets.ModelViewSet):
             deduction.code = serializer.data['code']
             deduction.name = serializer.data['name']
             deduction.description = serializer.data['description']
+            deduction.priority_seq = serializer.data['priority_seq']
             deduction.updated_by_id = request.user.id
             deduction.save()
             return Response({'id':deduction.id}, 201)
@@ -116,7 +118,7 @@ class AllowanceViewSet(viewsets.ModelViewSet):
         filter_conditions = Q()
         if search:
             filter_conditions.add(Q(code__icontains=search) | Q(name__icontains=search), Q.AND)
-        page = self.paginate_queryset(self.queryset.filter(filter_conditions).order_by('-updated_at'))
+        page = self.paginate_queryset(self.queryset.filter(filter_conditions).order_by('id'))
         serializer = self.get_serializer(page, many=True)
         return self.get_paginated_response(serializer.data)
 
@@ -262,6 +264,7 @@ class PayrollRegularViewSet(viewsets.ModelViewSet):
                                         code = data_deduc.code,
                                         name = data_deduc.name,
                                         description = data_deduc.description,
+                                        priority_seq = data_deduc.deduction.priority_seq,
                                         amount = existing_deduc['mod_value'] if existing_deduc else data_deduc.amount,
                                     )
                                 )       
@@ -296,6 +299,7 @@ class PayrollRegularViewSet(viewsets.ModelViewSet):
                                             name = data_mnt['field_description'],
                                             description = data_mnt['field_description'],
                                             amount = data_mnt['mod_value'],
+                                            priority_seq = deduction.priority_seq
                                         )
                                     )
                             if data_mnt['category'] == 3 and data_mnt['prd_id'] == data.id:
@@ -612,6 +616,7 @@ class PayrollRegularMaintenanceViewSet(viewsets.ModelViewSet):
                 payroll_regular_mnt.field_description = serializer.data['field_description']
                 payroll_regular_mnt.mod_value = serializer.data['mod_value']
                 payroll_regular_mnt.remarks = serializer.data['remarks']
+                payroll_regular_mnt.deduc_priority_seq = serializer.data['deduc_priority_seq']
                 payroll_regular_mnt.created_by_id = request.user.id
                 payroll_regular_mnt.updated_by_id = request.user.id
                 payroll_regular_mnt.save()
@@ -636,6 +641,7 @@ class PayrollRegularMaintenanceViewSet(viewsets.ModelViewSet):
                 payroll_regular_mnt.field_description = serializer.data['field_description']
                 payroll_regular_mnt.mod_value = serializer.data['mod_value']
                 payroll_regular_mnt.remarks = serializer.data['remarks']
+                payroll_regular_mnt.deduc_priority_seq = serializer.data['deduc_priority_seq']
                 payroll_regular_mnt.updated_by_id = request.user.id
                 payroll_regular_mnt.save()
                 return Response({'id':payroll_regular_mnt.id}, 200)

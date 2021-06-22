@@ -39,6 +39,7 @@ const PayrollRegularMntDetails = observer(({ payrollRegularDataStore, payrollReg
             category : payrollRegularMntStore.field?.category,
             field : payrollRegularMntStore.field?.value,
             field_description : payrollRegularMntStore.field?.description,
+            deduc_priority_seq : payrollRegularMntStore.field?.deduc_priority_seq,
             mod_value : mod_value.toString(),
             remarks : payrollRegularMntStore.remarks
         }).then((response) => {
@@ -95,7 +96,8 @@ const PayrollRegularMntDetails = observer(({ payrollRegularDataStore, payrollReg
             field : payrollRegularMntStore.field?.value,
             field_description : payrollRegularMntStore.field?.description,
             mod_value : mod_value.toString(),
-            remarks : payrollRegularMntStore.remarks
+            remarks : payrollRegularMntStore.remarks,
+            deduc_priority_seq : payrollRegularMntStore.field?.deduc_priority_seq,
         }).then((response) => {
             eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
                 message: "Maintenance Successfully Updated!", type: "inverse" 
@@ -252,7 +254,6 @@ const PayrollRegularMntDetails = observer(({ payrollRegularDataStore, payrollReg
                                 { payrollRegularMntStore.list.map((val, key) => { 
                                     return (
                                         <tr key={key} className={ val.id == payrollRegularMntStore.payroll_regular_mnt_id ? "table-info" : "" }>
-
                                             { val.category === 1 || val.category === 2 || val.category === 3 ? 
                                                 <>
                                                     <td className="align-middle">
@@ -277,7 +278,7 @@ const PayrollRegularMntDetails = observer(({ payrollRegularDataStore, payrollReg
                                                         <p className="m-0 p-0 text-success">{ val.field_description }</p>
                                                     </td>
                                                     <td className="align-middle"></td>
-                                                </> : <> </>
+                                                </> : <></>
                                             }
 
                                             { val.category == 5 ?
@@ -287,18 +288,16 @@ const PayrollRegularMntDetails = observer(({ payrollRegularDataStore, payrollReg
                                                         <p className="m-0 p-0 text-danger">{ val.field_description }</p>
                                                     </td>
                                                     <td className="align-middle"></td>
-                                                </> : <> </>
+                                                </> : <></>
                                             }
 
                                         </tr>
                                     ) 
                                 }) }
                                 { payrollRegularMntStore.list.length == 0 ?
-                                    (
-                                        <tr>
-                                            <td className="align-middle">No Data Encoded!</td>
-                                        </tr>
-                                    ) : <></>
+                                    <tr>
+                                        <td className="align-middle">No Data Encoded!</td>
+                                    </tr> : <></>
                                 }
                             </tbody>
                         </table>

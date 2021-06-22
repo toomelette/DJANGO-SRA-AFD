@@ -33,7 +33,17 @@ const DeductionForm = observer(({ deductionStore }) => {
         />
 
         <InputText 
-            col="col-sm-12"
+            col="col-sm-6"
+            type="text"
+            label="Priority Sequence"
+            placeholder="Priority Sequence"
+            errorField={ deductionStore.error_fields.priority_seq }
+            value={ deductionStore.priority_seq }
+            setter={ e => deductionStore.setPrioritySeq(e.target.value) }
+        />
+
+        <InputText 
+            col="col-sm-6"
             type="text"
             label="Description"
             placeholder="Description"

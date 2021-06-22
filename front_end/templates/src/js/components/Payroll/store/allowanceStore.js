@@ -10,7 +10,7 @@ class AllowanceStore{
     page_prev = 0;
     page_current = 1;
     page_next = 2;
-    page_size = 10;
+    page_size = 100;
     page_limit = 0;
 	delaySearch = debounce(() => this.fetch(), 500);
     selected_allowance = "";
