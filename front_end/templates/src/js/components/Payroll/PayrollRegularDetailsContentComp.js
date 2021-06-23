@@ -13,8 +13,6 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
 
     const history = useHistory();
     const { payroll_regular_id } = useParams();
-    let total_deduc = 0;
-    let total_allow = 0;
 
     const redirectToPayrollRegularCreate = useCallback(() => {
         history.push('/payroll/payroll_regular/'+ payroll_regular_id +'/create'), [history]
@@ -77,7 +75,6 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
             payrollRegularDataStore.form_data.payrollRegularDataDeduc_payrollRegularData.map((data) => {
                 if(Number(data.amount) > 0){
                     if(payrollRegularDataStore.getSelectedDataMaintenanceDetails(data.code)){
-                        total_deduc+=Number(payrollRegularDataStore.getSelectedDataMaintenanceDetails(data.code).mod_value)
                         rows.push(
                             <tr key={data.code} style={{color:'#4099ff'}}>
                                 <td className="align-middle">
@@ -89,7 +86,6 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
                             </tr>   
                         )
                     }else{
-                        total_deduc+=Number(data.amount)
                         rows.push(
                             <tr key={data.code}>
                                 <td className="align-middle">
@@ -105,9 +101,7 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
             })
 
         }else{
-            rows.push(
-                <tr key={0}><td className="align-middle">No Data Encoded!</td></tr>
-            )
+            rows.push(<tr key={0}><td className="align-middle">No Data Encoded!</td></tr>)
         }
         return rows;
     }
@@ -118,7 +112,6 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
             payrollRegularDataStore.form_data.payrollRegularDataAllow_payrollRegularData.map((data) => {
                 if(Number(data.amount) > 0){
                     if(payrollRegularDataStore.getSelectedDataMaintenanceDetails(data.code)){
-                        total_allow+=Number(payrollRegularDataStore.getSelectedDataMaintenanceDetails(data.code).mod_value)
                         rows.push(
                             <tr key={data.code} style={{color:'#4099ff'}}>
                                 <td className="align-middle">
@@ -130,7 +123,6 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
                             </tr>   
                         )
                     }else{
-                        total_allow+=Number(data.amount)
                         rows.push(
                             <tr key={data.code}>
                                 <td className="align-middle">
@@ -146,11 +138,82 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
             })
 
         }else{
-            rows.push(
-                <tr key={0}><td className="align-middle">No Data Encoded!</td></tr>
-            )
+            rows.push(<tr key={0}><td className="align-middle">No Data Encoded!</td></tr>)
         }
         return rows;
+    }
+
+    const getDeductionSortByPriority = () => {
+        if(payrollRegularDataStore.form_data.payrollRegularDataDeduc_payrollRegularData){
+            let deductions = [...payrollRegularDataStore.form_data.payrollRegularDataDeduc_payrollRegularData]
+            return deductions.sort((a,b) => (a.priority_seq > b.priority_seq) ? 1 : ((b.priority_seq > a.priority_seq) ? -1 : 0))
+        }else{
+            return [];
+        }
+    }
+
+    const getTotalDeducNet = () => {
+        const deduc_sort_by_priority = getDeductionSortByPriority();
+        let total_deduc = 0;
+        let max_deduc = 5000;
+        deduc_sort_by_priority.map(data => {
+            if(data.priority_seq > 0 && max_deduc > 0){
+                if(max_deduc > Number(data.amount)){
+                    max_deduc-=Number(data.amount)
+                    total_deduc+=Number(data.amount);
+                }else{
+                    total_deduc+=max_deduc;
+                    max_deduc = 0;
+                }
+            }
+        })
+        return Number(total_deduc);
+    }
+
+    const getTotalDeduc = () => {
+        let total_deduc = 0;
+        if(payrollRegularDataStore.form_data.payrollRegularDataDeduc_payrollRegularData){
+            payrollRegularDataStore.form_data.payrollRegularDataDeduc_payrollRegularData.map((data) => {
+                if(Number(data.amount) > 0){
+                    if(payrollRegularDataStore.getSelectedDataMaintenanceDetails(data.code)){
+                        total_deduc+=Number(payrollRegularDataStore.getSelectedDataMaintenanceDetails(data.code).mod_value)
+                    }else{
+                        total_deduc+=Number(data.amount)
+                    }
+                }
+            })
+
+        }
+        return Number(total_deduc);
+    }
+
+    const getTotalAllow = () => {
+        let total_allow = 0;
+        if(payrollRegularDataStore.form_data.payrollRegularDataAllow_payrollRegularData){
+            payrollRegularDataStore.form_data.payrollRegularDataAllow_payrollRegularData.map((data) => {
+                if(Number(data.amount) > 0){
+                    if(payrollRegularDataStore.getSelectedDataMaintenanceDetails(data.code)){
+                        total_allow+=Number(payrollRegularDataStore.getSelectedDataMaintenanceDetails(data.code).mod_value)
+                    }else{
+                        total_allow+=Number(data.amount)
+                    }
+                }
+            })
+
+        }
+        return Number(total_allow);
+    }
+
+    const getNetAmount = () => {
+        let monthly_salary = 0;
+        const allow = getTotalAllow();
+        const deduc = getTotalDeducNet();
+        if(payrollRegularDataStore.getSelectedDataMaintenanceDetails('monthly_salary')){
+            monthly_salary = payrollRegularDataStore.getSelectedDataMaintenanceDetails('monthly_salary').mod_value;
+        }else{
+            monthly_salary = payrollRegularDataStore.form_data.monthly_salary
+        }
+        return (Number(monthly_salary) + allow) - deduc
     }
 
     return (
@@ -430,9 +493,37 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
                                         <tfoot>
                                             <tr>
                                                 <td className="align-middle" style={{ fontWeight:'bold' }}>Total</td>
-                                                <td className="align-middle" style={{ fontWeight:'bold' }}>{ numberFormat(total_allow, 2) }</td>
+                                                <td className="align-middle" style={{ fontWeight:'bold' }}>{ numberFormat(getTotalAllow(), 2) }</td>
                                             </tr>
                                         </tfoot>
+                                    </table>
+                                </div>
+                                <div className="table-responsive">
+                                    <h5>Net Amount</h5>
+                                    <table className="table table-sm table-bordered table-hover mt-2">
+                                        <tbody>
+                                            <tr>
+                                                <td className="align-middle">Monthly Salary</td>
+                                                <td className="align-middle">
+                                                    { payrollRegularDataStore.getSelectedDataMaintenanceDetails('monthly_salary') ? 
+                                                        <> { numberFormat(payrollRegularDataStore.getSelectedDataMaintenanceDetails('monthly_salary').mod_value, 2) }</> : 
+                                                        <> { numberFormat(payrollRegularDataStore.form_data.monthly_salary, 2) } </>
+                                                    }
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td className="align-middle">Allowance</td>
+                                                <td className="align-middle">{ numberFormat(getTotalAllow(), 2) }</td>
+                                            </tr>
+                                            <tr>
+                                                <td className="align-middle">Deductions</td>
+                                                <td className="align-middle">{ numberFormat(getTotalDeducNet(), 2) }</td>
+                                            </tr>
+                                            <tr style={{ fontWeight:'bold'}}>
+                                                <td className="align-middle">Net</td>
+                                                <td className="align-middle">{ numberFormat(getNetAmount(), 2) }</td>
+                                            </tr>
+                                        </tbody>
                                     </table>
                                 </div>
                             </div>
@@ -443,8 +534,8 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
                                     <table className="table table-sm table-bordered table-hover mt-2">
                                         <thead>
                                             <tr>
-                                                <th className="align-middle">Deduction Code</th>
-                                                <th className="align-middle">Amount</th>
+                                                <th className="align-middle" style={{ width:20 }}>Deduction Code</th>
+                                                <th className="align-middle" style={{ width:20 }}>Amount</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -453,7 +544,7 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
                                         <tfoot>
                                             <tr>
                                                 <td className="align-middle" style={{ fontWeight:'bold' }}>Total</td>
-                                                <td className="align-middle" style={{ fontWeight:'bold' }}>{ numberFormat(total_deduc, 2) }</td>
+                                                <td className="align-middle" style={{ fontWeight:'bold' }}>{ numberFormat(getTotalDeduc(), 2) }</td>
                                             </tr>
                                         </tfoot>
                                     </table>
