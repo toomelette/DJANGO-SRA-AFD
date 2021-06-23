@@ -663,6 +663,11 @@ class TestViewSet(viewsets.ModelViewSet):
     queryset = MockAllowance.objects.all()
     
     def list(self, request):
+        # deduc_qs = PayrollRegularDataDeductions.objects.all()
+        # deduc = deduc_qs.filter(deduction_id=57)
+        # for data in deduc:
+        #     fd = deduc_qs.get(id=data.id)
+        #     fd.delete()
         # deduc_qs = Allowances.objects.all()
         # prd_deduc_qs = PayrollRegularDataAllowances.objects.all()
         # for deduc in deduc_qs:

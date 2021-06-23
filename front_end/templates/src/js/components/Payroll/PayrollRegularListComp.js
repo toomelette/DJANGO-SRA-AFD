@@ -150,7 +150,6 @@ const PayrollRegularList = observer(({ payrollRegularStore, dashboardMainStore }
                                                     <tr>
                                                         <th className="align-middle">Date</th>
                                                         <th className="align-middle">Description</th>
-                                                        <th className="align-middle">Remarks</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -163,7 +162,6 @@ const PayrollRegularList = observer(({ payrollRegularStore, dashboardMainStore }
                                                                 </a>
                                                             </td>
                                                             <td className="align-middle">{ val.description }</td>
-                                                            <td className="align-middle">{ val.remarks }</td>
                                                         </tr>
                                                     )
                                                 }) }

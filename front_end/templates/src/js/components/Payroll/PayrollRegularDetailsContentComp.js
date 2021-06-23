@@ -77,9 +77,7 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
                     if(payrollRegularDataStore.getSelectedDataMaintenanceDetails(data.code)){
                         rows.push(
                             <tr key={data.code} style={{color:'#4099ff'}}>
-                                <td className="align-middle">
-                                    { data.label }
-                                </td>
+                                <td className="align-middle">{ data.label }</td>
                                 <td className="align-middle">
                                     { numberFormat(payrollRegularDataStore.getSelectedDataMaintenanceDetails(data.code).mod_value, 2) }
                                 </td>
@@ -88,12 +86,8 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
                     }else{
                         rows.push(
                             <tr key={data.code}>
-                                <td className="align-middle">
-                                    { data.label }
-                                </td>
-                                <td className="align-middle">
-                                    { numberFormat(data.amount, 2) }
-                                </td>
+                                <td className="align-middle">{ data.label }</td>
+                                <td className="align-middle">{ numberFormat(data.amount, 2) }</td>
                             </tr>
                         )
                     }
@@ -114,9 +108,7 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
                     if(payrollRegularDataStore.getSelectedDataMaintenanceDetails(data.code)){
                         rows.push(
                             <tr key={data.code} style={{color:'#4099ff'}}>
-                                <td className="align-middle">
-                                    { data.label }
-                                </td>
+                                <td className="align-middle">{ data.label }</td>
                                 <td className="align-middle">
                                     { numberFormat(payrollRegularDataStore.getSelectedDataMaintenanceDetails(data.code).mod_value, 2) }
                                 </td>
@@ -125,12 +117,8 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
                     }else{
                         rows.push(
                             <tr key={data.code}>
-                                <td className="align-middle">
-                                    { data.label }
-                                </td>
-                                <td className="align-middle">
-                                    { numberFormat(data.amount, 2) }
-                                </td>
+                                <td className="align-middle">{ data.label }</td>
+                                <td className="align-middle">{ numberFormat(data.amount, 2) }</td>
                             </tr>
                         )
                     }
@@ -218,7 +206,6 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
 
     return (
     <>
-    
         <div className="col-md-7">
             <div className="card z-depth-0">
                 <div className="card-header">
@@ -559,8 +546,7 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
                     </div>
                 </div>
             </div>
-        </div>
-        
+        </div> 
     </>
     );
 
