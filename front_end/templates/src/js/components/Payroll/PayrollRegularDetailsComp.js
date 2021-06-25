@@ -127,6 +127,7 @@ const PayrollRegularDetails = observer(({ payrollRegularStore, payrollRegularDat
 
                             {/* Payroll Regular Maintenance */}
                             <PayrollRegularMntDetails 
+                                payrollRegularStore={payrollRegularStore}
                                 payrollRegularDataStore={payrollRegularDataStore} 
                                 payrollRegularMntStore={payrollRegularMntStore}
                             />

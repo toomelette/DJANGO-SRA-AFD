@@ -1,17 +1,16 @@
 
-
 import React, { useState, useRef } from 'react'
 import { observer } from 'mobx-react'
 import { useParams } from 'react-router-dom';
+import { useReactToPrint } from 'react-to-print';
+
 import eventBus from '../Utils/EventBus'
 import DivLoader from '../Utils/DivLoaderComp'
 import { numberFormat } from '../Utils/DataFilters'
 import PayrollRegularFormMntComp from './PayrollRegularFormMntComp'
-
-import { useReactToPrint } from 'react-to-print';
 import { PayrollRegularMntReport } from './printables/PayrollRegularMntReport';
 
-const PayrollRegularMntDetails = observer(({ payrollRegularDataStore, payrollRegularMntStore }) => {
+const PayrollRegularMntDetails = observer(({ payrollRegularStore, payrollRegularDataStore, payrollRegularMntStore }) => {
 
     const { payroll_regular_id } = useParams();
     const componentRef = useRef();
@@ -224,7 +223,8 @@ const PayrollRegularMntDetails = observer(({ payrollRegularDataStore, payrollReg
 
     const handleMntPrint = useReactToPrint({
         content: () => componentRef.current,
-      });
+        removeAfterPrint: true,
+    });
 
 
     return (
@@ -399,7 +399,11 @@ const PayrollRegularMntDetails = observer(({ payrollRegularDataStore, payrollReg
         
         {/* Print Maintenance */}
         <div style={{ display: "none" }}>
-            <PayrollRegularMntReport ref={componentRef} payrollRegularMntStore={payrollRegularMntStore}/>
+            <PayrollRegularMntReport 
+                ref={componentRef} 
+                payrollRegularStore={payrollRegularStore} 
+                payrollRegularMntStore={payrollRegularMntStore}    
+            />
         </div>
                 
     </>

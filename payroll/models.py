@@ -78,7 +78,7 @@ class PayrollRegularMaintenance(models.Model):
     field_description = models.CharField(max_length=200, default="", blank=True)
     mod_value = models.CharField(max_length=50, default="")
     remarks = models.CharField(max_length=200, default="", blank=True)
-    deduc_priority_seq = models.IntegerField(blank=True)
+    deduc_priority_seq = models.IntegerField(blank=True, default=0)
     created_by = models.ForeignKey(User, related_name='payrollRegularMnt_created_by_user', on_delete=models.PROTECT)
     updated_by = models.ForeignKey(User, related_name='payrollRegularMnt_updated_by_user', on_delete=models.PROTECT)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
@@ -91,7 +91,7 @@ class PayrollRegularDataDeductions(models.Model):
     code = models.CharField(max_length=50, blank=True)
     name = models.CharField(max_length=200, default="", blank=True)
     description = models.CharField(max_length=200, default="", blank=True)
-    priority_seq = models.IntegerField(blank=True)
+    priority_seq = models.IntegerField(blank=True, default=0)
     amount = models.DecimalField(max_digits=13, decimal_places=2, default=0, blank=True)
 
 

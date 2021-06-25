@@ -417,6 +417,7 @@ class PayrollRegularDataViewSet(viewsets.ModelViewSet):
                                 code = deduction_obj.code,
                                 name = deduction_obj.name,
                                 description = deduction_obj.description,
+                                priority_seq = deduction_obj.priority_seq,
                                 amount = data_deduc['amount'],
                             )
                         )
@@ -468,24 +469,39 @@ class PayrollRegularDataViewSet(viewsets.ModelViewSet):
                 payroll_regular_data.updated_by_id = request.user.id
                 payroll_regular_data.save()
                 
-                is_payroll_regular_mnt_exist = PayrollRegularMaintenance.objects.all().filter(
+                is_payroll_regular_mnt_removed_exist = PayrollRegularMaintenance.objects.all().filter(
                     payroll_regular=payroll_regular_data.payroll_regular_id,
                     payroll_regular_data=payroll_regular_data.id,
                     category=5,
                 ).count()
 
                 if serializer.data['is_removed'] == True:
-                    if is_payroll_regular_mnt_exist == 0:
+                    if payroll_regular_data.is_new == True:
+                        PayrollRegularMaintenance.objects.all().get(
+                            payroll_regular=payroll_regular_data.payroll_regular_id, 
+                            payroll_regular_data=payroll_regular_data.id, 
+                            category=4).delete() 
+                    else:
+                        if is_payroll_regular_mnt_removed_exist == 0:
+                            payroll_regular_mnt = PayrollRegularMaintenance()
+                            payroll_regular_mnt.payroll_regular = payroll_regular_data.payroll_regular
+                            payroll_regular_mnt.payroll_regular_data = payroll_regular_data
+                            payroll_regular_mnt.category = 5
+                            payroll_regular_mnt.field_description = "Removed Employee"
+                            payroll_regular_mnt.created_by_id = request.user.id
+                            payroll_regular_mnt.updated_by_id = request.user.id
+                            payroll_regular_mnt.save()
+                else:
+                    if payroll_regular_data.is_new == True:
                         payroll_regular_mnt = PayrollRegularMaintenance()
                         payroll_regular_mnt.payroll_regular = payroll_regular_data.payroll_regular
                         payroll_regular_mnt.payroll_regular_data = payroll_regular_data
-                        payroll_regular_mnt.category = 5
-                        payroll_regular_mnt.field_description = "Removed Employee"
+                        payroll_regular_mnt.category = 4
+                        payroll_regular_mnt.field_description = "Added New Employee"
                         payroll_regular_mnt.created_by_id = request.user.id
                         payroll_regular_mnt.updated_by_id = request.user.id
                         payroll_regular_mnt.save()
-                else:
-                    if is_payroll_regular_mnt_exist > 0:
+                    if is_payroll_regular_mnt_removed_exist > 0:
                         PayrollRegularMaintenance.objects.all().get(
                             payroll_regular=payroll_regular_data.payroll_regular_id, 
                             payroll_regular_data=payroll_regular_data.id, 
