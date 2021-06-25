@@ -47,7 +47,7 @@ export class PayrollRegularMntReport extends React.Component {
               <tr>
                   <th className="p-1">Employee</th>
                   <th className="p-1">Field</th>
-                  <th className="p-1">Value</th>
+                  <th className="p-1">Description</th>
               </tr>
             </thead>
             <tbody>
@@ -75,7 +75,7 @@ export class PayrollRegularMntReport extends React.Component {
                         <tr key={data.id}>
                             <td className="p-1">{ data.payroll_regular_data?.employee_no } - { data.payroll_regular_data?.fullname }</td>
                             <td className="p-1"></td>
-                            <td className="p-1"><p className="m-0 p-0 text-danger" style={{ fontSize:'12px' }}>Removed</p></td>
+                            <td className="p-1"><p className="m-0 p-0 text-danger" style={{ fontSize:'12px' }}>Removed Employee</p></td>
                         </tr>
                     )
                   }
