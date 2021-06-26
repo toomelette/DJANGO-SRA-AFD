@@ -220,6 +220,10 @@ class PayrollRegularDataStore{
         this.selected_data = id;
     }
 
+    setQuery(query){
+        this.query = query;
+    }
+
     getSelectedDataMaintenanceDetails(field){
         if(this.form_data.payrollRegularMnt_payrollRegularData){
             const mnt = [...this.form_data.payrollRegularMnt_payrollRegularData]

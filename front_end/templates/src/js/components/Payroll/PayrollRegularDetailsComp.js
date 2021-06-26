@@ -23,6 +23,7 @@ const PayrollRegularDetails = observer(({ payrollRegularStore, payrollRegularDat
         if(is_mounted = true){
             payrollRegularStore.retrieve(payroll_regular_id)
             payrollRegularDataStore.setPayrollRegularId(payroll_regular_id)
+            payrollRegularDataStore.setQuery("")
             payrollRegularDataStore.fetch()
             payrollRegularMntStore.setPayrollRegularId(payroll_regular_id)
             payrollRegularMntStore.fetch()

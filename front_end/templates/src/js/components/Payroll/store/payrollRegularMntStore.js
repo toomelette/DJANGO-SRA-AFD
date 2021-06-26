@@ -141,12 +141,12 @@ class PayrollRegularMntStore{
     }
 
     setParamOptions(){
-        runInAction(() => {
-            this.param_options = [];
-            this.param_options = [...this.FIELD_OPTIONS];
-            axios.get('api/deduction/get_all')
-            .then((response) => {
-                response.data.map(data => {
+        this.param_options = [];
+        this.param_options = [...this.FIELD_OPTIONS];
+        axios.get('api/deduction/get_all')
+        .then((response) => {
+            response.data.map(data => {
+                runInAction(()=>{ 
                     this.param_options.push({
                         category:2, 
                         value:data.code, 
@@ -155,10 +155,12 @@ class PayrollRegularMntStore{
                         deduc_priority_seq:data.priority_seq
                     })
                 }) 
-            });
-            axios.get('api/allowance/get_all')
-            .then((response) => {
-                response.data.map(data => {
+            })
+        });
+        axios.get('api/allowance/get_all')
+        .then((response) => {
+            response.data.map(data => {
+                runInAction(()=>{
                     this.param_options.push({
                         category:3, 
                         value:data.code, 
@@ -166,12 +168,13 @@ class PayrollRegularMntStore{
                         label:data.code+" - "+data.name, 
                         deduc_priority_seq:0
                     })
-                }) 
-            });
-        })
+                 })
+            }) 
+        });
     }
 
     setDeductionOptions(){
+        this.deduction_options = [];
         axios.get('api/deduction/get_all')
         .then((response) => {
             response.data.map(data => {
@@ -186,6 +189,7 @@ class PayrollRegularMntStore{
     }
 
     setAllowanceOptions(){
+        this.allowance_options = [];
         axios.get('api/allowance/get_all')
         .then((response) => {
             response.data.map(data => {
@@ -195,6 +199,7 @@ class PayrollRegularMntStore{
     }
 
     setStationOptions(){
+        this.station_options = [];
         axios.get('api/station/get_all')
              .then((response) => {
                 runInAction(() => {
