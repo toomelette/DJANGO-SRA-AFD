@@ -1,16 +1,20 @@
 
-import React, { useCallback } from 'react'
+import React, { useCallback, useRef } from 'react'
 import { observer } from 'mobx-react'
-
+import { useReactToPrint } from 'react-to-print';
 import { useHistory, useParams } from "react-router-dom"
+
 import { TableFooterDefault } from '../Utils/Table/TableFooters'
+import { SelectInput } from '../Utils/Forms/DefaultInputs'
 import PayrollRegularContentShow from './PayrollRegularDetailsContentShowComp'
+import { PayrollRegularDataReport } from './printables/PayrollRegularDataReport';
 
 
 
-const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrollRegularMntStore }) => {
+const PayrollRegularContentDetails = observer(({ payrollRegularStore, payrollRegularDataStore, payrollRegularMntStore }) => {
 
     const history = useHistory();
+    const componentRef = useRef();
     const { payroll_regular_id } = useParams();
 
     const redirectToPayrollRegularCreate = useCallback(() => {
@@ -34,6 +38,11 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
         e.preventDefault()
         $('#payroll-regular-content-print-modal').modal('toggle')
     }
+    
+    const handleContentPrint = useReactToPrint({
+        content: () => componentRef.current,
+        removeAfterPrint: true,
+    });
 
     return (
     <>
@@ -119,7 +128,10 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
 
 
         {/* Show Modal */}                        
-        <PayrollRegularContentShow payrollRegularDataStore={payrollRegularDataStore} payrollRegularMntStore={payrollRegularMntStore}/>
+        <PayrollRegularContentShow 
+            payrollRegularDataStore={payrollRegularDataStore} 
+            payrollRegularMntStore={payrollRegularMntStore}    
+        />
 
 
         {/* Print Modal */}
@@ -133,19 +145,37 @@ const PayrollRegularContentDetails = observer(({ payrollRegularDataStore, payrol
                         </button>
                     </div>
                     <div className="modal-body">
-                                                    
-
+                        <SelectInput
+                            col="col-md-6 p-0 m-0"
+                            name="paygroup"
+                            label="Paygroup:"
+                            value={ payrollRegularDataStore.print_form_data?.paygroup }
+                            isDisabled={ false }
+                            options={ payrollRegularMntStore.PAYGROUP_PRINT_OPTIONS }
+                            onChange={ (value) => payrollRegularDataStore.setPrintFormData(value, 'paygroup') }
+                            errorField={ payrollRegularDataStore.print_error_fields?.paygroup }
+                        />                 
                     </div>
                     <div className="modal-footer">
                         <button type="button" className="btn btn-default waves-effect" data-dismiss="modal">
                             Close
                         </button>
-                        <button type="button" className="btn btn-success waves-effect waves-light">
+                        <button type="button" className="btn btn-success waves-effect waves-light" onClick={handleContentPrint}>
                             Print
                         </button>
                     </div>
                 </div>
             </div>
+        </div>
+        
+        {/* Print Content */}
+        <div style={{ display: "none" }}>
+            <PayrollRegularDataReport 
+                ref={componentRef} 
+                payrollRegularStore={payrollRegularStore}
+                payrollRegularDataStore={payrollRegularDataStore}
+                payrollRegularMntStore={payrollRegularMntStore}    
+            />
         </div>
 
     </>

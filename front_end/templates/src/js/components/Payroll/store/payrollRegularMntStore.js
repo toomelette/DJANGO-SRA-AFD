@@ -33,6 +33,14 @@ class PayrollRegularMntStore{
         { value:4, label:"COS" },
     ]
 
+    PAYGROUP_PRINT_OPTIONS = [
+        { value:0, label:"All" },
+        { value:1, label:"Regular" },
+        { value:2, label:"Pay with Check" },
+        { value:3, label:"Actual" },
+        { value:4, label:"COS" },
+    ]
+
     STATUS_OPTIONS = [
         { value:1, label:"Regular" },
         { value:2, label:"COS" },

@@ -135,8 +135,9 @@ const PayrollRegularDetails = observer(({ payrollRegularStore, payrollRegularDat
 
                             {/* Payroll Regular Data Details */}
                             <PayrollRegularContentDetails 
+                                payrollRegularStore={payrollRegularStore}
                                 payrollRegularDataStore={payrollRegularDataStore} 
-                                payrollRegularMntStore={payrollRegularMntStore}    
+                                payrollRegularMntStore={payrollRegularMntStore}   
                             />
                                                                     
                             {/* Payroll Regular Delete Modal */}

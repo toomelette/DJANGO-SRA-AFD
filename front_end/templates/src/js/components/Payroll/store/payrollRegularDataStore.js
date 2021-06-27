@@ -6,6 +6,7 @@ class PayrollRegularDataStore{
     
     //  list vars
     list = [];
+    list_all = [];
     total_records = 0;
     query = "";
     page_prev = 0;
@@ -44,6 +45,12 @@ class PayrollRegularDataStore{
     };
     error_fields = {};
 
+    // print vars
+    print_form_data = {
+        paygroup: { value:0, label:'Select' },
+    }
+    print_error_fields = {};
+
 
     constructor(){
         makeAutoObservable(this)
@@ -80,6 +87,7 @@ class PayrollRegularDataStore{
                     prd_options.push({ value:data.id, label:data.employee_no+" - "+data.fullname },)
                 })
                 this.options = prd_options;
+                this.list_all = response.data;
             })
         });
     }
@@ -367,6 +375,22 @@ class PayrollRegularDataStore{
 
     setErrorFields(error_fields){
         this.error_fields = error_fields;
+    }
+
+
+    // Print Form Setters
+    setPrintFormData(value, field){
+        switch (field) {
+            case "paygroup":
+                this.print_form_data.paygroup = value
+                break;
+        default:
+                break;
+        }
+    }
+
+    setPrintErrorFields(pef){
+        this.print_error_fields = pef;
     }
 
 
