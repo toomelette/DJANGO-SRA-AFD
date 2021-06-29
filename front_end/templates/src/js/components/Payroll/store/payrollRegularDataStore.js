@@ -1,4 +1,4 @@
-import { debounce, stubString } from "lodash"
+import { debounce } from "lodash"
 import { makeAutoObservable, runInAction } from "mobx"
 import payrollRegularMntStore from "./payrollRegularMntStore"
 
@@ -7,6 +7,7 @@ class PayrollRegularDataStore{
     //  list vars
     list = [];
     list_all = [];
+    filtered_list_all = [];
     total_records = 0;
     query = "";
     page_prev = 0;
@@ -232,6 +233,10 @@ class PayrollRegularDataStore{
         this.query = query;
     }
 
+    setFilteredListAll(list){
+        this.filtered_list_all = list;
+    }
+
     getSelectedDataMaintenanceDetails(field){
         if(this.form_data.payrollRegularMnt_payrollRegularData){
             const mnt = [...this.form_data.payrollRegularMnt_payrollRegularData]
@@ -239,7 +244,6 @@ class PayrollRegularDataStore{
         }else{
             return null;
         }
-        
     }
 
 
@@ -397,4 +401,5 @@ class PayrollRegularDataStore{
 }
 
 const payrollRegularDataStore = new PayrollRegularDataStore()
+
 export default payrollRegularDataStore

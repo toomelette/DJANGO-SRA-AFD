@@ -17,6 +17,11 @@ const PayrollRegularContentDetails = observer(({ payrollRegularStore, payrollReg
     const componentRef = useRef();
     const { payroll_regular_id } = useParams();
 
+    const printContent = useReactToPrint({
+        content: () => componentRef.current,
+        removeAfterPrint: true,
+    });
+
     const redirectToPayrollRegularCreate = useCallback(() => {
         history.push('/payroll/payroll_regular/'+ payroll_regular_id +'/create'), [history]
     });
@@ -38,11 +43,18 @@ const PayrollRegularContentDetails = observer(({ payrollRegularStore, payrollReg
         e.preventDefault()
         $('#payroll-regular-content-print-modal').modal('toggle')
     }
-    
-    const handleContentPrint = useReactToPrint({
-        content: () => componentRef.current,
-        removeAfterPrint: true,
-    });
+
+    const handleContentPrint = (e) => {
+        e.preventDefault()
+        let filtered_list = [];
+        filtered_list = payrollRegularDataStore.list_all.filter(data => {
+            return data.paygroup==payrollRegularDataStore.print_form_data.paygroup?.value;
+        })
+        payrollRegularDataStore.setFilteredListAll(filtered_list)
+        setTimeout(function(){
+            printContent()
+        }, 3000) 
+    }
 
     return (
     <>
@@ -167,6 +179,7 @@ const PayrollRegularContentDetails = observer(({ payrollRegularStore, payrollReg
                 </div>
             </div>
         </div>
+        
         
         {/* Print Content */}
         <div style={{ display: "none" }}>
