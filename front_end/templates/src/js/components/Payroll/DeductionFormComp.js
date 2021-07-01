@@ -52,6 +52,16 @@ const DeductionForm = observer(({ deductionStore }) => {
             setter={ e => deductionStore.setDescription(e.target.value) }
         />
 
+        <InputText 
+            col="col-sm-6"
+            type="text"
+            label="Acronym"
+            placeholder="Acronym"
+            errorField={ deductionStore.error_fields.acronym }
+            value={ deductionStore.acronym }
+            setter={ e => deductionStore.setAcronym(e.target.value) }
+        />
+
 
     </div>
 

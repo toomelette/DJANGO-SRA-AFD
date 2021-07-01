@@ -43,6 +43,7 @@ const DeductionList = observer(({ deductionStore, dashboardMainStore }) => {
             code: deductionStore.code, 
             name: deductionStore.name, 
             description: deductionStore.description, 
+            acronym: deductionStore.acronym, 
             priority_seq: deductionStore.priority_seq, 
         }).then((response) => {
             eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
@@ -59,6 +60,7 @@ const DeductionList = observer(({ deductionStore, dashboardMainStore }) => {
                     code: field_errors.code?.toString(), 
                     name: field_errors.name?.toString(), 
                     description: field_errors.description?.toString(),
+                    acronym: field_errors.acronym?.toString(),
                     non_field_errors: field_errors.non_field_errors?.toString(),
                 });
             }
@@ -88,6 +90,7 @@ const DeductionList = observer(({ deductionStore, dashboardMainStore }) => {
             code: deductionStore.code, 
             name: deductionStore.name, 
             description: deductionStore.description, 
+            acronym: deductionStore.acronym, 
             priority_seq: deductionStore.priority_seq,
         }).then((response) => {
             eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
@@ -104,6 +107,7 @@ const DeductionList = observer(({ deductionStore, dashboardMainStore }) => {
                     code: field_errors.code?.toString(), 
                     name: field_errors.name?.toString(), 
                     description: field_errors.description?.toString(),
+                    acronym: field_errors.acronym?.toString(),
                     non_field_errors: field_errors.non_field_errors?.toString(),
                 });
             }
@@ -216,6 +220,7 @@ const DeductionList = observer(({ deductionStore, dashboardMainStore }) => {
                                                         <th className="align-middle">Name</th>
                                                         <th className="align-middle">Description</th>
                                                         <th className="align-middle">Priority Sequence</th>
+                                                        <th className="align-middle">Acronym</th>
                                                         <th className="align-middle">Actions</th>
                                                     </tr>
                                                 </thead>
@@ -227,6 +232,7 @@ const DeductionList = observer(({ deductionStore, dashboardMainStore }) => {
                                                         <td className="align-middle">{ val.name }</td>
                                                         <td className="align-middle">{ val.description }</td>
                                                         <td className="align-middle">{ val.priority_seq }</td>
+                                                        <td className="align-middle">{ val.acronym }</td>
                                                         <td className="align-middle">
                                                             { dashboardMainStore.checkIfSubrouteExist('payroll-deductions-edit') ? 
                                                                 (

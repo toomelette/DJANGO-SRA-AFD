@@ -20,14 +20,14 @@ from employee.api.serializers import (
 class DeductionSerializer(serializers.ModelSerializer): 
      class Meta:
           model = Deductions
-          fields = ('id', 'code', 'name', 'description', 'priority_seq')
+          fields = ('id', 'code', 'name', 'description', 'acronym', 'priority_seq')
           read_only_fields = ('id',)
 
 
 class AllowanceSerializer(serializers.ModelSerializer): 
      class Meta:
           model = Allowances
-          fields = ('id', 'code', 'name', 'description')
+          fields = ('id', 'code', 'name', 'description', 'acronym')
           read_only_fields = ('id',)
 
 
@@ -35,7 +35,7 @@ class PayrollRegularDataDeductionsDetailsSerializer(serializers.ModelSerializer)
      deduction = DeductionSerializer(many=False)
      class Meta:
           model = PayrollRegularDataDeductions
-          fields = ('id', 'code', 'name', 'description', 'amount', 'deduction', 'priority_seq')
+          fields = ('id', 'code', 'name', 'description', 'amount', 'deduction', 'acronym', 'priority_seq')
           read_only_fields = ('id',)
 
 
@@ -50,7 +50,7 @@ class PayrollRegularDataAllowancesDetailsSerializer(serializers.ModelSerializer)
      allowance = AllowanceSerializer(many=False)
      class Meta:
           model = PayrollRegularDataAllowances
-          fields = ('id', 'code', 'name', 'description', 'amount', 'allowance')
+          fields = ('id', 'code', 'name', 'description', 'acronym', 'amount', 'allowance')
           read_only_fields = ('id',)
 
 

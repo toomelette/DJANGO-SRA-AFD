@@ -21,6 +21,7 @@ class AllowanceStore{
     code = "";
     name = "";
     description="";
+    acronym="";
     error_fields={};
 
 
@@ -56,6 +57,7 @@ class AllowanceStore{
                 this.code = response.data.code;
                 this.name = response.data.name;
                 this.description = response.data.description;
+                this.acronym = response.data.acronym;
                 this.elig_error_fields = {};
             })
         });
@@ -120,6 +122,7 @@ class AllowanceStore{
         this.code = "";
         this.name = "";
         this.description= "";
+        this.acronym= "";
         this.error_fields= {};
     }
 
@@ -139,11 +142,13 @@ class AllowanceStore{
         this.description = description;
     }
 
+    setAcronym(acronym){
+        this.acronym = acronym;
+    }
 
     setErrorFields(ef){
         this.error_fields = ef;
     }
-
 
 
 }

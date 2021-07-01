@@ -33,13 +33,23 @@ const PayrollRegularAllowanceForm = observer(({ allowanceStore }) => {
         />
 
         <InputText 
-            col="col-sm-12"
+            col="col-sm-6"
             type="text"
             label="Description"
             placeholder="Description"
             errorField={ allowanceStore.error_fields.description }
             value={ allowanceStore.description }
             setter={ e => allowanceStore.setDescription(e.target.value) }
+        />
+
+        <InputText 
+            col="col-sm-6"
+            type="text"
+            label="Acronym"
+            placeholder="Acronym"
+            errorField={ allowanceStore.error_fields.acronym }
+            value={ allowanceStore.acronym }
+            setter={ e => allowanceStore.setAcronym(e.target.value) }
         />
 
 

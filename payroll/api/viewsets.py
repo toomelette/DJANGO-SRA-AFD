@@ -62,6 +62,7 @@ class DeductionViewSet(viewsets.ModelViewSet):
             deduction.name = serializer.data['name']
             deduction.description = serializer.data['description']
             deduction.priority_seq = serializer.data['priority_seq']
+            deduction.acronym = serializer.data['acronym']
             deduction.created_by_id = request.user.id
             deduction.updated_by_id = request.user.id
             deduction.save()
@@ -85,6 +86,7 @@ class DeductionViewSet(viewsets.ModelViewSet):
             deduction.name = serializer.data['name']
             deduction.description = serializer.data['description']
             deduction.priority_seq = serializer.data['priority_seq']
+            deduction.acronym = serializer.data['acronym']
             deduction.updated_by_id = request.user.id
             deduction.save()
             return Response({'id':deduction.id}, 201)
@@ -131,6 +133,7 @@ class AllowanceViewSet(viewsets.ModelViewSet):
             allowance.code = serializer.data['code']
             allowance.name = serializer.data['name']
             allowance.description = serializer.data['description']
+            allowance.acronym = serializer.data['acronym']
             allowance.created_by_id = request.user.id
             allowance.updated_by_id = request.user.id
             allowance.save()
@@ -153,6 +156,7 @@ class AllowanceViewSet(viewsets.ModelViewSet):
             allowance.code = serializer.data['code']
             allowance.name = serializer.data['name']
             allowance.description = serializer.data['description']
+            allowance.acronym = serializer.data['acronym']
             allowance.updated_by_id = request.user.id
             allowance.save()
             return Response({'id':allowance.id}, 201)
@@ -264,6 +268,7 @@ class PayrollRegularViewSet(viewsets.ModelViewSet):
                                         code = data_deduc.code,
                                         name = data_deduc.name,
                                         description = data_deduc.description,
+                                        acronym = data_deduc.acronym,
                                         priority_seq = data_deduc.deduction.priority_seq,
                                         amount = existing_deduc['mod_value'] if existing_deduc else data_deduc.amount,
                                     )
@@ -280,6 +285,7 @@ class PayrollRegularViewSet(viewsets.ModelViewSet):
                                         code = data_allow.code,
                                         name = data_allow.name,
                                         description = data_allow.description, 
+                                        acronym = data_allow.acronym, 
                                         amount = existing_allow['mod_value'] if existing_allow else data_allow.amount,
                                     )
                                 )

@@ -21,6 +21,7 @@ class DeductionStore{
     code = "";
     name = "";
     description="";
+    acronym="";
     priority_seq="";
     error_fields={};
 
@@ -57,6 +58,7 @@ class DeductionStore{
                 this.code = response.data.code;
                 this.name = response.data.name;
                 this.description = response.data.description;
+                this.acronym = response.data.acronym;
                 this.priority_seq = response.data.priority_seq;
                 this.elig_error_fields = {};
             })
@@ -122,6 +124,7 @@ class DeductionStore{
         this.code = "";
         this.name = "";
         this.description= "";
+        this.acronym= "";
         this.priority_seq= "";
         this.error_fields= {};
     }
@@ -140,6 +143,10 @@ class DeductionStore{
 
     setDescription(description){
         this.description = description;
+    }
+
+    setAcronym(acronym){
+        this.acronym = acronym;
     }
 
     setPrioritySeq(priority_seq){
