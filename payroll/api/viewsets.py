@@ -690,16 +690,16 @@ class TestViewSet(viewsets.ModelViewSet):
         # for data in deduc:
         #     fd = deduc_qs.get(id=data.id)
         #     fd.delete()
-        # deduc_qs = Allowances.objects.all()
-        # prd_deduc_qs = PayrollRegularDataAllowances.objects.all()
-        # for deduc in deduc_qs:
-        #     prd_deduc_spec_list = prd_deduc_qs.filter(allowance_id=deduc.id)
-        #     for prd_deduc in prd_deduc_spec_list:
-        #         prd_deduc_obj = get_object_or_404(prd_deduc_qs, id=prd_deduc.id)
-        #         prd_deduc_obj.name = deduc.name
-        #         prd_deduc_obj.description = deduc.description
-        #         prd_deduc_obj.save()
-        #         print(prd_deduc_obj.name)
+        deduc_qs = Deductions.objects.all()
+        prd_deduc_qs = PayrollRegularDataDeductions.objects.all()
+        for deduc in deduc_qs:
+            prd_deduc_spec_list = prd_deduc_qs.filter(deduction_id=deduc.id)
+            for prd_deduc in prd_deduc_spec_list:
+                prd_deduc_obj = get_object_or_404(prd_deduc_qs, id=prd_deduc.id)
+                prd_deduc_obj.description = deduc.description
+                prd_deduc_obj.acronym = deduc.acronym
+                prd_deduc_obj.save()
+                print(prd_deduc_obj.acronym)
 
 
         # payroll_regular_latest_cache = cache.keys('payroll_regular:latest:*')

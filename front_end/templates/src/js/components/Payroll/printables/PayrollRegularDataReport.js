@@ -25,7 +25,7 @@ class PayrollRegularDataReport extends React.Component {
                 <th className="p-2 align-middle">
                   <>SEQ <br/>NO.</>
                 </th>
-                <th className="p-2 align-middle" style={{ width:50 }}>
+                <th className="p-2 align-middle" style={{ maxWidth: 200 }}>
                   <>EMPLOYEE</>
                 </th>
                 <th className="p-2 align-middle">
@@ -47,30 +47,33 @@ class PayrollRegularDataReport extends React.Component {
               return (
                 <tr key={data.id}>
                   <td className="p-2">{ this.count++ }</td>
-                  <td className="p-2" style={{ width:50 }}>
-                    <>{ data.fullname }<br/>
+                  <td className="p-2" style={{ maxWidth: 200, wordWrap:'break-word' }}>
+                    <p>
+                      { data.fullname }<br/>
                       { data.position }<br/>
                       { data.employee_no + " "} ({ data.salary_grade }, { data.step_increment })
-                    </>
+                    </p>
                   </td> 
                   <td className="p-2">
                     { data.payrollRegularDataAllow_payrollRegularData.map(data_allow => 
-                      <span key={data_allow.id}>{ data_allow.code } : { numberFormat(data_allow.amount, 2)}<br/></span> ) 
+                      <span key={data_allow.id}>
+                        { data_allow.acronym } : { numberFormat(data_allow.amount, 2)}<br/>
+                      </span> ) 
                     }
                   </td>
                   <td className="p-2">
                     <div className="row ml-1">
                       { data.payrollRegularDataDeduc_payrollRegularData.map(data_deduc => 
-                        <div key={data_deduc.id} style={{ width:"25%" }}>
-                          { data_deduc.code } : { numberFormat(data_deduc.amount, 2)}
+                        <div key={data_deduc.id} style={{ width:"50%" }}>
+                          { data_deduc.acronym } : { numberFormat(data_deduc.amount, 2)}
                         </div> 
                       )}
                     </div>
                   </td>
                   <td className="p-2">
                     <>
-                      15TH: amount<br/>
-                      30TH: amount
+                      <span className="mb-2">15TH: amount</span><br/>
+                      <span className="mb-2">30TH: amount</span>
                     </>
                   </td>
                   <td className="p-2">

@@ -83,12 +83,40 @@ class PayrollRegularDataStore{
             }
         }).then((response) => {
             runInAction(() => {
-                var prd_options = []; 
-                response.data.map(data => {
-                    prd_options.push({ value:data.id, label:data.employee_no+" - "+data.fullname },)
-                })
+                let prd_options = [];
+                let list_all = [];
+                response.data.map(data => prd_options.push({value:data.id, label:data.employee_no+" - "+data.fullname}))
                 this.options = prd_options;
-                this.list_all = response.data;
+
+                response.data.map(data => {
+                    let data_obj = data;
+                    // IF DEDUCTION OR ALLOWANCE EXIST IN MAINTENANCE PUSH TO DECLARED ARRAY
+                    data.payrollRegularMnt_payrollRegularData.map(data_mnt => {
+                        if(data_mnt.category === 2){
+                            let deduc = data.payrollRegularDataDeduc_payrollRegularData.find(data_deduc => data_deduc.code === data_mnt.field)
+                            if(!deduc){
+                                data_obj.payrollRegularDataDeduc_payrollRegularData.push({ 
+                                    label: data_mnt.field+" - "+data_mnt.field_description, 
+                                    code: data_mnt.field, 
+                                    amount: data_mnt.mod_value,
+                                    priority_seq: data_mnt.deduc_priority_seq,
+                                })
+                            }
+                        }
+                        if(data_mnt.category === 3){
+                            let allow = data.payrollRegularDataAllow_payrollRegularData.find(data_allow => data_allow.code === data_mnt.field)
+                            if(!allow){
+                                data_obj.payrollRegularDataAllow_payrollRegularData.push({ 
+                                    label: data_mnt.field+" - "+data_mnt.field_description,
+                                    code: data_mnt.field,
+                                    amount: data_mnt.mod_value,
+                                })
+                            }
+                        }
+                    })
+                    list_all.push(data);
+                })
+                this.list_all = list_all;
             })
         });
     }
@@ -146,7 +174,6 @@ class PayrollRegularDataStore{
                                 label: data_mnt.field+" - "+data_mnt.field_description, 
                                 code: data_mnt.field, 
                                 amount: data_mnt.mod_value,
-                                
                             })
                         }
                     }
