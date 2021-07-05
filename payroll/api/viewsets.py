@@ -639,6 +639,7 @@ class PayrollRegularMaintenanceViewSet(viewsets.ModelViewSet):
                 payroll_regular_mnt.mod_value = serializer.data['mod_value']
                 payroll_regular_mnt.remarks = serializer.data['remarks']
                 payroll_regular_mnt.deduc_priority_seq = serializer.data['deduc_priority_seq']
+                payroll_regular_mnt.acronym = serializer.data['acronym']
                 payroll_regular_mnt.created_by_id = request.user.id
                 payroll_regular_mnt.updated_by_id = request.user.id
                 payroll_regular_mnt.save()
@@ -664,6 +665,7 @@ class PayrollRegularMaintenanceViewSet(viewsets.ModelViewSet):
                 payroll_regular_mnt.mod_value = serializer.data['mod_value']
                 payroll_regular_mnt.remarks = serializer.data['remarks']
                 payroll_regular_mnt.deduc_priority_seq = serializer.data['deduc_priority_seq']
+                payroll_regular_mnt.acronym = serializer.data['acronym']
                 payroll_regular_mnt.updated_by_id = request.user.id
                 payroll_regular_mnt.save()
                 return Response({'id':payroll_regular_mnt.id}, 200)

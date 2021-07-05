@@ -73,6 +73,7 @@ class PayrollRegularMaintenanceDetailsSerializer(serializers.ModelSerializer):
                'remarks',
                'deduc_priority_seq',
                'payroll_regular_data_id',
+               'acronym',
           )
 
 
@@ -218,4 +219,5 @@ class PayrollRegularMaintenanceFormSerializer(serializers.ModelSerializer):
                'mod_value',
                'remarks',
                'deduc_priority_seq',
+               'acronym',
           )

@@ -43,7 +43,8 @@ const PayrollRegularMntDetails = observer(({ payrollRegularStore, payrollRegular
             field_description : payrollRegularMntStore.field?.description,
             deduc_priority_seq : payrollRegularMntStore.field?.deduc_priority_seq,
             mod_value : mod_value.toString(),
-            remarks : payrollRegularMntStore.remarks
+            remarks : payrollRegularMntStore.remarks,
+            acronym : payrollRegularMntStore.field?.acronym
         }).then((response) => {
             eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
                 message: "Maintenance Successfully Created!", type: "inverse" 
@@ -61,6 +62,7 @@ const PayrollRegularMntDetails = observer(({ payrollRegularStore, payrollRegular
                     field: field_errors.field?.toString(), 
                     mod_value: field_errors.mod_value?.toString(), 
                     remarks: field_errors.remarks?.toString(),
+                    acronym: field_errors.acronym?.toString(),
                     non_field_errors: field_errors.non_field_errors?.toString(),
                 });
             }
@@ -100,6 +102,7 @@ const PayrollRegularMntDetails = observer(({ payrollRegularStore, payrollRegular
             mod_value : mod_value.toString(),
             remarks : payrollRegularMntStore.remarks,
             deduc_priority_seq : payrollRegularMntStore.field?.deduc_priority_seq,
+            acronym : payrollRegularMntStore.field?.acronym
         }).then((response) => {
             eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
                 message: "Maintenance Successfully Updated!", type: "inverse" 
@@ -118,6 +121,7 @@ const PayrollRegularMntDetails = observer(({ payrollRegularStore, payrollRegular
                     field: field_errors.field?.toString(), 
                     mod_value: field_errors.mod_value?.toString(), 
                     remarks: field_errors.remarks?.toString(),
+                    acronym: field_errors.acronym?.toString(),
                     non_field_errors: field_errors.non_field_errors?.toString(),
                 });
             }

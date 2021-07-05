@@ -83,14 +83,17 @@ class PayrollRegularDataStore{
             }
         }).then((response) => {
             runInAction(() => {
+
                 let prd_options = [];
                 let list_all = [];
+                
+                // SET OPtions
                 response.data.map(data => prd_options.push({value:data.id, label:data.employee_no+" - "+data.fullname}))
                 this.options = prd_options;
 
+                // IF DEDUCTION OR ALLOWANCE EXIST IN MAINTENANCE PUSH TO DECLARED ARRAY
                 response.data.map(data => {
                     let data_obj = data;
-                    // IF DEDUCTION OR ALLOWANCE EXIST IN MAINTENANCE PUSH TO DECLARED ARRAY
                     data.payrollRegularMnt_payrollRegularData.map(data_mnt => {
                         if(data_mnt.category === 2){
                             let deduc = data.payrollRegularDataDeduc_payrollRegularData.find(data_deduc => data_deduc.code === data_mnt.field)
@@ -100,6 +103,7 @@ class PayrollRegularDataStore{
                                     code: data_mnt.field, 
                                     amount: data_mnt.mod_value,
                                     priority_seq: data_mnt.deduc_priority_seq,
+                                    acronym: data_mnt.acronym,
                                 })
                             }
                         }
@@ -110,13 +114,35 @@ class PayrollRegularDataStore{
                                     label: data_mnt.field+" - "+data_mnt.field_description,
                                     code: data_mnt.field,
                                     amount: data_mnt.mod_value,
+                                    acronym: data_mnt.acronym,
                                 })
                             }
                         }
                     })
-                    list_all.push(data);
+                    
+                    // SORT Deduction and Allowances
+                    data.payrollRegularDataDeduc_payrollRegularData = data.payrollRegularDataDeduc_payrollRegularData.sort(
+                        function(a, b){
+                            if ( Number(a.code.substring(1)) < Number(b.code.substring(1)) ){ return -1; }
+                            if ( Number(a.code.substring(1)) > Number(b.code.substring(1)) ){ return 1; }
+                            return 0;
+                        }
+                    )
+
+                    data.payrollRegularDataAllow_payrollRegularData = data.payrollRegularDataAllow_payrollRegularData.sort(
+                        function(a, b){
+                            if ( Number(a.code.substring(5)) < Number(b.code.substring(5)) ){ return -1;}
+                            if ( Number(a.code.substring(5)) > Number(b.code.substring(5)) ){ return 1; }
+                            return 0;
+                        }
+                    )
+
+                    list_all.push(data_obj)
+
                 })
+                
                 this.list_all = list_all;
+                
             })
         });
     }

@@ -45,7 +45,7 @@ class PayrollRegularDataReport extends React.Component {
           <tbody>
             { this.props.payrollRegularDataStore.filtered_list_all.map(data => {
               return (
-                <tr key={data.id}>
+                <tr key={data.employee_no}>
                   <td className="p-2">{ this.count++ }</td>
                   <td className="p-2" style={{ maxWidth: 200, wordWrap:'break-word' }}>
                     <p>
