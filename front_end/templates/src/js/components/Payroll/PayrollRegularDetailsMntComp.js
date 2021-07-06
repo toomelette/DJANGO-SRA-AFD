@@ -49,6 +49,7 @@ const PayrollRegularMntDetails = observer(({ payrollRegularStore, payrollRegular
             eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
                 message: "Maintenance Successfully Created!", type: "inverse" 
             });
+            payrollRegularDataStore.getByPrId()
             payrollRegularMntStore.fetch()
             payrollRegularMntStore.resetForm()
             payrollRegularMntStore.setPayrollRegularMntId(response.data.id)
@@ -107,6 +108,7 @@ const PayrollRegularMntDetails = observer(({ payrollRegularStore, payrollRegular
             eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
                 message: "Maintenance Successfully Updated!", type: "inverse" 
             });
+            payrollRegularDataStore.getByPrId()
             payrollRegularMntStore.fetch()
             payrollRegularMntStore.resetForm()
             payrollRegularMntStore.setPayrollRegularMntId(response.data.id)
@@ -146,6 +148,7 @@ const PayrollRegularMntDetails = observer(({ payrollRegularStore, payrollRegular
         e.preventDefault()
         axios.delete('api/payroll_regular_mnt/'+payrollRegularMntStore.payroll_regular_mnt_id+'/')
         .then((response) => {
+            payrollRegularDataStore.getByPrId()
             payrollRegularMntStore.fetch()
             eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
                 message: "Maintenance Successfully Deleted!", type: "inverse" 

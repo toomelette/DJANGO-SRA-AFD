@@ -1,12 +1,12 @@
 import React from 'react';
 import {observer} from "mobx-react";
-import moment from 'moment';
 import { numberFormat } from '../../Utils/DataFilters'
 
 @observer 
 class PayrollRegularDataReport extends React.Component {
 
   count = 1;
+  MAX_NET = 5000;
 
   render() {
     return (
@@ -44,44 +44,183 @@ class PayrollRegularDataReport extends React.Component {
           </thead>
           <tbody>
             { this.props.payrollRegularDataStore.filtered_list_all.map(data => {
-              return (
-                <tr key={data.employee_no}>
-                  <td className="p-2">{ this.count++ }</td>
-                  <td className="p-2" style={{ maxWidth: 200, wordWrap:'break-word' }}>
-                    <p>
-                      { data.fullname }<br/>
-                      { data.position }<br/>
-                      { data.employee_no + " "} ({ data.salary_grade }, { data.step_increment })
-                    </p>
-                  </td> 
-                  <td className="p-2">
-                    { data.payrollRegularDataAllow_payrollRegularData.map(data_allow => 
+
+              let deduction_list = [];
+              let allowance_list = [];
+              let deduction_table_column = [];
+              let allowance_table_column = [];
+
+              let food_subsidy = 0;
+
+              let fullname = data.fullname;
+              let position = data.position;
+              let employee_no = data.employee_no;
+              let salary_grade = data.salary_grade;
+              let step_increment = data.step_increment;
+
+              let net = data.monthly_salary;
+              let total_deductions = 0;
+              let total_allowance = 0;
+
+
+              // Set Deductions
+              data.payrollRegularDataDeduc_payrollRegularData.map(data_deduc => {
+                let mnt_obj = {};
+                if(data.payrollRegularMnt_payrollRegularData){
+                  mnt_obj = data.payrollRegularMnt_payrollRegularData.find(data => data.field === data_deduc.code)
+                }
+                if(Number(data_deduc.amount) > 0){
+                  if(mnt_obj){
+                    deduction_list.push({
+                      code: data_deduc.code,
+                      acronym: data_deduc.acronym,
+                      amount: Number(mnt_obj.mod_value),
+                      priority_seq: mnt_obj.deduc_priority_seq,
+                    })
+                    deduction_table_column.push(
+                      <div key={data_deduc.id} style={{ width:"50%" }}>
+                        { data_deduc.acronym } : { numberFormat(mnt_obj.mod_value, 2)}
+                      </div> 
+                    )
+                  }else{
+                    deduction_list.push({
+                      code: data_deduc.code,
+                      acronym: data_deduc.acronym,
+                      amount: Number(data_deduc.amount),
+                      priority_seq: data_deduc.priority_seq,
+                    })
+                    deduction_table_column.push(
+                      <div key={data_deduc.id} style={{ width:"50%" }}>
+                        { data_deduc.acronym } : { numberFormat(data_deduc.amount, 2)}
+                      </div> 
+                    )
+                  }
+                }
+              })
+
+
+              // Set Allowances
+              data.payrollRegularDataAllow_payrollRegularData.map(data_allow => {
+                let mnt_obj = {};
+                if(data.payrollRegularMnt_payrollRegularData){
+                  mnt_obj = data.payrollRegularMnt_payrollRegularData.find(data => data.field === data_allow.code)
+                  if(data_allow.code === "allow9"){
+                    const mnt_obj_food_subsidy = data.payrollRegularMnt_payrollRegularData.find(data => data.field === data_allow.code)
+                    food_subsidy = mnt_obj_food_subsidy ? Number(mnt_obj_food_subsidy.mod_value) : Number(data_allow.amount);
+                  }
+                }
+                if(Number(data_allow.amount) > 0){
+                  if(mnt_obj){
+                    allowance_list.push({
+                      code: data_allow.code,
+                      acronym: data_allow.acronym,
+                      amount: Number(data_allow.amount),
+                      priority_seq: mnt_obj.deduc_priority_seq,
+                    })
+                    allowance_table_column.push(
+                      <span key={data_allow.id}>
+                        { data_allow.acronym } : { numberFormat(mnt_obj.mod_value, 2)}<br/>
+                      </span> 
+                    )
+                  }else{
+                    allowance_list.push({
+                      code: data_allow.code,
+                      acronym: data_allow.acronym,
+                      amount: Number(data_allow.amount),
+                      priority_seq: data_allow.priority_seq,
+                    })
+                    allowance_table_column.push(
                       <span key={data_allow.id}>
                         { data_allow.acronym } : { numberFormat(data_allow.amount, 2)}<br/>
-                      </span> ) 
-                    }
+                      </span> 
+                    )
+                  }
+                }
+              })
+
+
+              // Sort declared arrays
+              deduction_list.sort(
+                function(a,b){
+                  if(a.priority_seq > b.priority_seq) return 1;
+                  if(a.priority_seq < b.priority_seq) return -1;
+                  return 0;
+                }
+              )
+              allowance_list.sort(
+                function(a,b){
+                  if(a.priority_seq > b.priority_seq) return 1;
+                  if(a.priority_seq < b.priority_seq) return -1;
+                  return 0;
+                }
+              )
+              
+              
+              // calculations
+              allowance_list.map(val_allow => net += val_allow.amount )
+
+              deduction_list.map(val_deduc => {
+                if((net - val_deduc.amount) > this.MAX_NET){
+                  net -= val_deduc.amount;
+                }
+                console.log(val_deduc.acronym)
+              })
+              
+              console.log(data.fullname)
+
+
+              // Set fields that exist in mnt 
+              if(data.payrollRegularMnt_payrollRegularData){
+                const mnt_obj_fullname = data.payrollRegularMnt_payrollRegularData.find(data => data.field === "fullname");
+                const mnt_obj_position = data.payrollRegularMnt_payrollRegularData.find(data => data.field === "position");
+                const mnt_obj_employee_no = data.payrollRegularMnt_payrollRegularData.find(data => data.field === "employee_no");
+                const mnt_obj_salary_grade = data.payrollRegularMnt_payrollRegularData.find(data => data.field === "salary_grade");
+                const mnt_obj_step_increment = data.payrollRegularMnt_payrollRegularData.find(data => data.field === "step_increment");
+                if(mnt_obj_fullname){ fullname = mnt_obj_fullname.mod_value} 
+                if(mnt_obj_position){ position = mnt_obj_position.mod_value} 
+                if(mnt_obj_employee_no){ employee_no = mnt_obj_employee_no.mod_value} 
+                if(mnt_obj_salary_grade){ salary_grade = mnt_obj_salary_grade.mod_value} 
+                if(mnt_obj_step_increment){ step_increment = mnt_obj_step_increment.mod_value} 
+              }
+
+
+              return (
+                <tr key={data.employee_no}>
+
+                  <td className="p-2">{ this.count++ }</td>
+
+                  <td className="p-2" style={{ maxWidth: 200, wordWrap:'break-word' }}>
+                    <p>
+                      { fullname }<br/>
+                      { position }<br/>
+                      { employee_no + " "} ({ salary_grade }, { step_increment })
+                    </p>
+                  </td> 
+
+                  <td className="p-2">
+                    { allowance_table_column }
                   </td>
+
                   <td className="p-2">
                     <div className="row ml-1">
-                      { data.payrollRegularDataDeduc_payrollRegularData.map(data_deduc => 
-                        <div key={data_deduc.id} style={{ width:"50%" }}>
-                          { data_deduc.acronym } : { numberFormat(data_deduc.amount, 2)}
-                        </div> 
-                      )}
+                      { deduction_table_column }
                     </div>
                   </td>
+
                   <td className="p-2">
                     <>
                       <span className="mb-2">15TH: amount</span><br/>
-                      <span className="mb-2">30TH: amount</span>
+                      <span className="mb-2">30TH: { numberFormat(net, 2) }</span>
                     </>
                   </td>
+
                   <td className="p-2">
                     <>
                       15TH: ____________________<br/>
                       30TH: ____________________
                     </>
                   </td>
+
                 </tr>
               )
             })
