@@ -163,10 +163,8 @@ class PayrollRegularDataReport extends React.Component {
                 if((net - val_deduc.amount) > this.MAX_NET){
                   net -= val_deduc.amount;
                 }
-                console.log(val_deduc.acronym)
               })
               
-              console.log(data.fullname)
 
 
               // Set fields that exist in mnt 

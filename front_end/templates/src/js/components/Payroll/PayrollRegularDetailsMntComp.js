@@ -42,6 +42,7 @@ const PayrollRegularMntDetails = observer(({ payrollRegularStore, payrollRegular
             field : payrollRegularMntStore.field?.value,
             field_description : payrollRegularMntStore.field?.description,
             deduc_priority_seq : payrollRegularMntStore.field?.deduc_priority_seq,
+            deduc_is_gsis : payrollRegularMntStore.field?.deduc_is_gsis,
             mod_value : mod_value.toString(),
             remarks : payrollRegularMntStore.remarks,
             acronym : payrollRegularMntStore.field?.acronym
@@ -103,6 +104,7 @@ const PayrollRegularMntDetails = observer(({ payrollRegularStore, payrollRegular
             mod_value : mod_value.toString(),
             remarks : payrollRegularMntStore.remarks,
             deduc_priority_seq : payrollRegularMntStore.field?.deduc_priority_seq,
+            deduc_is_gsis : payrollRegularMntStore.field?.deduc_is_gsis,
             acronym : payrollRegularMntStore.field?.acronym
         }).then((response) => {
             eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {

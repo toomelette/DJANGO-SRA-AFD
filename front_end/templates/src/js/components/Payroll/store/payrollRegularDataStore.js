@@ -103,6 +103,7 @@ class PayrollRegularDataStore{
                                     code: data_mnt.field, 
                                     amount: data_mnt.mod_value,
                                     priority_seq: data_mnt.deduc_priority_seq,
+                                    is_gsis: data_mnt.deduc_is_gsis,
                                     acronym: data_mnt.acronym,
                                 })
                             }
@@ -169,6 +170,7 @@ class PayrollRegularDataStore{
                         code: data.code,
                         amount: data.amount,
                         priority_seq: data.priority_seq,
+                        is_gsis: data.is_gsis,
                     })
                 })
                 response.data.payrollRegularDataAllow_payrollRegularData.map(data => {
@@ -190,6 +192,7 @@ class PayrollRegularDataStore{
                                 code: data_mnt.field, 
                                 amount: data_mnt.mod_value,
                                 priority_seq: data_mnt.deduc_priority_seq,
+                                is_gsis: data_mnt.deduc_is_gsis,
                             })
                         }
                     }

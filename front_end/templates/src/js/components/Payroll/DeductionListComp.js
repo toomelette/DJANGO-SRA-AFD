@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react'
 
 import { observer } from 'mobx-react'
 import { Link } from "react-router-dom"
+import { defaultValueSetter } from '../Utils/DataFilters'
 import { TableHeaderDefault } from '../Utils/Table/TableHeaders'
 import { TableFooterDefault } from '../Utils/Table/TableFooters'
 import eventBus from '../Utils/EventBus'
@@ -45,6 +46,7 @@ const DeductionList = observer(({ deductionStore, dashboardMainStore }) => {
             description: deductionStore.description, 
             acronym: deductionStore.acronym, 
             priority_seq: deductionStore.priority_seq, 
+            is_gsis: defaultValueSetter(deductionStore.is_gsis?.value, null, false),
         }).then((response) => {
             eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
                 message: "Deduction Successfully Created!", type: "inverse" 
@@ -61,6 +63,7 @@ const DeductionList = observer(({ deductionStore, dashboardMainStore }) => {
                     name: field_errors.name?.toString(), 
                     description: field_errors.description?.toString(),
                     acronym: field_errors.acronym?.toString(),
+                    is_gsis: field_errors.is_gsis?.toString(),
                     non_field_errors: field_errors.non_field_errors?.toString(),
                 });
             }
@@ -92,6 +95,7 @@ const DeductionList = observer(({ deductionStore, dashboardMainStore }) => {
             description: deductionStore.description, 
             acronym: deductionStore.acronym, 
             priority_seq: deductionStore.priority_seq,
+            is_gsis: defaultValueSetter(deductionStore.is_gsis?.value, null, false),
         }).then((response) => {
             eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
                 message: "Deduction Successfully Updated!", type: "inverse" 
@@ -108,6 +112,7 @@ const DeductionList = observer(({ deductionStore, dashboardMainStore }) => {
                     name: field_errors.name?.toString(), 
                     description: field_errors.description?.toString(),
                     acronym: field_errors.acronym?.toString(),
+                    is_gsis: field_errors.is_gsis?.toString(),
                     non_field_errors: field_errors.non_field_errors?.toString(),
                 });
             }

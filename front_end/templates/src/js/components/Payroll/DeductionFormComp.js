@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { observer } from 'mobx-react'
-import { InputText } from '../Utils/Forms/DefaultInputs'
+import { InputText, SelectInput } from '../Utils/Forms/DefaultInputs'
 
 
 const DeductionForm = observer(({ deductionStore }) => {
@@ -62,6 +62,16 @@ const DeductionForm = observer(({ deductionStore }) => {
             setter={ e => deductionStore.setAcronym(e.target.value) }
         />
 
+        <SelectInput
+            col="col-md-6"
+            name="is_gsis"
+            label="Is GSIS:"
+            value={ deductionStore.is_gsis }
+            isDisabled={ false }
+            options={ deductionStore.IS_GSIS_OPTIONS }
+            onChange={ (value) => deductionStore.setIsGsis(value) }
+            errorField={ deductionStore.error_fields.is_gsis }
+        />
 
     </div>
 

@@ -1,7 +1,13 @@
 import { debounce } from 'lodash'
 import { makeAutoObservable, runInAction } from "mobx"
+import { defaultValueSetter } from '../../Utils/DataFilters'
 
 class DeductionStore{
+
+    IS_GSIS_OPTIONS = [
+        {value : false, label: 'No'},
+        {value : true, label: 'YES'},
+    ]
 
     //  list vars
     list = [];
@@ -23,6 +29,7 @@ class DeductionStore{
     description="";
     acronym="";
     priority_seq="";
+    is_gsis = {value: false, label: 'No'};
     error_fields={};
 
 
@@ -54,12 +61,14 @@ class DeductionStore{
         axios.get('api/deduction/' + id)
         .then((response) => {
             runInAction(() => {
+                const is_gsis_obj = this.IS_GSIS_OPTIONS.find(data => data.value === defaultValueSetter(response.data.is_gsis, null, false))
                 this.deduction_id = response.data.id;
                 this.code = response.data.code;
                 this.name = response.data.name;
                 this.description = response.data.description;
                 this.acronym = response.data.acronym;
                 this.priority_seq = response.data.priority_seq;
+                this.is_gsis = is_gsis_obj
                 this.elig_error_fields = {};
             })
         });
@@ -126,6 +135,7 @@ class DeductionStore{
         this.description= "";
         this.acronym= "";
         this.priority_seq= "";
+        this.is_gsis = {value : false, label: 'No'};
         this.error_fields= {};
     }
 
@@ -151,6 +161,10 @@ class DeductionStore{
 
     setPrioritySeq(priority_seq){
         this.priority_seq = priority_seq;
+    }
+
+    setIsGsis(is_gsis){
+        this.is_gsis = is_gsis;
     }
 
     setErrorFields(ef){

@@ -9,6 +9,7 @@ class Deductions(models.Model):
     description = models.CharField(max_length=200, default="", blank=True)
     priority_seq = models.IntegerField(blank=True)
     acronym = models.CharField(max_length=50, default="", blank=True)
+    is_gsis = models.BooleanField(null=True, default=None, blank=True)
     created_by = models.ForeignKey(User, related_name='deductions_created_by_user', on_delete=models.PROTECT)
     updated_by = models.ForeignKey(User, related_name='deductions_updated_by_user', on_delete=models.PROTECT)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
@@ -81,6 +82,7 @@ class PayrollRegularMaintenance(models.Model):
     mod_value = models.CharField(max_length=50, default="")
     remarks = models.CharField(max_length=200, default="", blank=True)
     deduc_priority_seq = models.IntegerField(blank=True, default=0)
+    deduc_is_gsis = models.BooleanField(null=True, default=None, blank=True)
     acronym = models.CharField(max_length=50, default="", blank=True)
     created_by = models.ForeignKey(User, related_name='payrollRegularMnt_created_by_user', on_delete=models.PROTECT)
     updated_by = models.ForeignKey(User, related_name='payrollRegularMnt_updated_by_user', on_delete=models.PROTECT)
@@ -96,6 +98,7 @@ class PayrollRegularDataDeductions(models.Model):
     description = models.CharField(max_length=200, default="", blank=True)
     acronym = models.CharField(max_length=50, default="", blank=True)
     priority_seq = models.IntegerField(blank=True, default=0)
+    is_gsis = models.BooleanField(null=True, default=None, blank=True)
     amount = models.DecimalField(max_digits=13, decimal_places=2, default=0, blank=True)
 
 

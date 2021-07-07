@@ -4,21 +4,21 @@ import { makeAutoObservable, runInAction } from "mobx"
 class PayrollRegularMntStore{
 
     FIELD_OPTIONS = [
-        { category:1, value:"station", description:"Station", label:"Station", deduc_priority_seq:0, acronym: "" },
-        { category:1, value:"paygroup", description:"Paygroup", label:"Paygroup", deduc_priority_seq:0, acronym: "" },
-        { category:1, value:"fullname", description:"Fullname", label:"Fullname", deduc_priority_seq:0, acronym: "" },
-        { category:1, value:"position", description:"Position", label:"Position", deduc_priority_seq:0, acronym: "" },
-        { category:1, value:"salary_grade", description:"Salary Grade", label:"Salary Grade", deduc_priority_seq:0, acronym: "" },
-        { category:1, value:"step_increment", description:"Step Increment", label:"Step Increment", deduc_priority_seq:0, acronym: "" },
-        { category:1, value:"monthly_salary", description:"Monthly Salary", label:"Monthly Salary", deduc_priority_seq:0, acronym: "" },
-        { category:1, value:"plantilla_item", description:"Plantilla Item", label:"Plantilla Item", deduc_priority_seq:0, acronym: "" },
-        { category:1, value:"status", description:"Status", label:"Status", deduc_priority_seq:0, acronym: "" },
-        { category:1, value:"atm_account_no", description:"ATM Account No.", label:"ATM Account No.", deduc_priority_seq:0, acronym: "" },
-        { category:1, value:"tin", description:"TIN", label:"TIN", deduc_priority_seq:0, acronym: "" },
-        { category:1, value:"gsis", description:"GSIS", label:"GSIS", deduc_priority_seq:0, acronym: "" },
-        { category:1, value:"philhealth", description:"Philhealth", label:"Philhealth", deduc_priority_seq:0, acronym: "" },
-        { category:1, value:"pagibig", description:"Pagibig", label:"Pagibig", deduc_priority_seq:0, acronym: "" },
-        { category:1, value:"sss", description:"SSS", label:"SSS", deduc_priority_seq:0, acronym: "" },
+        { category:1, value:"station", description:"Station", label:"Station", deduc_priority_seq:0, deduc_is_gsis:0, acronym: "" },
+        { category:1, value:"paygroup", description:"Paygroup", label:"Paygroup", deduc_priority_seq:0, deduc_is_gsis:0, acronym: "" },
+        { category:1, value:"fullname", description:"Fullname", label:"Fullname", deduc_priority_seq:0, deduc_is_gsis:0, acronym: "" },
+        { category:1, value:"position", description:"Position", label:"Position", deduc_priority_seq:0, deduc_is_gsis:0, acronym: "" },
+        { category:1, value:"salary_grade", description:"Salary Grade", label:"Salary Grade", deduc_priority_seq:0, deduc_is_gsis:0, acronym: "" },
+        { category:1, value:"step_increment", description:"Step Increment", label:"Step Increment", deduc_priority_seq:0, deduc_is_gsis:0, acronym: "" },
+        { category:1, value:"monthly_salary", description:"Monthly Salary", label:"Monthly Salary", deduc_priority_seq:0, deduc_is_gsis:0, acronym: "" },
+        { category:1, value:"plantilla_item", description:"Plantilla Item", label:"Plantilla Item", deduc_priority_seq:0, deduc_is_gsis:0, acronym: "" },
+        { category:1, value:"status", description:"Status", label:"Status", deduc_priority_seq:0, deduc_is_gsis:0, acronym: "" },
+        { category:1, value:"atm_account_no", description:"ATM Account No.", label:"ATM Account No.", deduc_priority_seq:0, deduc_is_gsis:0, acronym: "" },
+        { category:1, value:"tin", description:"TIN", label:"TIN", deduc_priority_seq:0, deduc_is_gsis:0, acronym: "" },
+        { category:1, value:"gsis", description:"GSIS", label:"GSIS", deduc_priority_seq:0, deduc_is_gsis:0, acronym: "" },
+        { category:1, value:"philhealth", description:"Philhealth", label:"Philhealth", deduc_priority_seq:0, deduc_is_gsis:0, acronym: "" },
+        { category:1, value:"pagibig", description:"Pagibig", label:"Pagibig", deduc_priority_seq:0, deduc_is_gsis:0, acronym: "" },
+        { category:1, value:"sss", description:"SSS", label:"SSS", deduc_priority_seq:0, deduc_is_gsis:0, acronym: "" },
     ];
 
     CHAR_FORM_FIELDS = ["fullname","position","atm_account_no","tin","gsis","philhealth","pagibig","sss"]
@@ -161,6 +161,7 @@ class PayrollRegularMntStore{
                         description:data.name, 
                         label:data.code+" - "+data.name, 
                         deduc_priority_seq:data.priority_seq, 
+                        deduc_is_gsis:data.is_gsis, 
                         acronym:data.acronym
                     })
                 }) 
@@ -176,6 +177,7 @@ class PayrollRegularMntStore{
                         description:data.name, 
                         label:data.code+" - "+data.name, 
                         deduc_priority_seq:0, 
+                        deduc_is_gsis:0, 
                         acronym:data.acronym
                     })
                  })
@@ -193,7 +195,8 @@ class PayrollRegularMntStore{
                     description:data.name, 
                     label:data.code+" - "+data.name, 
                     acronym:data.acronym,
-                    deduc_priority_seq:data.priority_seq
+                    priority_seq:data.priority_seq,
+                    is_gsis:data.is_gsis, 
                 })
             }) 
         });

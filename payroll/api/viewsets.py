@@ -63,6 +63,7 @@ class DeductionViewSet(viewsets.ModelViewSet):
             deduction.description = serializer.data['description']
             deduction.priority_seq = serializer.data['priority_seq']
             deduction.acronym = serializer.data['acronym']
+            deduction.is_gsis = serializer.data['is_gsis']
             deduction.created_by_id = request.user.id
             deduction.updated_by_id = request.user.id
             deduction.save()
@@ -87,6 +88,7 @@ class DeductionViewSet(viewsets.ModelViewSet):
             deduction.description = serializer.data['description']
             deduction.priority_seq = serializer.data['priority_seq']
             deduction.acronym = serializer.data['acronym']
+            deduction.is_gsis = serializer.data['is_gsis']
             deduction.updated_by_id = request.user.id
             deduction.save()
             return Response({'id':deduction.id}, 201)
@@ -270,6 +272,7 @@ class PayrollRegularViewSet(viewsets.ModelViewSet):
                                         description = data_deduc.description,
                                         acronym = data_deduc.acronym,
                                         priority_seq = data_deduc.deduction.priority_seq,
+                                        is_gsis = data_deduc.deduction.is_gsis,
                                         amount = existing_deduc['mod_value'] if existing_deduc else data_deduc.amount,
                                     )
                                 )       
@@ -305,7 +308,8 @@ class PayrollRegularViewSet(viewsets.ModelViewSet):
                                             name = data_mnt['field_description'],
                                             description = data_mnt['field_description'],
                                             amount = data_mnt['mod_value'],
-                                            priority_seq = deduction.priority_seq
+                                            priority_seq = data_mnt['deduc_priority_seq'],
+                                            is_gsis = data_mnt['deduc_is_gsis'],
                                         )
                                     )
                             if data_mnt['category'] == 3 and data_mnt['prd_id'] == data.id:
@@ -639,6 +643,7 @@ class PayrollRegularMaintenanceViewSet(viewsets.ModelViewSet):
                 payroll_regular_mnt.mod_value = serializer.data['mod_value']
                 payroll_regular_mnt.remarks = serializer.data['remarks']
                 payroll_regular_mnt.deduc_priority_seq = serializer.data['deduc_priority_seq']
+                payroll_regular_mnt.deduc_is_gsis = serializer.data['deduc_is_gsis']
                 payroll_regular_mnt.acronym = serializer.data['acronym']
                 payroll_regular_mnt.created_by_id = request.user.id
                 payroll_regular_mnt.updated_by_id = request.user.id
@@ -665,6 +670,7 @@ class PayrollRegularMaintenanceViewSet(viewsets.ModelViewSet):
                 payroll_regular_mnt.mod_value = serializer.data['mod_value']
                 payroll_regular_mnt.remarks = serializer.data['remarks']
                 payroll_regular_mnt.deduc_priority_seq = serializer.data['deduc_priority_seq']
+                payroll_regular_mnt.deduc_is_gsis = serializer.data['deduc_is_gsis']
                 payroll_regular_mnt.acronym = serializer.data['acronym']
                 payroll_regular_mnt.updated_by_id = request.user.id
                 payroll_regular_mnt.save()
