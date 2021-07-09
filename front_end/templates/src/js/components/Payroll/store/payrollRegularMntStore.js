@@ -46,6 +46,7 @@ class PayrollRegularMntStore{
         { value:2, label:"COS" },
     ]
 
+    stations = [];
     station_options = [];
     deduction_options = [];
     allowance_options = [];
@@ -217,7 +218,8 @@ class PayrollRegularMntStore{
         });
     }
 
-    setStationOptions(){
+    setStations(){
+        this.stations = [];
         this.station_options = [];
         axios.get('api/station/get_all')
              .then((response) => {
@@ -227,6 +229,7 @@ class PayrollRegularMntStore{
                         stations.forEach(data => {
                             this.station_options.push({ value:data.id, label:data.name });
                         });
+                        this.stations = stations;
                     }
                 })
         });

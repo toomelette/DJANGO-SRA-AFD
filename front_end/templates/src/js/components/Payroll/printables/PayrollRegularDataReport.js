@@ -153,12 +153,7 @@ class PayrollRegularDataReport extends React.Component {
               allowance_list.map(val_allow => {
                 net += Number(val_allow.amount)
               } )
-              
-              console.log("monthly Salary: " + data.fullname)
-              console.log("monthly Salary: " + data.monthly_salary)
-              console.log("net: " + net)
-              console.log("     ")
-              console.log("     ")
+
 
               // Minus Deductions to net and Set filtered deduction list
               deduction_list.map(val_deduc => {

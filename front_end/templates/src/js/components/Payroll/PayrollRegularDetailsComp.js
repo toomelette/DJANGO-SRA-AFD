@@ -29,7 +29,7 @@ const PayrollRegularDetails = observer(({ payrollRegularStore, payrollRegularDat
             payrollRegularMntStore.fetch()
             payrollRegularDataStore.getByPrId()
             payrollRegularMntStore.setParamOptions()
-            payrollRegularMntStore.setStationOptions()
+            payrollRegularMntStore.setStations()
         }
         return () => { is_mounted = false; } 
     },[])
