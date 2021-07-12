@@ -8,6 +8,10 @@ class PayrollRegularDataReport extends React.Component {
   count = 1;
   MAX_NET = 5000;
 
+  componentDidUpdate(){
+    console.log(this.props.payrollRegularMntStore.PROJECTS)
+  }
+
   render() {
     return (
       <div style={{ marginLeft:130, marginTop:40, marginBottom:40, marginRight:40 }}>
@@ -42,7 +46,17 @@ class PayrollRegularDataReport extends React.Component {
                 </th>
             </tr>
           </thead>
+
           <tbody>
+
+            { this.props.payrollRegularMntStore.PROJECTS.map(data_proj => {
+              return (
+                <tr>
+                  <th className="p-2 align-middle" colSpan="6">{ data_proj.label }</th>
+                </tr>
+              )
+            })}
+
             { this.props.payrollRegularDataStore.filtered_list_all.map(data => {
 
               let deduction_list = [];

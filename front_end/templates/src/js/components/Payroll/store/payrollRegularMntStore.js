@@ -46,6 +46,47 @@ class PayrollRegularMntStore{
         { value:2, label:"COS" },
     ]
 
+    PROJECTS = [
+        { 
+            code:'01', 
+            label:"OFFICE OF THE DEPUTY ADMINISTRATOR FOR ADMINISTRATION AND FINANCE",
+            departments:[
+                { code:'0101', label: 'ADMINISTRATIVE AND FINANCE DEPARTMENT' }
+            ],
+        },
+        { 
+            code:'02', 
+            label:"OFFICE OF THE ADMINISTRATOR",
+            departments:[
+                { code:'0201', label: 'INTERNAL AUDIT DEPARTMENT' },
+                { code:'0202', label: 'LEGAL DEPARTMENT' },
+                { code:'0203', label: 'PLANNING POLICY AND SPECIAL PROJECT DEPARTMENT' },
+            ],
+        },
+        { 
+            code:'03', 
+            label:"OFFICE OF THE DEPUTY ADMINISTRATOR FOR RESEARCH DEVELOPMENT AND EXTENSION",
+            departments:[
+                { code:'0301', label: 'FACTORY SERVICES AND RESEARCH DIVISION' },
+                { code:'0302', label: 'RESEARCH DEVELOPMENT AND EXTENSION DEPARTMENT - LUZON AND MINDANAO' },
+            ],
+        },
+        { 
+            code:'04', 
+            label:"OFFICE OF THE DEPUTY ADMINISTRATOR FOR REGULATIONS",
+            departments:[
+                { code:'0401', label: 'REGULATION DEPARTMENT - LUZON AND MINDANAO' },
+            ],
+        },
+        { 
+            code:'05', 
+            label:"OFFICE OF THE BOARD",
+            departments:[
+                { code:'0502', label: 'OFFICE OF THE ADMINISTRATOR' },
+            ],
+        },
+    ]
+
     stations = [];
     station_options = [];
     deduction_options = [];
