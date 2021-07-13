@@ -7,6 +7,7 @@ class Station(models.Model):
 
     station_id = models.CharField(max_length=20, unique=True)
     name = models.CharField(max_length=200, default="")
+    level = models.CharField(max_length=20, default="")
     created_by = models.ForeignKey(User, related_name='station_created_by_user', on_delete=models.PROTECT)
     updated_by = models.ForeignKey(User, related_name='station_updated_by_user', on_delete=models.PROTECT)
     created_at = models.DateTimeField(auto_now_add=True, null=True)

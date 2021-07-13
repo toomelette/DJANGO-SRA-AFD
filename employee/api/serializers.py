@@ -7,7 +7,7 @@ from employee.models import Employee, Station, Plantilla, EmployeeEducationalBac
 class StationSerializer(serializers.ModelSerializer): 
      class Meta:
           model = Station
-          fields = ('id', 'station_id', 'name')
+          fields = ('id', 'station_id', 'name', 'level')
 
 
 class PlantillaSerializer(serializers.ModelSerializer): 
