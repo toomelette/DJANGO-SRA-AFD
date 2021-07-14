@@ -30,6 +30,7 @@ class DeductionStore{
     acronym="";
     priority_seq="";
     is_gsis = {value: false, label: 'No'};
+    account_code="";
     error_fields={};
 
 
@@ -69,6 +70,7 @@ class DeductionStore{
                 this.acronym = response.data.acronym;
                 this.priority_seq = response.data.priority_seq;
                 this.is_gsis = is_gsis_obj
+                this.account_code = response.data.account_code;
                 this.elig_error_fields = {};
             })
         });
@@ -135,6 +137,7 @@ class DeductionStore{
         this.description= "";
         this.acronym= "";
         this.priority_seq= "";
+        this.account_code= "";
         this.is_gsis = {value : false, label: 'No'};
         this.error_fields= {};
     }
@@ -165,6 +168,10 @@ class DeductionStore{
 
     setIsGsis(is_gsis){
         this.is_gsis = is_gsis;
+    }
+
+    setAccountCode(account_code){
+        this.account_code = account_code;
     }
 
     setErrorFields(ef){

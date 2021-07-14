@@ -73,6 +73,16 @@ const DeductionForm = observer(({ deductionStore }) => {
             errorField={ deductionStore.error_fields.is_gsis }
         />
 
+        <InputText 
+            col="col-sm-6"
+            type="text"
+            label="Account Code:"
+            placeholder="Account Code"
+            errorField={ deductionStore.error_fields.account_code }
+            value={ deductionStore.account_code }
+            setter={ e => deductionStore.setAccountCode(e.target.value) }
+        />
+
     </div>
 
 );

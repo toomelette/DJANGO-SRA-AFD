@@ -11,14 +11,16 @@ class PayrollRegularDataReport extends React.Component {
   department_parameters = [];
   division_parameters = [];
 
-  componentDidUpdate(){
-
-    console.log('TEST!')
-
-  }
-
   render() {
+
+    this.project_parameters = [];
+    this.department_parameters = [];
+    this.division_parameters = [];
+
+    var station_count = 0;
+
     return (
+      
       <div style={{ marginLeft:130, marginTop:40, marginBottom:40, marginRight:40 }}>
 
         <div className="mb-4 text-center">
@@ -55,14 +57,17 @@ class PayrollRegularDataReport extends React.Component {
           <tbody>
 
             { this.props.payrollRegularMntStore.stations.map(data_station => {
-              
-              let count = 1;
 
+              let next_station_obj = this.props.payrollRegularMntStore.stations[station_count+1]
+
+              let count = 1;
               let project_param_obj = this.project_parameters.find(data => data.code === data_station.station_id.substring(0,2))
               let department_param_obj = this.department_parameters.find(data => data.code === data_station.station_id.substring(0,4))
               let division_param_obj = this.division_parameters.find(data => data.code === data_station.station_id)
 
-              let subtotal_table_column = [];
+
+              station_count++
+
 
               if(!project_param_obj) { 
                 this.project_parameters.push({ 
@@ -93,7 +98,7 @@ class PayrollRegularDataReport extends React.Component {
                   deductions:[]
                 }) 
               } 
-              
+
               return (
                 <>
 
@@ -101,9 +106,6 @@ class PayrollRegularDataReport extends React.Component {
                   <tr>
                     <th className="p-2 align-middle" colSpan="6">{ data_station.name }</th>
                   </tr>
-
-
-
 
 
                   { this.props.payrollRegularDataStore.filtered_list_all.map(data => {
@@ -292,6 +294,11 @@ class PayrollRegularDataReport extends React.Component {
                         if(mnt_obj_salary_grade){ salary_grade = mnt_obj_salary_grade.mod_value} 
                         if(mnt_obj_step_increment){ step_increment = mnt_obj_step_increment.mod_value} 
                       }
+
+
+                      project_param_obj = this.project_parameters.find(data => data.code === data_station.station_id.substring(0,2))
+                      department_param_obj = this.department_parameters.find(data => data.code === data_station.station_id.substring(0,4))
+                      division_param_obj = this.division_parameters.find(data => data.code === data_station.station_id)
                       
 
                       // SET TOTAL 15TH AND 3OTH PAY PER DEPT AND PROJECT 
@@ -305,6 +312,7 @@ class PayrollRegularDataReport extends React.Component {
                       division_param_obj.second_half_pay += second_half_pay;
 
 
+
                       // Project and Department Deduction Total
                       deduction_list_filtered.map(data_deduc => {
                         let project_param_deduc =  project_param_obj.deductions.find( data_pp => data_pp.code === data_deduc.code )
@@ -312,19 +320,19 @@ class PayrollRegularDataReport extends React.Component {
                         let div_param_deduc =  division_param_obj.deductions.find( data_pp => data_pp.code === data_deduc.code )
 
                         if(!project_param_deduc) { 
-                          project_param_obj.deductions.push(data_deduc) 
+                          project_param_obj.deductions.push(data_deduc);
                         }else{
                           project_param_deduc.amount += data_deduc.amount;
                         } 
                         
                         if(!dept_param_deduc) { 
-                          department_param_obj.deductions.push(data_deduc) 
+                          department_param_obj.deductions.push(data_deduc);
                         }else{
                           dept_param_deduc.amount += data_deduc.amount;
                         } 
                         
                         if(!div_param_deduc) { 
-                          division_param_obj.deductions.push(data_deduc) 
+                          division_param_obj.deductions.push(data_deduc);
                         }else{
                           div_param_deduc.amount += data_deduc.amount;
                         } 
@@ -409,7 +417,6 @@ class PayrollRegularDataReport extends React.Component {
 
 
 
-
                   {/* SUB TOTALS */}
                   <tr>
 
@@ -460,6 +467,122 @@ class PayrollRegularDataReport extends React.Component {
                     </td>
 
                   </tr>
+
+
+
+
+                  {/* DEPARTMENT TOTALS */}
+                  { next_station_obj?.level === "DEPT" || next_station_obj?.level === "PROJ"? 
+                    
+                    <tr>
+
+                      <td className="p-2"></td>
+
+                      <td className="p-2">
+                        <p>DEPARTMENT TOTALS:</p>
+                      </td> 
+
+                      <td className="p-2">
+                        { department_param_obj?.allowances.map(data => {
+                          return (
+                            <span key={data.id}>
+                              { data.acronym } : { numberFormat(data.amount, 2)}<br/>
+                            </span> 
+                          )
+                        })}
+                      </td>
+
+                      <td className="p-2">
+                        <div className="row ml-1">
+                          { department_param_obj?.deductions.map(data => {
+                            return (
+                              <div key={data.code} style={{ width:"50%" }}>
+                                { data.acronym } : { numberFormat(data.amount, 2)}
+                              </div> 
+                            )
+                          })}
+                        </div>
+                      </td>
+
+                      <td className="p-2">
+                        <>
+                          <span className="mb-2">
+                            15TH: { department_param_obj ? numberFormat(department_param_obj.first_half_pay, 2) : '0.00' }
+                          </span><br/>
+                          <span className="mb-2">
+                            30TH: { department_param_obj ? numberFormat(department_param_obj.second_half_pay, 2) : '0.00' }
+                          </span>
+                        </>
+                      </td>
+
+                      <td className="p-2">
+                        <>
+                          *<br/>
+                          *
+                        </>
+                      </td>
+
+                    </tr> : <></>
+                          
+                  }
+
+
+
+
+                  {/* DEPARTMENT TOTALS */}
+                  { next_station_obj?.level === "PROJ" || next_station_obj?.station_id === "020100" || !next_station_obj? 
+                    
+                    <tr>
+
+                      <td className="p-2"></td>
+
+                      <td className="p-2">
+                        <p>PROJECT TOTALS:</p>
+                      </td> 
+
+                      <td className="p-2">
+                        { project_param_obj?.allowances.map(data => {
+                          return (
+                            <span key={data.id}>
+                              { data.acronym } : { numberFormat(data.amount, 2)}<br/>
+                            </span> 
+                          )
+                        })}
+                      </td>
+
+                      <td className="p-2">
+                        <div className="row ml-1">
+                          { project_param_obj?.deductions.map(data => {
+                            return (
+                              <div key={data.code} style={{ width:"50%" }}>
+                                { data.acronym } : { numberFormat(data.amount, 2)}
+                              </div> 
+                            )
+                          })}
+                        </div>
+                      </td>
+
+                      <td className="p-2">
+                        <>
+                          <span className="mb-2">
+                            15TH: { project_param_obj ? numberFormat(project_param_obj.first_half_pay, 2) : '0.00' }
+                          </span><br/>
+                          <span className="mb-2">
+                            30TH: { project_param_obj ? numberFormat(project_param_obj.second_half_pay, 2) : '0.00' }
+                          </span>
+                        </>
+                      </td>
+
+                      <td className="p-2">
+                        <>
+                          *<br/>
+                          *
+                        </>
+                      </td>
+
+                    </tr> : <></>
+                          
+                  }
 
 
 

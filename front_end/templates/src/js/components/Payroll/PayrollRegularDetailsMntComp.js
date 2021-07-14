@@ -45,7 +45,8 @@ const PayrollRegularMntDetails = observer(({ payrollRegularStore, payrollRegular
             deduc_is_gsis : payrollRegularMntStore.field?.deduc_is_gsis,
             mod_value : mod_value.toString(),
             remarks : payrollRegularMntStore.remarks,
-            acronym : payrollRegularMntStore.field?.acronym
+            acronym : payrollRegularMntStore.field?.acronym,
+            account_code : payrollRegularMntStore.field?.account_code
         }).then((response) => {
             eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
                 message: "Maintenance Successfully Created!", type: "inverse" 
@@ -65,6 +66,7 @@ const PayrollRegularMntDetails = observer(({ payrollRegularStore, payrollRegular
                     mod_value: field_errors.mod_value?.toString(), 
                     remarks: field_errors.remarks?.toString(),
                     acronym: field_errors.acronym?.toString(),
+                    account_code: field_errors.account_code?.toString(),
                     non_field_errors: field_errors.non_field_errors?.toString(),
                 });
             }
@@ -105,7 +107,8 @@ const PayrollRegularMntDetails = observer(({ payrollRegularStore, payrollRegular
             remarks : payrollRegularMntStore.remarks,
             deduc_priority_seq : payrollRegularMntStore.field?.deduc_priority_seq,
             deduc_is_gsis : payrollRegularMntStore.field?.deduc_is_gsis,
-            acronym : payrollRegularMntStore.field?.acronym
+            acronym : payrollRegularMntStore.field?.acronym,
+            account_code : payrollRegularMntStore.field?.account_code
         }).then((response) => {
             eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
                 message: "Maintenance Successfully Updated!", type: "inverse" 
@@ -126,6 +129,7 @@ const PayrollRegularMntDetails = observer(({ payrollRegularStore, payrollRegular
                     mod_value: field_errors.mod_value?.toString(), 
                     remarks: field_errors.remarks?.toString(),
                     acronym: field_errors.acronym?.toString(),
+                    account_code: field_errors.account_code?.toString(),
                     non_field_errors: field_errors.non_field_errors?.toString(),
                 });
             }

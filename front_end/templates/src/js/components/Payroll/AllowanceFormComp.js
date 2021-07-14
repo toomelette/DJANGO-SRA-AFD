@@ -52,6 +52,16 @@ const PayrollRegularAllowanceForm = observer(({ allowanceStore }) => {
             setter={ e => allowanceStore.setAcronym(e.target.value) }
         />
 
+        <InputText 
+            col="col-sm-6"
+            type="text"
+            label="Account Code"
+            placeholder="Account Code"
+            errorField={ allowanceStore.error_fields.account_code }
+            value={ allowanceStore.account_code }
+            setter={ e => allowanceStore.setAccountCode(e.target.value) }
+        />
+
 
     </div>
 

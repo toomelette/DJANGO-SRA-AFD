@@ -47,6 +47,7 @@ const DeductionList = observer(({ deductionStore, dashboardMainStore }) => {
             acronym: deductionStore.acronym, 
             priority_seq: deductionStore.priority_seq, 
             is_gsis: defaultValueSetter(deductionStore.is_gsis?.value, null, false),
+            account_code: deductionStore.account_code, 
         }).then((response) => {
             eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
                 message: "Deduction Successfully Created!", type: "inverse" 
@@ -64,6 +65,7 @@ const DeductionList = observer(({ deductionStore, dashboardMainStore }) => {
                     description: field_errors.description?.toString(),
                     acronym: field_errors.acronym?.toString(),
                     is_gsis: field_errors.is_gsis?.toString(),
+                    account_code: field_errors.account_code?.toString(),
                     non_field_errors: field_errors.non_field_errors?.toString(),
                 });
             }
@@ -96,6 +98,7 @@ const DeductionList = observer(({ deductionStore, dashboardMainStore }) => {
             acronym: deductionStore.acronym, 
             priority_seq: deductionStore.priority_seq,
             is_gsis: defaultValueSetter(deductionStore.is_gsis?.value, null, false),
+            account_code: deductionStore.account_code, 
         }).then((response) => {
             eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
                 message: "Deduction Successfully Updated!", type: "inverse" 
@@ -113,6 +116,7 @@ const DeductionList = observer(({ deductionStore, dashboardMainStore }) => {
                     description: field_errors.description?.toString(),
                     acronym: field_errors.acronym?.toString(),
                     is_gsis: field_errors.is_gsis?.toString(),
+                    account_code: field_errors.account_code?.toString(),
                     non_field_errors: field_errors.non_field_errors?.toString(),
                 });
             }
@@ -223,9 +227,9 @@ const DeductionList = observer(({ deductionStore, dashboardMainStore }) => {
                                                     <tr>
                                                         <th className="align-middle">Code</th>
                                                         <th className="align-middle">Name</th>
-                                                        <th className="align-middle">Description</th>
                                                         <th className="align-middle">Priority Sequence</th>
                                                         <th className="align-middle">Acronym</th>
+                                                        <th className="align-middle">Account Code</th>
                                                         <th className="align-middle">Actions</th>
                                                     </tr>
                                                 </thead>
@@ -235,9 +239,9 @@ const DeductionList = observer(({ deductionStore, dashboardMainStore }) => {
                                                     <tr key={key} className={ val.id == deductionStore.selected_deduction ? "table-info" : "" }>
                                                         <td className="align-middle">{ val.code }</td>
                                                         <td className="align-middle">{ val.name }</td>
-                                                        <td className="align-middle">{ val.description }</td>
                                                         <td className="align-middle">{ val.priority_seq }</td>
                                                         <td className="align-middle">{ val.acronym }</td>
+                                                        <td className="align-middle">{ val.account_code }</td>
                                                         <td className="align-middle">
                                                             { dashboardMainStore.checkIfSubrouteExist('payroll-deductions-edit') ? 
                                                                 (

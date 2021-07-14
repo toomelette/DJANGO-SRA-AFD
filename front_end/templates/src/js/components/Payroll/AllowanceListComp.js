@@ -44,6 +44,7 @@ const PayrollRegularAllowanceList = observer(({ allowanceStore, dashboardMainSto
             name: allowanceStore.name, 
             description: allowanceStore.description, 
             acronym: allowanceStore.acronym, 
+            account_code: allowanceStore.account_code, 
         }).then((response) => {
             eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
                 message: "Allowance Successfully Created!", type: "inverse" 
@@ -60,6 +61,7 @@ const PayrollRegularAllowanceList = observer(({ allowanceStore, dashboardMainSto
                     name: field_errors.name?.toString(), 
                     description: field_errors.description?.toString(),
                     acronym: field_errors.acronym?.toString(),
+                    account_code: field_errors.account_code?.toString(),
                     non_field_errors: field_errors.non_field_errors?.toString(),
                 });
             }
@@ -90,6 +92,7 @@ const PayrollRegularAllowanceList = observer(({ allowanceStore, dashboardMainSto
             name: allowanceStore.name, 
             description: allowanceStore.description, 
             acronym: allowanceStore.acronym, 
+            account_code: allowanceStore.account_code, 
         }).then((response) => {
             eventBus.dispatch("SHOW_TOAST_NOTIFICATION", {
                 message: "Allowance Successfully Updated!", type: "inverse" 
@@ -106,6 +109,7 @@ const PayrollRegularAllowanceList = observer(({ allowanceStore, dashboardMainSto
                     name: field_errors.name?.toString(), 
                     description: field_errors.description?.toString(),
                     acronym: field_errors.acronym?.toString(),
+                    account_code: field_errors.account_code?.toString(),
                     non_field_errors: field_errors.non_field_errors?.toString(),
                 });
             }
@@ -216,8 +220,8 @@ const PayrollRegularAllowanceList = observer(({ allowanceStore, dashboardMainSto
                                                     <tr>
                                                         <th className="align-middle">Code</th>
                                                         <th className="align-middle">Name</th>
-                                                        <th className="align-middle">Description</th>
                                                         <th className="align-middle">Acronym</th>
+                                                        <th className="align-middle">Account Code</th>
                                                         <th className="align-middle">Actions</th>
                                                     </tr>
                                                 </thead>
@@ -227,8 +231,8 @@ const PayrollRegularAllowanceList = observer(({ allowanceStore, dashboardMainSto
                                                     <tr key={key} className={ val.id == allowanceStore.selected_allowance ? "table-info" : "" }>
                                                         <td className="align-middle">{ val.code }</td>
                                                         <td className="align-middle">{ val.name }</td>
-                                                        <td className="align-middle">{ val.description }</td>
                                                         <td className="align-middle">{ val.acronym }</td>
+                                                        <td className="align-middle">{ val.account_code }</td>
                                                         <td className="align-middle">
                                                         { dashboardMainStore.checkIfSubrouteExist('payroll-allowance-edit') ? 
                                                             (

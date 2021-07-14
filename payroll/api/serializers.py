@@ -20,14 +20,14 @@ from employee.api.serializers import (
 class DeductionSerializer(serializers.ModelSerializer): 
      class Meta:
           model = Deductions
-          fields = ('id', 'code', 'name', 'description', 'acronym', 'priority_seq', 'is_gsis')
+          fields = ('id', 'code', 'name', 'description', 'acronym', 'priority_seq', 'is_gsis', 'account_code')
           read_only_fields = ('id',)
 
 
 class AllowanceSerializer(serializers.ModelSerializer): 
      class Meta:
           model = Allowances
-          fields = ('id', 'code', 'name', 'description', 'acronym')
+          fields = ('id', 'code', 'name', 'description', 'acronym', 'account_code')
           read_only_fields = ('id',)
 
 
@@ -35,7 +35,7 @@ class PayrollRegularDataDeductionsDetailsSerializer(serializers.ModelSerializer)
      deduction = DeductionSerializer(many=False)
      class Meta:
           model = PayrollRegularDataDeductions
-          fields = ('id', 'code', 'name', 'description', 'amount', 'deduction', 'acronym', 'priority_seq', 'is_gsis')
+          fields = ('id', 'code', 'name', 'description', 'amount', 'deduction', 'acronym', 'priority_seq', 'is_gsis', 'account_code')
           read_only_fields = ('id',)
 
 
@@ -50,7 +50,7 @@ class PayrollRegularDataAllowancesDetailsSerializer(serializers.ModelSerializer)
      allowance = AllowanceSerializer(many=False)
      class Meta:
           model = PayrollRegularDataAllowances
-          fields = ('id', 'code', 'name', 'description', 'acronym', 'amount', 'allowance')
+          fields = ('id', 'code', 'name', 'description', 'acronym', 'amount', 'account_code', 'allowance')
           read_only_fields = ('id',)
 
 
@@ -74,7 +74,8 @@ class PayrollRegularMaintenanceDetailsSerializer(serializers.ModelSerializer):
                'deduc_priority_seq',
                'deduc_is_gsis',
                'payroll_regular_data_id',
-               'acronym',
+               'acronym', 
+               'account_code'
           )
 
 
@@ -201,7 +202,8 @@ class PayrollRegularMaintenanceSerializer(serializers.ModelSerializer):
                'mod_value',
                'remarks',
                'deduc_priority_seq',
-               'deduc_is_gsis',
+               'deduc_is_gsis', 
+               'account_code',
                'payroll_regular_data',
           )
           read_only_fields = ('id',)
@@ -222,5 +224,6 @@ class PayrollRegularMaintenanceFormSerializer(serializers.ModelSerializer):
                'remarks',
                'deduc_priority_seq',
                'deduc_is_gsis',
+               'account_code',
                'acronym',
           )

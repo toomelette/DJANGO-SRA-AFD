@@ -47,7 +47,7 @@ class DeductionViewSet(viewsets.ModelViewSet):
         search = request.GET.get('q', None)
         filter_conditions = Q()
         if search:
-            filter_conditions.add(Q(code__icontains=search) | Q(name__icontains=search), Q.AND)
+            filter_conditions.add(Q(code__icontains=search) | Q(name__icontains=search)| Q(account_no__icontains=search), Q.AND)
         page = self.paginate_queryset(self.queryset.filter(filter_conditions).order_by('id'))
         serializer = self.get_serializer(page, many=True)
         return self.get_paginated_response(serializer.data)
@@ -64,6 +64,7 @@ class DeductionViewSet(viewsets.ModelViewSet):
             deduction.priority_seq = serializer.data['priority_seq']
             deduction.acronym = serializer.data['acronym']
             deduction.is_gsis = serializer.data['is_gsis']
+            deduction.account_code = serializer.data['account_code']
             deduction.created_by_id = request.user.id
             deduction.updated_by_id = request.user.id
             deduction.save()
@@ -89,6 +90,7 @@ class DeductionViewSet(viewsets.ModelViewSet):
             deduction.priority_seq = serializer.data['priority_seq']
             deduction.acronym = serializer.data['acronym']
             deduction.is_gsis = serializer.data['is_gsis']
+            deduction.account_code = serializer.data['account_code']
             deduction.updated_by_id = request.user.id
             deduction.save()
             return Response({'id':deduction.id}, 201)
@@ -121,7 +123,7 @@ class AllowanceViewSet(viewsets.ModelViewSet):
         search = request.GET.get('q', None)
         filter_conditions = Q()
         if search:
-            filter_conditions.add(Q(code__icontains=search) | Q(name__icontains=search), Q.AND)
+            filter_conditions.add(Q(code__icontains=search) | Q(name__icontains=search)| Q(account_code__icontains=search), Q.AND)
         page = self.paginate_queryset(self.queryset.filter(filter_conditions).order_by('id'))
         serializer = self.get_serializer(page, many=True)
         return self.get_paginated_response(serializer.data)
@@ -136,6 +138,7 @@ class AllowanceViewSet(viewsets.ModelViewSet):
             allowance.name = serializer.data['name']
             allowance.description = serializer.data['description']
             allowance.acronym = serializer.data['acronym']
+            allowance.account_code = serializer.data['account_code']
             allowance.created_by_id = request.user.id
             allowance.updated_by_id = request.user.id
             allowance.save()
@@ -159,6 +162,7 @@ class AllowanceViewSet(viewsets.ModelViewSet):
             allowance.name = serializer.data['name']
             allowance.description = serializer.data['description']
             allowance.acronym = serializer.data['acronym']
+            allowance.account_code = serializer.data['account_code']
             allowance.updated_by_id = request.user.id
             allowance.save()
             return Response({'id':allowance.id}, 201)
