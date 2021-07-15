@@ -2,6 +2,7 @@ import React from 'react';
 import {observer} from "mobx-react";
 import { numberFormat } from '../../Utils/DataFilters'
 
+
 @observer 
 class PayrollRegularDataReport extends React.Component {
 
@@ -59,7 +60,8 @@ class PayrollRegularDataReport extends React.Component {
             { this.props.payrollRegularMntStore.stations.map(data_station => {
 
               let next_station_obj = this.props.payrollRegularMntStore.stations[station_count+1]
-
+              let station_index = this.props.payrollRegularMntStore.stations.findIndex(x => x.station_id === data_station.station_id)
+              
               let count = 1;
               let project_param_obj = this.project_parameters.find(data => data.code === data_station.station_id.substring(0,2))
               let department_param_obj = this.department_parameters.find(data => data.code === data_station.station_id.substring(0,4))
@@ -368,6 +370,7 @@ class PayrollRegularDataReport extends React.Component {
 
 
                       return (
+
                         <tr key={data.employee_no}>
 
                           <td className="p-2">{ count++ }</td>
@@ -418,61 +421,65 @@ class PayrollRegularDataReport extends React.Component {
 
 
                   {/* SUB TOTALS */}
-                  <tr>
+                  { station_index > 0 ? 
 
-                    <td className="p-2"></td>
+                    <tr>
 
-                    <td className="p-2">
-                      <p>SUB TOTALS:</p>
-                    </td> 
+                      <td className="p-2"></td>
 
-                    <td className="p-2">
-                      { division_param_obj?.allowances.map(data => {
-                        return (
-                          <span key={data.id}>
-                            { data.acronym } : { numberFormat(data.amount, 2)}<br/>
-                          </span> 
-                        )
-                      })}
-                    </td>
+                      <td className="p-2">
+                        <p>SUB TOTALS:</p>
+                      </td> 
 
-                    <td className="p-2">
-                      <div className="row ml-1">
-                        { division_param_obj?.deductions.map(data => {
+                      <td className="p-2">
+                        { division_param_obj?.allowances.map(data => {
                           return (
-                            <div key={data.code} style={{ width:"50%" }}>
-                              { data.acronym } : { numberFormat(data.amount, 2)}
-                            </div> 
+                            <span key={data.id}>
+                              { data.acronym } : { numberFormat(data.amount, 2)}<br/>
+                            </span> 
                           )
                         })}
-                      </div>
-                    </td>
+                      </td>
 
-                    <td className="p-2">
-                      <>
-                        <span className="mb-2">
-                          15TH: { division_param_obj ? numberFormat(division_param_obj.first_half_pay, 2) : '0.00' }
-                        </span><br/>
-                        <span className="mb-2">
-                          30TH: { division_param_obj ? numberFormat(division_param_obj.second_half_pay, 2) : '0.00' }
-                        </span>
-                      </>
-                    </td>
+                      <td className="p-2">
+                        <div className="row ml-1">
+                          { division_param_obj?.deductions.map(data => {
+                            return (
+                              <div key={data.code} style={{ width:"50%" }}>
+                                { data.acronym } : { numberFormat(data.amount, 2)}
+                              </div> 
+                            )
+                          })}
+                        </div>
+                      </td>
 
-                    <td className="p-2">
-                      <>
-                        *<br/>
-                        *
-                      </>
-                    </td>
+                      <td className="p-2">
+                        <>
+                          <span className="mb-2">
+                            15TH: { division_param_obj ? numberFormat(division_param_obj.first_half_pay, 2) : '0.00' }
+                          </span><br/>
+                          <span className="mb-2">
+                            30TH: { division_param_obj ? numberFormat(division_param_obj.second_half_pay, 2) : '0.00' }
+                          </span>
+                        </>
+                      </td>
 
-                  </tr>
+                      <td className="p-2">
+                        <>
+                          *<br/>
+                          *
+                        </>
+                      </td>
+
+                    </tr> : <></>
+                   
+                   }
 
 
 
 
                   {/* DEPARTMENT TOTALS */}
-                  { next_station_obj?.level === "DEPT" || next_station_obj?.level === "PROJ"? 
+                  { station_index > 0 && next_station_obj?.level === "DEPT" || station_index > 0 && next_station_obj?.level === "PROJ"? 
                     
                     <tr>
 
@@ -529,58 +536,61 @@ class PayrollRegularDataReport extends React.Component {
 
 
 
-                  {/* DEPARTMENT TOTALS */}
+                  {/* PROJECT TOTALS */}
                   { next_station_obj?.level === "PROJ" || next_station_obj?.station_id === "020100" || !next_station_obj? 
-                    
-                    <tr>
+                    <>
 
-                      <td className="p-2"></td>
+                      <tr>
 
-                      <td className="p-2">
-                        <p>PROJECT TOTALS:</p>
-                      </td> 
+                        <td className="p-2"></td>
 
-                      <td className="p-2">
-                        { project_param_obj?.allowances.map(data => {
-                          return (
-                            <span key={data.id}>
-                              { data.acronym } : { numberFormat(data.amount, 2)}<br/>
-                            </span> 
-                          )
-                        })}
-                      </td>
+                        <td className="p-2">
+                          <p>PROJECT TOTALS:</p>
+                        </td> 
 
-                      <td className="p-2">
-                        <div className="row ml-1">
-                          { project_param_obj?.deductions.map(data => {
+                        <td className="p-2">
+                          { project_param_obj?.allowances.map(data => {
                             return (
-                              <div key={data.code} style={{ width:"50%" }}>
-                                { data.acronym } : { numberFormat(data.amount, 2)}
-                              </div> 
+                              <span key={data.id}>
+                                { data.acronym } : { numberFormat(data.amount, 2)}<br/>
+                              </span> 
                             )
                           })}
-                        </div>
-                      </td>
+                        </td>
 
-                      <td className="p-2">
-                        <>
-                          <span className="mb-2">
-                            15TH: { project_param_obj ? numberFormat(project_param_obj.first_half_pay, 2) : '0.00' }
-                          </span><br/>
-                          <span className="mb-2">
-                            30TH: { project_param_obj ? numberFormat(project_param_obj.second_half_pay, 2) : '0.00' }
-                          </span>
-                        </>
-                      </td>
+                        <td className="p-2">
+                          <div className="row ml-1">
+                            { project_param_obj?.deductions.map(data => {
+                              return (
+                                <div key={data.code} style={{ width:"50%" }}>
+                                  { data.acronym } : { numberFormat(data.amount, 2)}
+                                </div> 
+                              )
+                            })}
+                          </div>
+                        </td>
 
-                      <td className="p-2">
-                        <>
-                          *<br/>
-                          *
-                        </>
-                      </td>
+                        <td className="p-2">
+                          <>
+                            <span className="mb-2">
+                              15TH: { project_param_obj ? numberFormat(project_param_obj.first_half_pay, 2) : '0.00' }
+                            </span><br/>
+                            <span className="mb-2">
+                              30TH: { project_param_obj ? numberFormat(project_param_obj.second_half_pay, 2) : '0.00' }
+                            </span>
+                          </>
+                        </td>
 
-                    </tr> : <></>
+                        <td className="p-2">
+                          <>
+                            *<br/>
+                            *
+                          </>
+                        </td>
+
+                      </tr>
+
+                    </> : <></>
                           
                   }
 

@@ -151,6 +151,7 @@ const PayrollRegularAllowanceList = observer(({ allowanceStore, dashboardMainSto
         });
     }
 
+    
     return (
 
     <div className="pcoded-content">

@@ -47,7 +47,7 @@ class DeductionViewSet(viewsets.ModelViewSet):
         search = request.GET.get('q', None)
         filter_conditions = Q()
         if search:
-            filter_conditions.add(Q(code__icontains=search) | Q(name__icontains=search)| Q(account_no__icontains=search), Q.AND)
+            filter_conditions.add(Q(code__icontains=search) | Q(name__icontains=search) | Q(account_code__icontains=search), Q.AND)
         page = self.paginate_queryset(self.queryset.filter(filter_conditions).order_by('id'))
         serializer = self.get_serializer(page, many=True)
         return self.get_paginated_response(serializer.data)
@@ -222,6 +222,10 @@ class PayrollRegularViewSet(viewsets.ModelViewSet):
                 'category' : data_mnt.category, 
                 'field' : data_mnt.field, 
                 'field_description' : data_mnt.field_description, 
+                'acronym' : data_mnt.acronym, 
+                'deduc_priority_seq' : data_mnt.deduc_priority_seq, 
+                'deduc_is_gsis' : data_mnt.deduc_is_gsis, 
+                'account_code' : data_mnt.account_code, 
                 'mod_value' : data_mnt.mod_value 
             })
 
@@ -271,12 +275,13 @@ class PayrollRegularViewSet(viewsets.ModelViewSet):
                                     PayrollRegularDataDeductions(
                                         payroll_regular_data = payroll_regular_data_obj,
                                         deduction = data_deduc.deduction,
-                                        code = data_deduc.code,
-                                        name = data_deduc.name,
-                                        description = data_deduc.description,
-                                        acronym = data_deduc.acronym,
+                                        code = data_deduc.deduction.code,
+                                        name = data_deduc.deduction.name,
+                                        description = data_deduc.deduction.description,
+                                        acronym = data_deduc.deduction.acronym,
                                         priority_seq = data_deduc.deduction.priority_seq,
                                         is_gsis = data_deduc.deduction.is_gsis,
+                                        account_code = data_deduc.deduction.account_code,
                                         amount = existing_deduc['mod_value'] if existing_deduc else data_deduc.amount,
                                     )
                                 )       
@@ -289,10 +294,11 @@ class PayrollRegularViewSet(viewsets.ModelViewSet):
                                     PayrollRegularDataAllowances(
                                         payroll_regular_data = payroll_regular_data_obj,
                                         allowance = data_allow.allowance,
-                                        code = data_allow.code,
-                                        name = data_allow.name,
-                                        description = data_allow.description, 
-                                        acronym = data_allow.acronym, 
+                                        code = data_allow.allowance.code,
+                                        name = data_allow.allowance.name,
+                                        description = data_allow.allowance.description, 
+                                        acronym = data_allow.allowance.acronym, 
+                                        account_code = data_allow.allowance.account_code, 
                                         amount = existing_allow['mod_value'] if existing_allow else data_allow.amount,
                                     )
                                 )
@@ -311,9 +317,11 @@ class PayrollRegularViewSet(viewsets.ModelViewSet):
                                             code = data_mnt['field'],
                                             name = data_mnt['field_description'],
                                             description = data_mnt['field_description'],
-                                            amount = data_mnt['mod_value'],
+                                            acronym = data_mnt['acronym'],
                                             priority_seq = data_mnt['deduc_priority_seq'],
                                             is_gsis = data_mnt['deduc_is_gsis'],
+                                            account_code = data_mnt['account_code'],
+                                            amount = data_mnt['mod_value'],
                                         )
                                     )
                             if data_mnt['category'] == 3 and data_mnt['prd_id'] == data.id:
@@ -328,6 +336,8 @@ class PayrollRegularViewSet(viewsets.ModelViewSet):
                                             code = data_mnt['field'],
                                             name = data_mnt['field_description'],
                                             description = data_mnt['field_description'],
+                                            acronym = data_mnt['acronym'],
+                                            account_code = data_mnt['account_code'],
                                             amount = data_mnt['mod_value'],
                                         )
                                     )
@@ -432,11 +442,12 @@ class PayrollRegularDataViewSet(viewsets.ModelViewSet):
                                 name = deduction_obj.name,
                                 description = deduction_obj.description,
                                 priority_seq = deduction_obj.priority_seq,
+                                account_code = deduction_obj.account_code,
                                 amount = data_deduc['amount'],
                             )
                         )
 
-                if allowances:  
+                if allowances:
                     for data_allow in allowances:
                         allowance_obj = get_object_or_404(Allowances.objects.all(), id=data_allow['id'])
                         payroll_regular_data_allow_objs.append(
@@ -446,6 +457,7 @@ class PayrollRegularDataViewSet(viewsets.ModelViewSet):
                                 code = allowance_obj.code,
                                 name = allowance_obj.name,
                                 description = allowance_obj.description,
+                                account_code = allowance_obj.account_code,
                                 amount = data_allow['amount'],
                             )
                         )
@@ -577,6 +589,7 @@ class PayrollRegularDataViewSet(viewsets.ModelViewSet):
                                 code = deduction_obj.code,
                                 name = deduction_obj.name,
                                 description = deduction_obj.description,
+                                account_code = deduction_obj.account_code,
                                 amount = data_deduc['amount'],
                             )
                         )
@@ -590,6 +603,7 @@ class PayrollRegularDataViewSet(viewsets.ModelViewSet):
                                 code = allowance_obj.code,
                                 name = allowance_obj.name,
                                 description = allowance_obj.description,
+                                account_code = allowance_obj.account_code,
                                 amount = data_allow['amount'],
                             )
                         )
@@ -649,6 +663,7 @@ class PayrollRegularMaintenanceViewSet(viewsets.ModelViewSet):
                 payroll_regular_mnt.deduc_priority_seq = serializer.data['deduc_priority_seq']
                 payroll_regular_mnt.deduc_is_gsis = serializer.data['deduc_is_gsis']
                 payroll_regular_mnt.acronym = serializer.data['acronym']
+                payroll_regular_mnt.account_code = serializer.data['account_code']
                 payroll_regular_mnt.created_by_id = request.user.id
                 payroll_regular_mnt.updated_by_id = request.user.id
                 payroll_regular_mnt.save()
@@ -676,6 +691,7 @@ class PayrollRegularMaintenanceViewSet(viewsets.ModelViewSet):
                 payroll_regular_mnt.deduc_priority_seq = serializer.data['deduc_priority_seq']
                 payroll_regular_mnt.deduc_is_gsis = serializer.data['deduc_is_gsis']
                 payroll_regular_mnt.acronym = serializer.data['acronym']
+                payroll_regular_mnt.account_code = serializer.data['account_code']
                 payroll_regular_mnt.updated_by_id = request.user.id
                 payroll_regular_mnt.save()
                 return Response({'id':payroll_regular_mnt.id}, 200)

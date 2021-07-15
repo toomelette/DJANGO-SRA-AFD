@@ -170,7 +170,7 @@ const PayrollRegularMntDetails = observer(({ payrollRegularStore, payrollRegular
     }  
 
 
-    const tableRowChanges = (category, field, mod_value) =>{
+    const tableRowChanges = (category, field, mod_value) => {
         var data = "";
         if(category === 1){
             switch (field) {

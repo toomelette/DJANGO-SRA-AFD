@@ -199,7 +199,8 @@ class PayrollRegularMntStore{
                     label:data.code+" - "+data.name, 
                     acronym:data.acronym,
                     priority_seq:data.priority_seq,
-                    is_gsis:data.is_gsis, 
+                    is_gsis:data.is_gsis,
+                    account_code:data.account_code
                 })
             }) 
         });
@@ -214,7 +215,8 @@ class PayrollRegularMntStore{
                     value:data.id, 
                     description:data.name, 
                     label:data.code+" - "+data.name,
-                    acronym:data.acronym
+                    acronym:data.acronym, 
+                    account_code:data.account_code
                 })
             }) 
         });
