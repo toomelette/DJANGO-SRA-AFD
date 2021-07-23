@@ -11,21 +11,21 @@ def loginPage(request):
     if request.user.is_authenticated == False:
         return render(request, 'authentication/login.html')
     else:
-        return redirect('/dashboard')
+        return redirect('dashboard_main_page')
 
 
 def setUsernamelogoutPage(request):
     if request.user.is_authenticated == False:
         return render(request, 'authentication/set_username_logout.html')
     else:
-        return redirect('/dashboard')
+        return redirect('dashboard_main_page')
 
 
 def setPasswordlogoutPage(request):
     if request.user.is_authenticated == False:
         return render(request, 'authentication/set_password_logout.html')
     else:
-        return redirect('/dashboard')
+        return redirect('dashboard_main_page')
 
 
 @api_view(['POST'])

@@ -1,8 +1,13 @@
 @media print {
 
-    table { 
-        display: block; 
+    /* table{
+        table-layout: fixed;
+        width: 100%;
     }
 
+    table td .wrapTd{
+        width: 100%;
+        word-wrap: break-word;
+    } */
 
 }

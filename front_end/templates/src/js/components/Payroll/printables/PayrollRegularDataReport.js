@@ -1,6 +1,7 @@
 import React from 'react';
 import {observer} from "mobx-react";
 import { numberFormat } from '../../Utils/DataFilters'
+import './PayrollRegularDataReport.css'
 
 
 @observer 
@@ -34,22 +35,22 @@ class PayrollRegularDataReport extends React.Component {
         <table className="table table-xs" style={{ fontSize:'12px' }}>
           <thead>
             <tr>
-                <th className="p-2 align-middle">
+                <th className="p-2 align-middle" style={{ width: '5%' }}>
                   <>SEQ <br/>NO.</>
                 </th>
-                <th className="p-2 align-middle" style={{ maxWidth: 200 }}>
+                <th className="p-2 align-middle" style={{ width: '15%' }}>
                   <>EMPLOYEE</>
                 </th>
-                <th className="p-2 align-middle">
+                <th className="p-2 align-middle" style={{ width: '15%' }}>
                   <>SALARY<br/>ALLOWANCE</>
                 </th>
-                <th className="p-2 align-middle">
+                <th className="p-2 align-middle" style={{ width: '30%' }}>
                   <>SALARY<br/>DEDUCTIONS</>
                 </th>
-                <th className="p-2 align-middle">
+                <th className="p-2 align-middle"  style={{ width: '17.5%' }}>
                   <>AMOUNT<br/>RECEIVED</>
                 </th>
-                <th className="p-2 align-middle">
+                <th className="p-2 align-middle" style={{ width: '17.5%' }}>
                   SIGNATURE
                 </th>
             </tr>
@@ -373,35 +374,36 @@ class PayrollRegularDataReport extends React.Component {
 
                         <tr key={data.employee_no}>
 
-                          <td className="p-2">{ count++ }</td>
+                          <td className="p-2" style={{ width: '5%' }}>
+                            { count++ }
+                          </td>
 
-                          <td className="p-2" style={{ maxWidth: 200, wordWrap:'break-word' }}>
-                            <p>
-                              { fullname }<br/>
-                              { position }<br/>
-                              { employee_no + " "} ({ salary_grade }, { step_increment })
-                            </p>
+                          <td className="p-2" style={{ width: '15%', wordWrap: 'break-word' }}>
+                            <div>
+                              {/* { fullname } */}
+                              { position }
+                              {/* { employee_no + " "} ({ salary_grade }, { step_increment }) */}
+                            </div>
                           </td> 
 
-                          <td className="p-2">
+                          <td className="p-2" style={{ width: '15%' }}>
                             { allowance_table_column }
                           </td>
 
-                          <td className="p-2">
+                          <td className="p-2" style={{ width: '30%' }}>
                             <div className="row ml-1">
                               { deduction_table_column }
                             </div>
                           </td>
 
-                          <td className="p-2">
+                          <td className="p-2" style={{ width: '17.5%' }}>
                             <>
                               <span className="mb-2">15TH: { numberFormat(first_half_pay, 2) }</span><br/>
                               <span className="mb-2">30TH: { numberFormat(second_half_pay, 2) }</span><br/>
-                              <span className="mb-2">TOTAL: { numberFormat(net, 2) }</span>
                             </>
                           </td>
 
-                          <td className="p-2">
+                          <td className="p-2" style={{ width: '17.5%' }}>
                             <>
                               15TH: ____________________<br/>
                               30TH: ____________________
